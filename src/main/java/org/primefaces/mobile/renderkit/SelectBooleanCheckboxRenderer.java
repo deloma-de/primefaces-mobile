@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Prime Technology.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,130 +16,72 @@
 package org.primefaces.mobile.renderkit;
 
 import java.io.IOException;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
-import org.primefaces.mobile.util.MobileUtils;
-import org.primefaces.renderkit.InputRenderer;
 import org.primefaces.util.ComponentUtils;
-import org.primefaces.util.WidgetBuilder;
 
-public class SelectBooleanCheckboxRenderer extends InputRenderer {
-
-    @Override
-	public void decode(FacesContext context, UIComponent component) {
-		SelectBooleanCheckbox checkbox = (SelectBooleanCheckbox) component;
-
-        if(checkbox.isDisabled()) {
-            return;
-        }
-
-        decodeBehaviors(context, checkbox);
-
-		String clientId = checkbox.getClientId(context);
-		String submittedValue = (String) context.getExternalContext().getRequestParameterMap().get(clientId + "_input");
-
-        if(submittedValue != null && submittedValue.equalsIgnoreCase("on")) {
-            checkbox.setSubmittedValue("true");
-        }
-        else {
-            checkbox.setSubmittedValue("false");
-        }
-	}
+public class SelectBooleanCheckboxRenderer extends org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckboxRenderer {
+    
+    public final static String MOBILE_STYLE_CLASS = "ui-checkbox";
+    public final static String MOBILE_LABEL_OFF_CLASS = "ui-btn ui-btn-inherit ui-btn-icon-left ui-corner-all ui-checkbox-off";
+    public final static String MOBILE_LABEL_ON_CLASS = "ui-btn ui-btn-inherit ui-btn-icon-left ui-corner-all ui-checkbox-on";
     
     @Override
-    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        SelectBooleanCheckbox checkbox = (SelectBooleanCheckbox) component;
-
-        encodeMarkup(context, checkbox);
-        encodeScript(context, checkbox);
-    }
-
-    protected void encodeMarkup(FacesContext context, SelectBooleanCheckbox checkbox) throws IOException {        
+    public void encodeMarkup(FacesContext context, SelectBooleanCheckbox checkbox) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         String clientId = checkbox.getClientId(context);
+        String inputId = clientId + "_input";
         boolean checked = Boolean.valueOf(ComponentUtils.getValueToRender(context, checkbox));
         boolean disabled = checkbox.isDisabled();
-        String label = checkbox.getLabel();
+        String style = checkbox.getStyle();
+        String styleClass = checkbox.getStyleClass();
+        styleClass = (styleClass == null) ? MOBILE_STYLE_CLASS: MOBILE_STYLE_CLASS + " " + styleClass;
         
         writer.startElement("div", checkbox);
         writer.writeAttribute("id", clientId, "id");
-
-        if(checkbox.getStyle() != null) writer.writeAttribute("style", checkbox.getStyle(), "style");
-        writer.writeAttribute("class", createStyleClass(checkbox), "styleClass");
+        writer.writeAttribute("class", styleClass, "styleClass");
         
-        if(label == null) {
-            encodeInput(context, checkbox, clientId, checked, disabled);
-            encodeLabel(context, checkbox, clientId);
+        if(style != null) {
+            writer.writeAttribute("style", style, "style");
         }
-        else {
-            writer.writeAttribute("data-role", "fieldcontain", null);
-            
-            writer.startElement("fieldset", null);
-            writer.writeAttribute("data-role", "controlgroup", null);
-            
-            writer.startElement("legend", null);
-            writer.writeText(label, "label");
-            writer.endElement("legend");
-            
-            encodeInput(context, checkbox, clientId, checked, disabled);
-            encodeLabel(context, checkbox, clientId);
-            
-            writer.endElement("fieldset");
-        }
+
+        encodeLabel(context, checkbox, inputId, checked);
+        encodeInput(context, checkbox, inputId, checked);
         
         writer.endElement("div");
     }
-
-    protected void encodeInput(FacesContext context, SelectBooleanCheckbox checkbox, String clientId, boolean checked, boolean disabled) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        String inputId = clientId + "_input";
-                
-        writer.startElement("input", null);
-        writer.writeAttribute("id", inputId, "id");
-        writer.writeAttribute("name", inputId, null);
-        writer.writeAttribute("type", "checkbox", null);
-
-        if(MobileUtils.isMini(context)) writer.writeAttribute("data-mini", "true", null);
-        if(checked) writer.writeAttribute("checked", "checked", null);
-        if(disabled) writer.writeAttribute("disabled", "disabled", null);
-        if(checkbox.getOnchange() != null) writer.writeAttribute("onchange", checkbox.getOnchange(), null);        
-
-        writer.endElement("input");
-    }
-
-    protected void encodeLabel(FacesContext context, SelectBooleanCheckbox checkbox, String clientId) throws IOException {
+    
+    protected void encodeLabel(FacesContext context, SelectBooleanCheckbox checkbox, String inputId, boolean checked) throws IOException {
         String itemLabel = checkbox.getItemLabel();
         
         if(itemLabel != null) {
-            ResponseWriter writer = context.getResponseWriter();
-
+            String labelClass = checked ? MOBILE_LABEL_ON_CLASS: MOBILE_LABEL_OFF_CLASS;
+            ResponseWriter writer = context.getResponseWriter();            
             writer.startElement("label", null);
-            writer.writeAttribute("for", clientId + "_input", null);
-            writer.writeText(itemLabel, "itemLabel");
+            writer.writeAttribute("for", inputId, null);
+            writer.writeAttribute("class", labelClass, null);
+            writer.writeText(itemLabel, null);
             writer.endElement("label");
         }
     }
     
-    protected void encodeScript(FacesContext context, SelectBooleanCheckbox checkbox) throws IOException {
-        String clientId = checkbox.getClientId(context);
+    @Override
+    protected void encodeInput(FacesContext context, SelectBooleanCheckbox checkbox, String inputId, boolean checked) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        
+        writer.startElement("input", null);
+        writer.writeAttribute("id", inputId, "id");
+        writer.writeAttribute("name", inputId, null);
+        writer.writeAttribute("type", "checkbox", null);
+        writer.writeAttribute("data-role", "none", null);
 
-        WidgetBuilder wb = getWidgetBuilder(context);
-        wb.initWithDomReady("SelectBooleanCheckbox", checkbox.resolveWidgetVar(), clientId);
-
-        encodeClientBehaviors(context, checkbox);
-
-        wb.finish();
+        if (checked) writer.writeAttribute("checked", "checked", null);
+        if (checkbox.isDisabled()) writer.writeAttribute("disabled", "disabled", null);
+        
+        renderOnchange(context, checkbox);
+        renderDynamicPassThruAttributes(context, checkbox);
+        
+        writer.endElement("input");
     }
-    
-    protected String createStyleClass(SelectBooleanCheckbox checkbox) {
-        String defaultClass = "";
-        defaultClass = checkbox.isValid() ? defaultClass : defaultClass + " ui-focus";
-        
-        String styleClass = checkbox.getStyleClass();
-        styleClass = styleClass == null ? defaultClass : defaultClass + " " + styleClass;
-        
-        return styleClass;
-    }       
 }

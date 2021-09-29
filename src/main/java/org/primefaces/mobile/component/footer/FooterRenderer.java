@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Prime Technology.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,21 +28,32 @@ public class FooterRenderer extends CoreRenderer {
         ResponseWriter writer = context.getResponseWriter();
         Footer footer = (Footer) component;
         String swatch = footer.getSwatch();
+        String title = footer.getTitle();
 
-        writer.startElement("div", footer);
-        writer.writeAttribute("id", footer.getClientId(context), "id");
+        writer.startElement("div", null);
         writer.writeAttribute("data-role", "footer", null);
         
         if(footer.getStyle() != null) writer.writeAttribute("style", footer.getStyle(), null);
         if(footer.getStyleClass() != null) writer.writeAttribute("class", footer.getStyleClass(), null);
         if(swatch != null) writer.writeAttribute("data-theme", swatch, null);        
-        if(footer.isFixed())  writer.writeAttribute("data-position", "fixed", null);
+        if(footer.isFixed()) {
+            writer.writeAttribute("data-position", "fixed", null);
+            
+            if(!footer.isTapToggle())
+                writer.writeAttribute("data-tap-toggle", "false", null);
+        }
+        
+        renderDynamicPassThruAttributes(context, component);
+        
+        if(title != null) {
+             writer.startElement("h4", null);
+             writer.writeText(title, null);
+             writer.endElement("h4");
+        }
     }
 
     @Override
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-
-        writer.endElement("div");
+        context.getResponseWriter().endElement("div");
     }
 }

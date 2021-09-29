@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Prime Technology.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,73 +16,93 @@
 package org.primefaces.mobile.renderkit;
 
 import java.io.IOException;
-import java.util.Map;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.button.Button;
 import org.primefaces.mobile.util.MobileUtils;
-import org.primefaces.renderkit.CoreRenderer;
+import org.primefaces.util.HTML;
 
-public class ButtonRenderer extends CoreRenderer {
+public class ButtonRenderer extends org.primefaces.component.button.ButtonRenderer {
+    
+    @Override
+    public void encodeMarkup(FacesContext context, Button button) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+		String clientId = button.getClientId(context);
+        Object value = (String) button.getValue();
+        String icon = button.resolveIcon();
+
+		writer.startElement("button", button);
+		writer.writeAttribute("id", clientId, "id");
+		writer.writeAttribute("name", clientId, "name");
+        writer.writeAttribute("type", "button", null);
+		writer.writeAttribute("class", resolveStyleClass(button), "styleClass");
+
+		renderPassThruAttributes(context, button, HTML.BUTTON_ATTRS, HTML.CLICK_EVENT);
+
+        if(button.isDisabled()) {
+            writer.writeAttribute("disabled", "disabled", "disabled");
+        }
+        else {
+            writer.writeAttribute("onclick", buildOnclick(context, button), null);
+        }
+
+        if(value == null) {
+            writer.write("ui-button");
+        }
+        else {
+            if(button.isEscape())
+                writer.writeText(value, "value");
+            else
+                writer.write(value.toString());
+        }
+			
+		writer.endElement("button");
+    }
 
     @Override
-    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        Button button = (Button) component;
-        Map<String,Object> attrs = button.getAttributes();
-        Object inline = attrs.get("inline");
-        String styleClass = button.getStyleClass() == null ? "" : button.getStyleClass();
-        if (button.isDisabled()) styleClass = styleClass + " ui-disabled";
-                
-        writer.startElement("a", component);
-        writer.writeAttribute("id", button.getClientId(context), null);
-        writer.writeAttribute("href", "javascript:void(0)", null);
-        writer.writeAttribute("data-role", "button", null);        
-
-        if(inline != null && Boolean.valueOf(inline.toString())) writer.writeAttribute("data-inline", "true", null);
-        if (button.getIcon() != null) {
-            writer.writeAttribute("data-iconpos", button.getIconPos(), null);
-            writer.writeAttribute("data-icon", button.getIcon(), null);
-        }
-        if(button.getStyle() != null) writer.writeAttribute("style", button.getStyle(), null);
-        writer.writeAttribute("class", styleClass, null);
-        
-        writer.writeAttribute("onclick", buildOnclick(context, button), null);
-
-        writer.writeText(button.getValue(), null);
-        
-        writer.endElement("a");
+    public void encodeScript(FacesContext context, Button button) throws IOException {
+        //no widget
     }
     
-    /**
-     * Resolves to local view, external page or jsf navigation
-     */
+    @Override
     protected String buildOnclick(FacesContext context, Button button) {
-        String href = button.getHref();
-        String userOnclick = button.getOnclick();
-        StringBuilder onclick = new StringBuilder();
-        String url = null;
+        String command = null;
+        String outcome = button.getOutcome();
         
-        if(userOnclick != null) {
-            onclick.append(userOnclick).append(";");
+        if(outcome != null && outcome.startsWith("pm:")) {
+            command = MobileUtils.buildNavigation(outcome);
         }
-        
-        if(href != null) {
-            if(href.startsWith("#")) {
-                onclick.append(MobileUtils.buildNavigation(href));
-                
-                return onclick.toString();              //local view
+        else {
+            String targetURL = getTargetURL(context, button);
+            if(targetURL != null) {
+                command = "window.open('" + targetURL + "','" + button.getTarget() + "')";
             }
-            else {
-                url = getResourceURL(context, href);    //external page
-            }  
         }
         
-        if(url != null) {
-            onclick.append("window.location.href='").append(url).append("';");
+        return buildDomEvent(context, button, "onclick", "click", "action", command);
+    }
+    
+    public static String resolveStyleClass(Button button) {
+        String icon = button.getIcon();
+        String iconPos = button.getIconPos();
+        Object value = button.getValue();
+        String styleClass = "ui-btn ui-shadow ui-corner-all";
+            
+        if(value != null && icon != null) {
+            styleClass = styleClass + " " + icon + " ui-btn-icon-" + iconPos;
+        } else if(value == null && icon != null) {
+            styleClass = styleClass + " " + icon + " ui-btn-icon-notext";
         }
-        
-        return onclick.toString();
+    
+        if(button.isDisabled()) {
+            styleClass = styleClass + " ui-state-disabled";
+        } 
+    
+        String userStyleClass = button.getStyleClass();
+        if(userStyleClass != null) {
+            styleClass = styleClass + " " + userStyleClass;
+        }
+    
+        return styleClass;
     }
 }

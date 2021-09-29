@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,112 +16,128 @@
 package org.primefaces.mobile.renderkit;
 
 import java.io.IOException;
-import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.dialog.Dialog;
-import org.primefaces.renderkit.CoreRenderer;
+import org.primefaces.expression.SearchExpressionFacade;
 import org.primefaces.util.WidgetBuilder;
 
-public class DialogRenderer extends CoreRenderer {
+public class DialogRenderer extends org.primefaces.component.dialog.DialogRenderer {
     
+    public static final String MOBILE_CONTAINER_CLASS = "ui-popup-container ui-popup-hidden ui-popup-truncate";
+    public static final String MOBILE_POPUP_CLASS = "ui-popup ui-body-inherit ui-overlay-shadow ui-corner-all";
+    public static final String MOBILE_MASK_CLASS = "ui-popup-screen ui-overlay-b ui-screen-hidden";
+    public static final String MOBILE_TITLE_BAR_CLASS = "ui-header ui-bar-inherit";
+    public static final String MOBILE_TITLE_CLASS = "ui-title";
+    public static final String MOBILE_CONTENT_CLASS = "ui-content";
+    public static final String MOBILE_CLOSE_ICON_CLASS = "ui-btn ui-corner-all ui-icon-delete ui-btn-icon-notext ui-btn-left";
+	
     @Override
-    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        Dialog dialog = (Dialog) component;
-        
-        encodeMarkup(context, dialog);
-        encodeScript(context, dialog);
-    }
-
     protected void encodeScript(FacesContext context, Dialog dialog) throws IOException {
-        String clientId = dialog.getClientId(context);        
+        String clientId = dialog.getClientId(context);
         WidgetBuilder wb = getWidgetBuilder(context);
         wb.initWithDomReady("Dialog", dialog.resolveWidgetVar(), clientId);
+
+        wb.attr("visible", dialog.isVisible(), false)
+            .attr("modal", dialog.isModal(), false)
+            .attr("dynamic", dialog.isDynamic(), false)
+            .attr("showEffect", dialog.getShowEffect(), null)
+            .attr("closeOnEscape", dialog.isCloseOnEscape(), false)  
+            .callback("onHide", "function()", dialog.getOnHide())
+            .callback("onShow", "function()", dialog.getOnShow());
         
+        String focusExpressions = SearchExpressionFacade.resolveClientIds(
+        		context, dialog, dialog.getFocus());
+        if (focusExpressions != null) {
+        	wb.attr("focus", focusExpressions);
+        }
+
+        encodeClientBehaviors(context, dialog);
+         
         wb.finish();
     }
 
+    @Override
     protected void encodeMarkup(FacesContext context, Dialog dialog) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         String clientId = dialog.getClientId(context);
         String style = dialog.getStyle();
         String styleClass = dialog.getStyleClass();
-        String header = dialog.getHeader();
-        
-        Map<String, Object> attrs = dialog.getAttributes();
-        String contentSwatch = (String) attrs.get("contentSwatch");
-        String headerSwatch = (String) attrs.get("headerSwatch");
+        styleClass = (styleClass == null) ? MOBILE_CONTAINER_CLASS : MOBILE_CONTAINER_CLASS + " " + styleClass;
+
+        writer.startElement("div", null);
+        writer.writeAttribute("id", clientId + "_mask", null);
+        writer.writeAttribute("class", MOBILE_MASK_CLASS, null);
+        writer.endElement("div");
         
         writer.startElement("div", dialog);
-        writer.writeAttribute("id", clientId, "id");
-        if (style != null) {
+        writer.writeAttribute("id", clientId, null);
+        writer.writeAttribute("class", styleClass, null);
+        if(style != null) {
             writer.writeAttribute("style", style, null);
-        }
-        if(styleClass != null) {
-            writer.writeAttribute("class", styleClass, null);
-        }
-        
-        writer.writeAttribute("data-role", "popup", null);
-        
-        if(dialog.isModal()) {
-            writer.writeAttribute("data-overlay-theme", "a", null);
-            writer.writeAttribute("data-dismissible", "false", null);
-        }
-        
-        if(dialog.getPosition() != null) {
-            writer.writeAttribute("data-position-to", dialog.getPosition(), null);
-        }
-        
-        if(dialog.getShowEffect() != null) {
-            writer.writeAttribute("data-transition", dialog.getShowEffect(), null);
-        }
-        
-        if(header != null) {
-            writer.startElement("div", null);
-            writer.writeAttribute("data-role", "header", null);
-            writer.writeAttribute("class", "ui-corner-top", null);
-            writer.startElement("h1", null);
-            if(headerSwatch != null) {
-                writer.writeAttribute("data-theme", headerSwatch, null);
-            }
-            writer.writeText(header, null);
-            writer.endElement("h1");
-            
-            if(dialog.isClosable()) {
-                writer.startElement("a", dialog);
-                writer.writeAttribute("href", "#", null);
-                writer.writeAttribute("data-rel", "back", null);
-                writer.writeAttribute("data-role", "button", null);
-                writer.writeAttribute("data-theme", "a", null);
-                writer.writeAttribute("data-icon", "delete", null);
-                writer.writeAttribute("data-iconpos", "notext", null);
-                writer.writeAttribute("data-class", "ui-btn-left", null);
-                writer.endElement("a");
-            }
-            
-            writer.endElement("div");
         }
         
         writer.startElement("div", null);
-        writer.writeAttribute("data-role", "content", null);
-        writer.writeAttribute("class", "ui-corner-bottom ui-content", null);
-        if(contentSwatch != null) {
-            writer.writeAttribute("data-theme", contentSwatch, null);
+        writer.writeAttribute("class", MOBILE_POPUP_CLASS, null);
+        
+        if(dialog.isShowHeader()) {
+            encodeHeader(context, dialog);
         }
-        renderChildren(context, dialog);
+        
+        renderDynamicPassThruAttributes(context, dialog);
+        
+        encodeContent(context, dialog);
+        
         writer.endElement("div");
+
+        writer.endElement("div");
+    }
+    
+    @Override
+    protected void encodeHeader(FacesContext context, Dialog dialog) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        String header = dialog.getHeader();
+        UIComponent headerFacet = dialog.getFacet("header");
+        
+        writer.startElement("div", null);
+        writer.writeAttribute("class", MOBILE_TITLE_BAR_CLASS, null);
+        
+        //close
+        if(dialog.isClosable()) {
+            writer.startElement("a", null);
+            writer.writeAttribute("href", "#", null);
+            writer.writeAttribute("class", MOBILE_CLOSE_ICON_CLASS, null);
+            writer.endElement("a");
+        }
+        
+        //title
+        writer.startElement("h1", null);
+        writer.writeAttribute("class", MOBILE_TITLE_CLASS, null);
+        writer.writeAttribute("role", "heading", null);
+        
+        if(headerFacet != null)
+            headerFacet.encodeAll(context);
+        else if(header != null)
+            writer.write(header);
+        
+        writer.endElement("h1");
         
         writer.endElement("div");
     }
     
     @Override
-    public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
-        //Rendering happens on encodeEnd
+    protected void encodeContent(FacesContext context, Dialog dialog) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        
+        writer.startElement("div", null);
+        writer.writeAttribute("class", "ui-content", null);
+        writer.writeAttribute("role", "main", null);
+        
+        if(!dialog.isDynamic()) {
+            renderChildren(context, dialog);
+        }
+        
+        writer.endElement("div");
     }
-
-    @Override
-    public boolean getRendersChildren() {
-        return true;
-    }    
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,109 +16,61 @@
 package org.primefaces.mobile.renderkit;
 
 import java.io.IOException;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.convert.ConverterException;
-import javax.servlet.ServletRequestWrapper;
-import org.apache.commons.fileupload.FileItem;
 import org.primefaces.component.fileupload.FileUpload;
-import org.primefaces.model.DefaultUploadedFile;
-import org.primefaces.renderkit.CoreRenderer;
-import org.primefaces.webapp.MultipartRequest;
 
-public class FileUploadRenderer extends CoreRenderer {
-
+public class FileUploadRenderer extends org.primefaces.component.fileupload.FileUploadRenderer {
+    
+   public final static String MOBILE_CONTAINER_CLASS = "ui-fileupload ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset";
+	
     @Override
-    public void decode(FacesContext context, UIComponent component) {
+	public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
         FileUpload fileUpload = (FileUpload) component;
         String clientId = fileUpload.getClientId(context);
-        MultipartRequest multipartRequest = getMultiPartRequestInChain(context);
-
-        if (multipartRequest != null) {
-            FileItem file = multipartRequest.getFileItem(clientId);
-
-            if (fileUpload.getMode().equals("simple")) {
-                decodeSimple(context, fileUpload, file);
-            }
+		String style = fileUpload.getStyle();
+        String styleClass = fileUpload.getStyleClass();
+        styleClass = (styleClass == null) ? MOBILE_CONTAINER_CLASS : MOBILE_CONTAINER_CLASS + " " + styleClass;
+        if(fileUpload.isDisabled()) {
+            styleClass = styleClass + " ui-state-disabled";
         }
-    }
-
-    public void decodeSimple(FacesContext context, FileUpload fileUpload, FileItem file) {
-        if (file.getName().equals("")) {
-            fileUpload.setSubmittedValue("");
-        } else {
-            fileUpload.setSubmittedValue(new DefaultUploadedFile(file));
+        
+        writer.startElement("div", null);
+        writer.writeAttribute("id", this, null);
+        if(style != null) {
+            writer.writeAttribute("style", style, null);
         }
-    }
-
-    /**
-     * Finds our MultipartRequestServletWrapper in case application contains
-     * other RequestWrappers
-     */
-    private MultipartRequest getMultiPartRequestInChain(FacesContext facesContext) {
-        Object request = facesContext.getExternalContext().getRequest();
-
-        while (request instanceof ServletRequestWrapper) {
-            if (request instanceof MultipartRequest) {
-                return (MultipartRequest) request;
-            } else {
-                request = ((ServletRequestWrapper) request).getRequest();
-            }
-        }
-
-        return null;
-    }
+                
+        writer.writeAttribute("class", styleClass, null);
+        
+        encodeInputField(context, fileUpload, clientId + "_input");
+        
+        writer.endElement("div");
+	}
 
     @Override
-    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        FileUpload fileUpload = (FileUpload) component;
-
-        encodeMarkup(context, fileUpload);
+    protected void encodeInputField(FacesContext context, FileUpload fileUpload, String clientId) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        
+        writer.startElement("input", fileUpload);
+        writer.writeAttribute("data-role", "none", null);
+		writer.writeAttribute("type", "file", null);
+		writer.writeAttribute("name", clientId, null);
+        
+        if(fileUpload.isMultiple()) writer.writeAttribute("multiple", "multiple", null);
+        if(fileUpload.getStyle() != null) writer.writeAttribute("style", fileUpload.getStyle(), "style");
+        if(fileUpload.getStyleClass() != null) writer.writeAttribute("class", fileUpload.getStyleClass(), "styleClass");
+        if(fileUpload.isDisabled()) writer.writeAttribute("disabled", "disabled", "disabled");
+        
+        renderDynamicPassThruAttributes(context, fileUpload);
+        
+		writer.endElement("input");
     }
-
-    protected void encodeMarkup(FacesContext context, FileUpload fileUpload) throws IOException {
-        if (fileUpload.getMode().equals("simple")) {
-            ResponseWriter writer = context.getResponseWriter();
-            String clientId = fileUpload.getClientId(context);
-
-            writer.startElement("input", null);
-            writer.writeAttribute("type", "file", null);
-            writer.writeAttribute("id", clientId, null);
-            writer.writeAttribute("name", clientId, null);
-
-            if (fileUpload.getStyle() != null) {
-                writer.writeAttribute("style", fileUpload.getStyle(), "style");
-            }
-            if (fileUpload.getStyleClass() != null) {
-                writer.writeAttribute("class", fileUpload.getStyleClass(), "styleClass");
-            }
-            if (fileUpload.isDisabled()) {
-                writer.writeAttribute("disabled", "disabled", "disabled");
-            }
-
-            writer.endElement("input");
-        }
-    }
-
-    /**
-     * Return null if no file is submitted in simple mode
-     *
-     * @param context
-     * @param component
-     * @param submittedValue
-     * @return
-     * @throws ConverterException
-     */
+    
     @Override
-    public Object getConvertedValue(FacesContext context, UIComponent component, Object submittedValue) throws ConverterException {
-        FileUpload fileUpload = (FileUpload) component;
-
-        if (fileUpload.getMode().equals("simple") && submittedValue != null && submittedValue.equals("")) {
-            return null;
-        } else {
-            return submittedValue;
-        }
+    public String getSimpleInputDecodeId(FileUpload fileUpload, FacesContext context) {
+        return fileUpload.getClientId(context) + "_input";
     }
 }

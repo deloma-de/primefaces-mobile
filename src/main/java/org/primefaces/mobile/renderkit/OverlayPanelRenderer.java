@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Prime Teknoloji.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,83 +16,54 @@
 package org.primefaces.mobile.renderkit;
 
 import java.io.IOException;
-import java.util.Map;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.overlaypanel.OverlayPanel;
 import org.primefaces.expression.SearchExpressionFacade;
-import org.primefaces.renderkit.CoreRenderer;
 import org.primefaces.util.WidgetBuilder;
 
-public class OverlayPanelRenderer extends CoreRenderer {
-
+public class OverlayPanelRenderer extends org.primefaces.component.overlaypanel.OverlayPanelRenderer {
+    
     @Override
-    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        OverlayPanel panel = (OverlayPanel) component;
-
-        encodeMarkup(context, panel);
-        encodeScript(context, panel);
-    }
-
     protected void encodeMarkup(FacesContext context, OverlayPanel panel) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
-        String clientId = panel.getClientId(context);     
-        Map<String, Object> attrs = panel.getAttributes();
-        String swatch = (String) attrs.get("swatch");
-        Object swipeClose = (String) attrs.get("swipeClose");        
+        String clientId = panel.getClientId(context);
+        String style = panel.getStyle();
+        String styleClass = panel.getStyleClass();
         
         writer.startElement("div", panel);
         writer.writeAttribute("id", clientId, "id");
-        writer.writeAttribute("data-role", "panel", null);       
-
-        if (panel.getMy() != null)writer.writeAttribute("data-position", panel.getMy(), null);                
-        if (swatch != null) writer.writeAttribute("data-theme", swatch, null);            
-        if (swipeClose != null && Boolean.valueOf(swipeClose.toString())) writer.writeAttribute("data-swipe-close", "true", null);                
-        if (!panel.isDismissable()) writer.writeAttribute("data-dismissible", "false", null);                
-
+        if(style != null) writer.writeAttribute("style", style, "style");
+        if(styleClass != null) writer.writeAttribute("class", styleClass, "styleClass");
         
-        if (panel.getStyleClass() != null) {
-            writer.writeAttribute("class", panel.getStyleClass(), "styleClass");
+        if(!panel.isDynamic()) {
+            renderChildren(context, panel);
         }
-
-        if (panel.getStyle() != null) {
-            writer.writeAttribute("style", panel.getStyle(), "style");
-        }
-
-        renderChildren(context, panel);
-
-
+        
+        renderDynamicPassThruAttributes(context, panel);
+        
         writer.endElement("div");
     }
-
-    protected void encodeScript(FacesContext context, OverlayPanel panel) throws IOException {        
+    
+    @Override
+    protected void encodeScript(FacesContext context, OverlayPanel panel) throws IOException {
         UIComponent target = SearchExpressionFacade.resolveComponent(context, panel, panel.getFor());
-        if (target == null) {
-            throw new FacesException("Cannot find component '" + panel.getFor() + "' in view.");
-        }
-
+        String targetClientId = (target == null) ? null: target.getClientId(context);
         String clientId = panel.getClientId(context);
-        String targetClientId = target.getClientId(context);
-        WidgetBuilder wb = getWidgetBuilder(context);
-        wb.initWithDomReady("OverlayPanel", panel.resolveWidgetVar(), clientId);
 
-        wb.attr("target", targetClientId)
-                .attr("showEvent", panel.getShowEvent(), null)                
-                .callback("onShow", "function()", panel.getOnShow())
-                .callback("onHide", "function()", panel.getOnHide());      
+        WidgetBuilder wb = getWidgetBuilder(context);
+        wb.initWithDomReady("OverlayPanel", panel.resolveWidgetVar(), clientId)
+            .attr("targetId", targetClientId, null)
+            .attr("showEvent", panel.getShowEvent(), null)
+            .attr("hideEvent", panel.getHideEvent(), null)
+            .attr("showEffect", panel.getShowEffect(), null)
+            .callback("onShow", "function()", panel.getOnShow())
+            .callback("onHide", "function()", panel.getOnHide())
+            .attr("at", panel.getAt(), null)
+            .attr("dynamic", panel.isDynamic(), false)
+            .attr("dismissable", panel.isDismissable(), true);
 
         wb.finish();
-    }
-
-    @Override
-    public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
-        //Do nothing
-    }
-
-    @Override
-    public boolean getRendersChildren() {
-        return true;
     }
 }

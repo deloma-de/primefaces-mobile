@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Prime Technology.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,205 +16,164 @@
 package org.primefaces.mobile.renderkit;
 
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import org.primefaces.component.api.UIData;
 import org.primefaces.component.datalist.DataList;
-import org.primefaces.component.separator.Separator;
-import org.primefaces.renderkit.CoreRenderer;
+import org.primefaces.mobile.renderkit.paginator.PaginatorRenderer;
+import org.primefaces.util.ComponentUtils;
 import org.primefaces.util.WidgetBuilder;
 
-public class DataListRenderer extends CoreRenderer {
-             
+public class DataListRenderer extends org.primefaces.component.datalist.DataListRenderer {
+    
+    public static final String MOBILE_CONTENT_CLASS = "ui-datalist-content";
+	
     @Override
-    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        DataList dataList = (DataList) component;                       
-        
-        if (dataList.isPaginationRequest(context)) {
-            dataList.updatePaginationData(context, dataList);
-            
-            if(dataList.isLazy()) {
-                dataList.loadLazyData();
-            }            
-
-            encodeLoadMore(context, dataList);
-        } else {
-            encodeMarkup(context, dataList);
-            encodeScript(context, dataList);
-        }
+    public void decode(FacesContext context, UIComponent component) {
+        decodeBehaviors(context, component);        
     }
     
-    protected void encodeMarkup(FacesContext context, DataList dataList) throws IOException {
-        if(dataList.isLazy()) {
-            dataList.loadLazyData();
-        }        
-        
-        ResponseWriter writer = context.getResponseWriter();        
-        UIComponent header = dataList.getHeader();
-        UIComponent footer = dataList.getFooter();
-        String type = dataList.getType();
-        Object filterValue = dataList.getAttributes().get("filter");          
-        Object placeholder = dataList.getAttributes().get("placeholder");
-        Object autodividers = dataList.getAttributes().get("autoDividers");
-        Object autoComplete = dataList.getAttributes().get("autoComplete");
-        Object icon = dataList.getAttributes().get("icon");
-        Object iconSplit = dataList.getAttributes().get("iconSplit");
-        Object swatch = (String) dataList.getAttributes().get("swatch");
-        Object dividerSwatch = (String) dataList.getAttributes().get("dividerSwatch");        
-        String iconType = (iconSplit != null && Boolean.valueOf(iconSplit.toString())) ? "data-split-icon" : "data-icon";
-        
-        writer.startElement("ul", dataList);                        
-        writer.writeAttribute("id", dataList.getClientId(context), "id");        
-        if(dataList.getStyle() != null) writer.writeAttribute("style", dataList.getStyle(), null);
-        if(dataList.getStyleClass() != null) writer.writeAttribute("class", dataList.getStyleClass(), null);                        
-        writer.writeAttribute("data-role", "listview", null);
-        
-        if(filterValue != null && Boolean.valueOf(filterValue.toString())) writer.writeAttribute("data-filter", "true", null);
-        if(placeholder != null) writer.writeAttribute("data-filter-placeholder", placeholder, null);
-        if(autodividers != null && Boolean.valueOf(autodividers.toString())) writer.writeAttribute("data-autodividers", "true", null);
-        if(autoComplete != null && Boolean.valueOf(autoComplete.toString())) writer.writeAttribute("data-filter-reveal", "true", null);        
-        if(icon != null) writer.writeAttribute(iconType, icon, null);        
-        if(type != null && type.equals("inset")) writer.writeAttribute("data-inset", true, null);
-        if(swatch != null) writer.writeAttribute("data-theme", swatch, null); 
-        if(dividerSwatch != null) writer.writeAttribute("data-divider-theme", dividerSwatch, null);         
+    @Override
+    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
+        DataList list = (DataList) component;
 
-        if(header != null) {
-            writer.startElement("li", null);
-            writer.writeAttribute("data-role", "list-divider", null);
-            header.encodeAll(context);
-            writer.endElement("li");
-        }
-        
-        int rowCount = dataList.getRowCount(); 
-        
-        //restore
-        Integer defaultRows = (Integer) dataList.getAttributes().get("defaultRows");
-        if (defaultRows == null) {
-            dataList.getAttributes().put("defaultRows", dataList.getRows());
-            defaultRows = dataList.getRows();
-        }
-        dataList.setRows(defaultRows);        
-        
-        boolean renderPaginator = (dataList.isPaginator() && (rowCount > dataList.getRows()));
-        
-        if (dataList.getVar() != null) {
-            if (renderPaginator) {
-                rowCount = dataList.getRows();
+        if(list.isPaginationRequest(context)) {
+            list.updatePaginationData(context, list);
+            
+            if(list.isLazy()) {
+                list.loadLazyData();
             }
-
-            for (int i = 0; i < rowCount; i++) {
-                dataList.setRowIndex(i);
-                writer.startElement("li", null);
-                renderChildren(context, dataList);
-                writer.endElement("li");
-            }
-        }
+            
+            encodeList(context, list);
+        } 
         else {
-            for(UIComponent child : dataList.getChildren()) {
-                if(child.isRendered()) {
-                    writer.startElement("li", dataList);
-                    
-                    if(child instanceof Separator) {
-                        writer.writeAttribute("data-role", "list-divider", null);
-                        renderChildren(context, child);
-                    }
-                    else {
-                        Object iconLi = child.getAttributes().get("icon");
-                        Object filterText = child.getAttributes().get("filterText"); 
-                        if(iconLi != null) writer.writeAttribute("data-icon", iconLi, null);
-                        if (filterText != null) writer.writeAttribute("data-filtertext", filterText, null);              
-                        child.encodeAll(context);
-                    }
-                    
-                    writer.endElement("li");
-                }
-            }
+            encodeMarkup(context, list);
+            encodeScript(context, list);
+        }
+    }
+    
+    @Override
+    protected void encodeScript(FacesContext context, DataList list) throws IOException {
+        String clientId = list.getClientId(context);
+        WidgetBuilder wb = getWidgetBuilder(context);
+        wb.init("DataList", list.resolveWidgetVar(), clientId);
+        
+        if(list.isPaginator()) {
+            PaginatorRenderer paginatorRenderer = getPaginatorRenderer(context);
+            paginatorRenderer.encodeScript(context, list, wb);
         }
         
-        if (footer != null) {
-            writer.startElement("div", null); 
-            writer.writeAttribute("style", "margin-top: 20px;text-align: center;", null);                        
-            footer.encodeAll(context);
-            writer.endElement("div");
-        }            
-        
-        
-        if (renderPaginator) {
-            encodePaginatorButton(context, dataList);
-        }                
+        encodeClientBehaviors(context, list);
 
-        writer.endElement("ul");
-                                                 
-        dataList.setRowIndex(-1);        
+        wb.finish();
     }
-        
-    protected void encodePaginatorButton(FacesContext context, DataList dataList) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        String clientId =  dataList.getClientId(context) + "_btn";
-        Object paginatorText = (dataList.getAttributes().get("paginatorText") == null) ? "More" : dataList.getAttributes().get("paginatorText");
-        
-        writer.startElement("a", dataList);
-        writer.writeAttribute("id", clientId, null);        
-        writer.writeAttribute("data-role", "button", null);
-        writer.writeAttribute("style", "margin: 20px 0px 20px", null);        
-        writer.writeText(paginatorText, null);       
-        writer.endElement("a");        
-    }  
     
-    protected void encodeLoadMore(FacesContext context, DataList dataList) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();        
-                                      
-        int rowsRendered = dataList.getFirst() + dataList.getRows();
-        for (int i = dataList.getFirst(); i < rowsRendered; i++) {
-            dataList.setRowIndex(i);
+    @Override
+    public void encodeMarkup(FacesContext context, DataList list) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        String clientId = list.getClientId(context);
+        String style = list.getStyle();
+        String styleClass = list.getStyleClass();
+        styleClass = (styleClass == null) ? DataList.DATALIST_CLASS : DataList.DATALIST_CLASS + " " + styleClass;
+        boolean hasPaginator = list.isPaginator();
+        String paginatorPosition = list.getPaginatorPosition();
+        PaginatorRenderer paginatorRenderer = getPaginatorRenderer(context);
+        
+        if(hasPaginator) {
+            list.calculateFirst();
+        }
+        
+        writer.startElement("div", null);
+        writer.writeAttribute("id", clientId, "id");
+        writer.writeAttribute("class", styleClass, "styleClass");
+        if(style != null) {
+            writer.writeAttribute("style", style, "style");
+        }
+        
+        encodeFacet(context, list, "header");
+                
+        if(hasPaginator && !paginatorPosition.equalsIgnoreCase("bottom")) {
+            paginatorRenderer.encodeMarkup(context, list, "top");
+        }
+        
+        writer.startElement("div", null);
+        writer.writeAttribute("class", MOBILE_CONTENT_CLASS, null);
+        encodeList(context, list);
+        writer.endElement("div");
+        
+        if(hasPaginator && !paginatorPosition.equalsIgnoreCase("top")) {
+            paginatorRenderer.encodeMarkup(context, list, "bottom");
+        }
+        
+        encodeFacet(context, list, "footer");
+
+        writer.endElement("div");
+    }
+
+    protected void encodeList(FacesContext context, DataList list) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        int first = list.getFirst();
+        int rows = list.getRows() == 0 ? list.getRowCount() : list.getRows();
+        int pageSize = first + rows;
+        int rowCount = list.getRowCount();
+        String varStatus = list.getVarStatus();
+        Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
+        String listTag = list.getListTag();
+        writer.startElement(listTag, null);
+        writer.writeAttribute("id", list.getClientId(context) + "_list", "id");
+
+        if(list.getItemType() != null) {
+            writer.writeAttribute("type", list.getItemType(), null);
+        }
+        
+        renderDynamicPassThruAttributes(context, list);
+
+        for (int i = first; i < pageSize; i++) {
+            if(varStatus != null) {
+                requestMap.put(varStatus, new org.primefaces.component.datalist.DataListRenderer.VarStatus(first, (pageSize - 1), (i == 0), (i == (rowCount - 1)), i, (i % 2 == 0), (i % 2 == 1), 1));
+            }
             
-            if (dataList.isRowAvailable()) {
+            list.setRowIndex(i);
+
+            if (list.isRowAvailable()) {
                 writer.startElement("li", null);
-                renderChildren(context, dataList);
+                renderChildren(context, list);
                 writer.endElement("li");
             }
         }
-                 
-        dataList.setFirst(0);
-        dataList.setRows(rowsRendered);
-    }    
-    
-    protected void encodeScript(FacesContext context, DataList dataList) throws IOException {        
-        String clientId = dataList.getClientId(context);
-        WidgetBuilder wb = getWidgetBuilder(context);                 
-        wb.initWithDomReady("DataList", dataList.resolveWidgetVar(), clientId)
-                .attr("isPaginator", dataList.isPaginator())                
-                .attr("scrollStep", dataList.getRows())
-                .attr("scrollLimit", dataList.getRowCount());
         
-        wb.finish();
-    }    
+        list.setRowIndex(-1);
+        
+        if(varStatus != null) {
+            requestMap.remove(varStatus);
+        }
+        
+        
+        
+        writer.endElement(listTag);
+    }
     
-    @Override
-    protected void renderChildren(FacesContext context, UIComponent component) throws IOException {
+    public void encodeFacet(FacesContext context, UIData data, String facet) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
-        for (Iterator<UIComponent> iterator = component.getChildren().iterator(); iterator.hasNext();) {
-            UIComponent child = (UIComponent) iterator.next();
-            Object iconLi = child.getAttributes().get("icon");
-            Object filterText = child.getAttributes().get("filterText");            
-            if (iconLi != null) {
-                writer.writeAttribute("data-icon", iconLi, null);
-            }
-            if (filterText != null) {
-                writer.writeAttribute("data-filtertext", filterText, null);
-            }            
-            renderChild(context, child);
+        UIComponent component = data.getFacet(facet);
+        
+        if(component != null && component.isRendered()) {
+            writer.startElement("div", null);
+            writer.writeAttribute("class", "ui-bar ui-bar-b", null);
+            writer.writeAttribute("role", "heading", null);
+            component.encodeAll(context);
+            writer.endElement("div");
         }
     }
     
-    @Override
-    public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
-        //Do Nothing
+    private PaginatorRenderer getPaginatorRenderer(FacesContext context) {
+        PaginatorRenderer renderer = ComponentUtils.getUnwrappedRenderer(
+                context,
+                "org.primefaces.component",
+                "org.primefaces.component.PaginatorRenderer",
+                PaginatorRenderer.class);
+        return renderer;
     }
-
-    @Override
-    public boolean getRendersChildren() {
-        return true;
-    }
- }    
+}

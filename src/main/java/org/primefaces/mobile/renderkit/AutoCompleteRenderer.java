@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Prime Teknoloji.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,120 +18,150 @@ package org.primefaces.mobile.renderkit;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
-import javax.faces.event.PhaseId;
 import org.primefaces.component.autocomplete.AutoComplete;
-import org.primefaces.event.AutoCompleteEvent;
-import org.primefaces.renderkit.CoreRenderer;
 import org.primefaces.util.ComponentUtils;
+import org.primefaces.util.HTML;
 import org.primefaces.util.WidgetBuilder;
 
-public class AutoCompleteRenderer extends CoreRenderer {
-
-    public void decode(FacesContext context, UIComponent component) {
-        AutoComplete ac = (AutoComplete) component;
-        String clientId = ac.getClientId(context);
-        Map<String, String> params = context.getExternalContext().getRequestParameterMap();
-
-        if (ac.isDisabled() || ac.isReadonly()) {
-            return;
-        }
-
-        decodeBehaviors(context, ac);
-
-        //AutoComplete event
-        String query = params.get(clientId + "_query");
-        if (query != null && !query.isEmpty()) {
-            AutoCompleteEvent autoCompleteEvent = new AutoCompleteEvent(ac, query);
-            autoCompleteEvent.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
-            ac.queueEvent(autoCompleteEvent);
-        }
-    }
-
+public class AutoCompleteRenderer extends org.primefaces.component.autocomplete.AutoCompleteRenderer {
+    
+    public final static String MOBILE_INPUT_CONTAINER_CLASS = "ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear";
+    public final static String MOBILE_PANEL_CLASS = "ui-controlgroup ui-controlgroup-vertical ui-corner-all ui-screen-hidden";
+    public final static String MOBILE_ITEM_CONTAINER_CLASS = "ui-controlgroup-controls";
+    public final static String MOBILE_ITEM_CLASS = "ui-autocomplete-item ui-btn ui-corner-all ui-shadow";
+    public final static String MOBILE_CLEAR_ICON_CLASS = "ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden";
+	
     @Override
-    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        AutoComplete autoComplete = (AutoComplete) component;
-
-        encodeMarkup(context, autoComplete);
-        encodeScript(context, autoComplete);
-
-    }
-
-    protected void encodeMarkup(FacesContext context, AutoComplete ac) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        String clientId = ac.getClientId(context);
-        String var = ac.getVar();
-        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
-        Converter converter = ComponentUtils.getConverter(context, ac);
-        boolean pojo = var != null;
-
-        writer.startElement("div", ac);
-        writer.writeAttribute("id", clientId, "id");
-        writer.startElement("ul", null);
-        writer.writeAttribute("data-role", "listview", null);
-        writer.writeAttribute("data-inset", "true", null);
-        writer.writeAttribute("data-filter", "true", null);
-
-        if (ac.getStyleClass() != null) {
-            writer.writeAttribute("class", ac.getStyleClass(), "styleClass");
-        }
-
-        if (ac.getStyle() != null) {
-            writer.writeAttribute("style", ac.getStyle(), "style");
-        }
-
-        int maxResults = ac.getMaxResults();
-        List results = ac.getSuggestions();
-
-        if (results != null) {
-
-            if (maxResults != Integer.MAX_VALUE && results.size() > maxResults) {
-                results = results.subList(0, ac.getMaxResults());
-            }
-
-            for (Object item : results) {
-                writer.startElement("li", null);
-                writer.startElement("a", null);                
-                if (pojo) {
-                    requestMap.put(var, item);
-                    String value = converter == null ? (String) ac.getItemValue() : converter.getAsString(context, ac, ac.getItemValue());
-                    writer.writeAttribute("item-value", value, null);
-                    writer.writeText(ac.getItemLabel(), null);
-                } else {
-                    writer.writeAttribute("item-value", item, null);
-                    writer.writeText(item, null);
-                }
-                writer.endElement("a");
-                writer.endElement("li");
-            }
-        }
-
-        writer.endElement("ul");
-        writer.endElement("div");
-    }
-
     protected void encodeScript(FacesContext context, AutoComplete ac) throws IOException {
         String clientId = ac.getClientId(context);
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.initWithDomReady("AutoComplete", ac.resolveWidgetVar(), clientId);
+        wb.init("AutoComplete", ac.resolveWidgetVar(), clientId);
+        
         wb.attr("minLength", ac.getMinQueryLength(), 1)
-                .attr("delay", ac.getQueryDelay(), 300);
-
+            .attr("delay", ac.getQueryDelay(), 300);
+                
+        String emptyMessage = ac.getEmptyMessage();
+        if(emptyMessage != null) {
+            wb.attr("emptyMessage", emptyMessage, null);
+        }
+        
         encodeClientBehaviors(context, ac);
 
         wb.finish();
     }
-
+    
     @Override
-    public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
-        //Do nothing
+    protected void encodeMarkup(FacesContext context, AutoComplete ac) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        String clientId = ac.getClientId(context);
+        String style = ac.getStyle();
+        String styleClass = ac.getStyleClass();
+        
+        writer.startElement("div", null);
+        writer.writeAttribute("id", clientId, null);
+        if(style != null) writer.writeAttribute("style", style, null);
+        if(styleClass != null) writer.writeAttribute("class", styleClass, null);
+        
+        encodeInput(context, ac);
+        encodePanel(context, ac);
+        
+        writer.endElement("div");
     }
 
+    protected void encodeInput(FacesContext context, AutoComplete ac) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        String clientId = ac.getClientId(context);
+        String inputId = clientId + "_input";
+        String valueToRender = ComponentUtils.getValueToRender(context, ac);
+            
+        writer.startElement("div", null);
+        writer.writeAttribute("class", MOBILE_INPUT_CONTAINER_CLASS, null);
+        
+        writer.startElement("input", ac);
+        writer.writeAttribute("id", inputId, null);
+        writer.writeAttribute("name", inputId, null);
+        writer.writeAttribute("type", "text", null);
+        writer.writeAttribute("data-enhanced", "true", null);
+        renderPassThruAttributes(context, ac, HTML.INPUT_TEXT_ATTRS_WITHOUT_EVENTS);
+        renderDomEvents(context, ac, HTML.INPUT_TEXT_EVENTS);
+        
+        if(valueToRender != null) writer.writeAttribute("value", valueToRender , null);
+        if(ac.isDisabled()) writer.writeAttribute("disabled", "disabled", null);
+        if(ac.isReadonly()) writer.writeAttribute("readonly", "readonly", null);
+        
+        writer.endElement("input");
+        
+        writer.startElement("a", null);
+        writer.writeAttribute("href", "#", null);
+        writer.writeAttribute("class", MOBILE_CLEAR_ICON_CLASS, null);
+        writer.endElement("a");
+        
+        if(ac.getVar() != null) {
+            encodeHiddenInput(context, ac, clientId);
+        }
+        
+        writer.endElement("div");
+    }
+    
     @Override
-    public boolean getRendersChildren() {
-        return true;
+    protected void encodePanel(FacesContext context, AutoComplete ac) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        String panelStyle = ac.getPanelStyle();
+        String panelStyleClass = ac.getPanelStyleClass();
+        panelStyleClass = (panelStyleClass == null)? MOBILE_PANEL_CLASS: MOBILE_PANEL_CLASS + " " + panelStyleClass;
+        
+        writer.startElement("div", null);
+        writer.writeAttribute("class", panelStyleClass, null);
+        if(panelStyle != null) {
+            writer.writeAttribute("style", panelStyle, null);
+        }
+        
+        writer.startElement("div", null);
+        writer.writeAttribute("class", MOBILE_ITEM_CONTAINER_CLASS, null);
+        writer.endElement("div");
+        writer.endElement("div");
+    }
+    
+    @Override
+    protected void encodeSuggestions(FacesContext context, AutoComplete ac, List items) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        String var = ac.getVar();
+        boolean pojo = (var != null);
+        Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
+        Converter converter = ComponentUtils.getConverter(context, ac);
+        boolean hasContent = (ac.getChildCount() > 0);
+        
+        for(Object item : items) {
+            writer.startElement("a", null);
+            writer.writeAttribute("href", "#", null);
+            writer.writeAttribute("class", MOBILE_ITEM_CLASS, null);
+            
+            if(pojo) {
+                requestMap.put(var, item);
+                String value = (converter == null) ? (String) ac.getItemValue() : converter.getAsString(context, ac, ac.getItemValue());
+                writer.writeAttribute("data-item-value", value, null);
+                writer.writeAttribute("data-item-label", ac.getItemLabel(), null);
+                
+                if(hasContent)
+                    renderChildren(context, ac);
+                else
+                    writer.writeText(ac.getItemLabel(), null);
+            }
+            else {
+                writer.writeAttribute("data-item-label", item, null);
+                writer.writeAttribute("data-item-value", item, null);
+                
+                writer.writeText(item, null);
+            }
+
+            writer.endElement("a");
+        }
+        
+        if(pojo) {
+            requestMap.remove(var);
+        }
     }
 }

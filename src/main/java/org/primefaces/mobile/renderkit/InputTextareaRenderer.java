@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Prime Technology.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,110 +16,49 @@
 package org.primefaces.mobile.renderkit;
 
 import java.io.IOException;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.inputtextarea.InputTextarea;
-import org.primefaces.mobile.util.MobileUtils;
-import org.primefaces.renderkit.InputRenderer;
 import org.primefaces.util.ComponentUtils;
 import org.primefaces.util.HTML;
 import org.primefaces.util.WidgetBuilder;
 
-public class InputTextareaRenderer extends InputRenderer {
+public class InputTextareaRenderer extends org.primefaces.component.inputtextarea.InputTextareaRenderer {
 
-    @Override
-	public void decode(FacesContext context, UIComponent component) {
-		InputTextarea inputTextarea = (InputTextarea) component;
-        String clientId = inputTextarea.getClientId(context);
-        String inputId = inputTextarea.getLabel() == null ? clientId : clientId + "_input";
-
-        if(inputTextarea.isDisabled() || inputTextarea.isReadonly()) {
-            return;
-        }
-
-        decodeBehaviors(context, inputTextarea);
-
-		String submittedValue = (String) context.getExternalContext().getRequestParameterMap().get(inputId);
-        
-		inputTextarea.setSubmittedValue(submittedValue);
-	}
-
+    public final static String MOBILE_STYLE_CLASS = "ui-input-text ui-shadow-inset ui-body-inherit ui-corner-all";
+	
 	@Override
-	public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-		InputTextarea inputTextarea = (InputTextarea) component;
-
-		encodeMarkup(context, inputTextarea);
-		encodeScript(context, inputTextarea);
-	}
-
-    protected void encodeScript(FacesContext context, InputTextarea inputTextarea) throws IOException {
+	public void encodeMarkup(FacesContext context, InputTextarea inputTextarea) throws IOException {
+		ResponseWriter writer = context.getResponseWriter();
         String clientId = inputTextarea.getClientId(context);
-
-        WidgetBuilder wb = getWidgetBuilder(context);
-        wb.initWithDomReady("InputTextarea", inputTextarea.resolveWidgetVar(), clientId);
-
-        encodeClientBehaviors(context, inputTextarea);
-
-        wb.finish();
-    }
-    
-    protected void encodeMarkup(FacesContext context, InputTextarea inputTextarea) throws IOException {
-		ResponseWriter writer = context.getResponseWriter();
-		String clientId = inputTextarea.getClientId(context);
-        String label = inputTextarea.getLabel();
-        String inputId = label == null ? clientId : clientId + "_input";
-
-        if(label == null) {
-            encodeInput(context, inputTextarea, inputId);
-        } 
-        else {
-            writer.startElement("div", inputTextarea);
-            writer.writeAttribute("id", clientId, null);
-            writer.writeAttribute("data-role", "fieldcontain", null);
-                        
-            writer.startElement("label", null);
-            writer.writeAttribute("for", inputId, null);
-            writer.writeText(label, "label");
-            writer.endElement("label");
-            
-            encodeInput(context, inputTextarea, inputId);
-            
-            writer.endElement("div");
-        }
-	}
-    
-    protected void encodeInput(FacesContext context, InputTextarea inputTextarea, String inputId) throws IOException {
-		ResponseWriter writer = context.getResponseWriter();
-
-		writer.startElement("textarea", null);
-		writer.writeAttribute("id", inputId, null);
-		writer.writeAttribute("name", inputId, null);
+        String valueToRender = ComponentUtils.getValueToRender(context, inputTextarea);
+        String style = inputTextarea.getStyle();
+        String styleClass = inputTextarea.getStyleClass();
+        styleClass = (styleClass == null) ? MOBILE_STYLE_CLASS: MOBILE_STYLE_CLASS + " " + styleClass;
+        styleClass = !inputTextarea.isDisabled() ? styleClass : styleClass + " ui-state-disabled";
+        
+		writer.startElement("textarea", inputTextarea);
+        writer.writeAttribute("data-role", "none", null);
+		writer.writeAttribute("id", clientId, null);
+		writer.writeAttribute("name", clientId, null);
+        writer.writeAttribute("class", styleClass, null); 
 
 		renderPassThruAttributes(context, inputTextarea, HTML.INPUT_TEXTAREA_ATTRS);
+        renderDomEvents(context, inputTextarea, HTML.INPUT_TEXT_EVENTS);
 
-        if(MobileUtils.isMini(context)) writer.writeAttribute("data-mini", "true", null);
         if(inputTextarea.isDisabled()) writer.writeAttribute("disabled", "disabled", "disabled");
         if(inputTextarea.isReadonly()) writer.writeAttribute("readonly", "readonly", "readonly");
-        if(inputTextarea.getStyle() != null) writer.writeAttribute("style", inputTextarea.getStyle(), "style");        
-        writer.writeAttribute("class", createStyleClass(inputTextarea), "styleClass");
-
-        String valueToRender = ComponentUtils.getValueToRender(context, inputTextarea);
-		if(valueToRender != null) {
-			writer.writeText(valueToRender, "value");
-		}                     
+        if(style != null) writer.writeAttribute("style", style, null);  
+		if(valueToRender != null) writer.writeText(valueToRender, "value");        
 
         writer.endElement("textarea");
 	}
     
-    protected String createStyleClass(InputTextarea inputTextarea) {
-        String defaultClass = "";
-        defaultClass = inputTextarea.isValid() ? defaultClass : defaultClass + " ui-focus";
+    @Override
+	public void encodeScript(FacesContext context, InputTextarea inputTextarea) throws IOException {
+		String clientId = inputTextarea.getClientId(context);
         
-        String styleClass = inputTextarea.getStyleClass();
-        styleClass = styleClass == null ? defaultClass : defaultClass + " " + styleClass;
-        
-        return styleClass;
-    }       
-    
+        WidgetBuilder wb = getWidgetBuilder(context);
+        wb.initWithDomReady("InputTextarea", inputTextarea.resolveWidgetVar(), clientId).finish();
+	}
 }

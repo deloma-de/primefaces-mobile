@@ -1,0 +1,1 @@
+This product includes software developed by the jQuery Project! (http://jquerymobile.com/)

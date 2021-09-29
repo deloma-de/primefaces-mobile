@@ -1,5 +1,5 @@
 <!-- Components having these attributes must extend from HtmlInputTextArea so all the attributes are defined as ignoreInComponet 
-	which will ignore code generation in component class since they are already defined in parent HtmlInputText
+	which will ignore code generation in component class since they are already defined in parent HtmlInputTextArea
 -->
 <attribute>
 	<name>accesskey</name>
@@ -174,7 +174,7 @@
 	<required></required>
 	<type>java.lang.String</type>
 	<ignoreInComponent>true</ignoreInComponent>
-    <description>Advisory tooltip information.</description>
+    <description>Position of the element in the tabbing order.</description>
 </attribute>
 <attribute>
 	<name>title</name>
@@ -182,4 +182,10 @@
 	<type>java.lang.String</type>
 	<ignoreInComponent>true</ignoreInComponent>
     <description>Advisory tooltip information.</description>
+</attribute>
+<attribute>
+    <name>placeholder</name>
+    <required>false</required>
+    <type>java.lang.String</type>
+    <description>The placeholder attribute specifies a short hint that describes the expected value of an input field.</description>
 </attribute>

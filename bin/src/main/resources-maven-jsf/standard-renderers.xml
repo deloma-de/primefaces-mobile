@@ -1,0 +1,131 @@
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.CommandButtonRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.CommandButtonRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.ButtonRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.ButtonRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.DataListRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.DataListRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.InputTextRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.InputTextRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.InputTextareaRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.InputTextareaRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>javax.faces.Panel</component-family>
+            <renderer-type>javax.faces.Grid</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.PanelGridRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.Link</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.OutputLinkRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.PanelRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.PanelRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.AccordionPanelRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.AccordionPanelRenderer</renderer-class>
+        </renderer>
+                
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.SelectBooleanCheckboxRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.SelectBooleanCheckboxRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.SelectManyCheckboxRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.SelectManyCheckboxRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.SelectOneRadioRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.SelectOneRadioRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.DialogRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.DialogRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.GrowlRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.GrowlRenderer</renderer-class>
+        </renderer>   
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.CalendarRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.CalendarRenderer</renderer-class>
+        </renderer>   
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.AutoCompleteRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.AutoCompleteRenderer</renderer-class>
+        </renderer>   
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.OverlayPanelRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.OverlayPanelRenderer</renderer-class>
+        </renderer> 
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.DataTableRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.DataTableRenderer</renderer-class>
+        </renderer> 
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.FileUploadRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.FileUploadRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.ContextMenuRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.ContextMenuRenderer</renderer-class>            
+        </renderer>    
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.ConfirmDialogRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.ConfirmDialogRenderer</renderer-class>            
+        </renderer>          
+        
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.SelectManyMenuRenderer</renderer-type>
+            <renderer-class>org.primefaces.mobile.renderkit.SelectManyMenuRenderer</renderer-class>            
+        </renderer>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        

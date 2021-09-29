@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Prime Technology.
+ * Copyright 2009-2015 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,122 +16,133 @@
 package org.primefaces.mobile.renderkit;
 
 import java.io.IOException;
-import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.accordionpanel.AccordionPanel;
 import org.primefaces.component.tabview.Tab;
-import org.primefaces.renderkit.CoreRenderer;
+import org.primefaces.util.HTML;
 import org.primefaces.util.WidgetBuilder;
 
-public class AccordionPanelRenderer extends CoreRenderer {
+public class AccordionPanelRenderer extends org.primefaces.component.accordionpanel.AccordionPanelRenderer {
     
+    public final static String MOBILE_CONTAINER_CLASS = "ui-accordion ui-collapsible-set ui-corner-all ui-hidden-container";
+    public final static String MOBILE_INACTIVE_TAB_CONTAINER_CLASS = "ui-collapsible ui-collapsible-inset ui-corner-all ui-collapsible-themed-content ui-collapsible-collapsed";
+    public final static String MOBILE_ACTIVE_TAB_CONTAINER_CLASS = "ui-collapsible ui-collapsible-inset ui-corner-all ui-collapsible-themed-content";
+    public final static String MOBILE_ACTIVE_TAB_HEADER_CLASS = "ui-collapsible-heading";
+    public final static String MOBILE_INACTIVE_TAB_HEADER_CLASS = "ui-collapsible-heading ui-collapsible-heading-collapsed";
+    public final static String MOBILE_ACTIVE_TAB_CONTENT_CLASS = "ui-collapsible-content ui-body-inherit";
+    public final static String MOBILE_INACTIVE_TAB_CONTENT_CLASS = "ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed";
+    public final static String MOBILE_ACTIVE_ICON_CLASS = "ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-icon-minus";
+    public final static String MOBILE_INACTIVE_ICON_CLASS = "ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-icon-plus";
+	
     @Override
-    public void decode(FacesContext context, UIComponent component) {        
-        decodeBehaviors(context, component);
-    }   
-
-    @Override
-    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        AccordionPanel acco = (AccordionPanel) component;
-        encodeMarkup(context, acco);
-        encodeScript(context, acco);
-    }
-           
     protected void encodeMarkup(FacesContext context, AccordionPanel acco) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();        
-        Map<String, Object> attrs = acco.getAttributes();
-        Object swatch = (String) attrs.get("swatch");
-        String contentSwatch = (String) attrs.get("contentSwatch");
-        Boolean inset = (acco.getAttributes().get("inset") == null ? true : Boolean.valueOf(acco.getAttributes().get("inset").toString()));
-        String var = acco.getVar();
-        boolean multiple = acco.isMultiple();
-        String activeIndex = acco.getActiveIndex();
-
-        writer.startElement("div", acco);
-        writer.writeAttribute("id", acco.getClientId(context), null);
-        if (!multiple) writer.writeAttribute("data-role", "collapsible-set", null);
-        if(acco.getStyle() != null) writer.writeAttribute("style", acco.getStyle(), null);
-        if(acco.getStyleClass() != null) writer.writeAttribute("class", acco.getStyleClass(), null);        
-        if(swatch != null) writer.writeAttribute("data-theme", swatch, null); 
-        if(contentSwatch != null) writer.writeAttribute("data-content-theme", contentSwatch, null);                 
-        if (var == null) {
-            int i = 0;
-            for(UIComponent child : acco.getChildren()) {
-                if(child.isRendered() && child instanceof Tab) {
-                    boolean active = multiple ? activeIndex.indexOf(String.valueOf(i)) != -1 : activeIndex.equals(String.valueOf(i));
-
-                    encodeTab(context, (Tab) child, active, inset);
-
-                    i++;
-                }
-            }
-        } else {
-            int dataCount = acco.getRowCount();
-            Tab tab = (Tab) acco.getChildren().get(0);
-
-            for (int i = 0; i < dataCount; i++) {
-                acco.setRowIndex(i);
-                boolean active = multiple ? activeIndex.indexOf(String.valueOf(i)) != -1 : activeIndex.equals(String.valueOf(i));
-
-                encodeTab(context, tab, active, inset);
-            }
-
-            acco.setRowIndex(-1);
+		ResponseWriter writer = context.getResponseWriter();
+		String clientId = acco.getClientId(context);
+        String widgetVar = acco.resolveWidgetVar();
+        String style = acco.getStyle();
+        String styleClass = acco.getStyleClass();
+        styleClass = styleClass == null ? MOBILE_CONTAINER_CLASS : MOBILE_CONTAINER_CLASS + " " + styleClass;
+        
+		writer.startElement("div", acco);
+		writer.writeAttribute("id", clientId, null);
+        writer.writeAttribute("class", styleClass, null);
+		if(acco.getStyle() != null) {
+            writer.writeAttribute("style", style, null);
         }
+        
+        writer.writeAttribute("role", "tablist", null);
+        
+        writer.writeAttribute(HTML.WIDGET_VAR, widgetVar, null);
 
-        writer.endElement("div");
-    }
-    
-    protected void encodeScript(FacesContext context, AccordionPanel acco) throws IOException {
-        String clientId = acco.getClientId(context);
+		encodeTabs(context, acco);
+        encodeStateHolder(context, acco);
+        
+        renderDynamicPassThruAttributes(context, acco);
+
+		writer.endElement("div");
+	}
+
+    @Override
+	protected void encodeScript(FacesContext context, AccordionPanel acco) throws IOException {
+		String clientId = acco.getClientId(context);
+        boolean multiple = acco.isMultiple();
+        
         WidgetBuilder wb = getWidgetBuilder(context);
         wb.init("AccordionPanel", acco.resolveWidgetVar(), clientId);
-
-        wb.callback("onTabChange", "function(panel)", acco.getOnTabChange());
-
+         		
+        if(acco.isDynamic()) {
+            wb.attr("dynamic", true).attr("cache", acco.isCache());
+        }
+        
+        wb.attr("multiple", multiple, false)
+        .callback("onTabChange", "function(panel)", acco.getOnTabChange())
+        .callback("onTabShow", "function(panel)", acco.getOnTabShow());
+        
         encodeClientBehaviors(context, acco);
-
+        
         wb.finish();
-    }  
+	}
     
-    protected void encodeTab(FacesContext context, Tab tab, boolean active,boolean inset) throws IOException {
+    @Override
+    protected void encodeTab(FacesContext context, AccordionPanel accordionPanel, Tab tab, boolean active, boolean dynamic, boolean rtl) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         
-        String title = tab.getTitle();
+        String containerClass = active ? MOBILE_ACTIVE_TAB_CONTAINER_CLASS : MOBILE_INACTIVE_TAB_CONTAINER_CLASS;
+        String headerClass = active ? MOBILE_ACTIVE_TAB_HEADER_CLASS : MOBILE_INACTIVE_TAB_HEADER_CLASS;
+        headerClass = tab.isDisabled() ? headerClass + " ui-state-disabled" : headerClass;
+        headerClass = tab.getTitleStyleClass() == null ? headerClass : headerClass + " " + tab.getTitleStyleClass();
+        String iconClass = active ? MOBILE_ACTIVE_ICON_CLASS : MOBILE_INACTIVE_ICON_CLASS;
+        String contentClass = active ? MOBILE_ACTIVE_TAB_CONTENT_CLASS : MOBILE_INACTIVE_TAB_CONTENT_CLASS;
+        UIComponent titleFacet = tab.getFacet("title");
 
+        //tab
         writer.startElement("div", null);
         writer.writeAttribute("id", tab.getClientId(context), null);
-        writer.writeAttribute("data-role", "collapsible", null);
-        writer.writeAttribute("data-inset", Boolean.toString(inset), null);
+        writer.writeAttribute("class", containerClass, null);
+        writer.writeAttribute("role", "tabpanel", null);
+        
+        //header container
+        writer.startElement("div", null);
+        writer.writeAttribute("class", headerClass, null);
+        writer.writeAttribute("role", "tab", null);
+        writer.writeAttribute("aria-expanded", String.valueOf(active), null);
+        if(tab.getTitleStyle() != null) writer.writeAttribute("style", tab.getTitleStyle(), null);
+        if(tab.getTitletip() != null) writer.writeAttribute("title", tab.getTitletip(), null);
 
-        if (active) {
-            writer.writeAttribute("data-collapsed", "false", null);
+        writer.startElement("a", null);
+        writer.writeAttribute("href", "#", null);
+        writer.writeAttribute("class", iconClass, null);
+        if(titleFacet == null) {
+            writer.write(tab.getTitle());
+        } else {
+            titleFacet.encodeAll(context);
         }
-
-        //header
-        writer.startElement("h3", null);
-        if (title != null) {
-            writer.writeText(title, null);
-        }
-        writer.endElement("h3");
+        writer.endElement("a");
+        
+        writer.endElement("div");
 
         //content
-        if (inset) writer.startElement("p", null);
-        tab.encodeAll(context);
-        if (inset) writer.endElement("p");
+        writer.startElement("div", null);
+        writer.writeAttribute("class", contentClass, null);
+        writer.writeAttribute("aria-hidden", String.valueOf(!active), null);
+
+        writer.startElement("p", null);
+        if(dynamic) {
+            if(active) {
+                tab.encodeAll(context);
+                tab.setLoaded(true);
+            }
+        }
+        else {
+            tab.encodeAll(context);
+        }
+        writer.endElement("p");
 
         writer.endElement("div");
+        
+        writer.endElement("div");
     }
-
-    @Override
-	public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
-		//Rendering happens on encodeEnd
-	}
-
-    @Override
-	public boolean getRendersChildren() {
-		return true;
-	}
+    
 }

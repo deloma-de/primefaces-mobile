@@ -1,0 +1,13 @@
+    
+    <name>primefaces_mobile</name>
+    
+    <ordering>
+        <after>
+            <name>primefaces</name>
+        </after>
+    </ordering>
+  
+    <application>
+        <navigation-handler>org.primefaces.mobile.navigation.MobileNavigationHandler</navigation-handler>
+        <resource-handler>org.primefaces.mobile.application.PrimeResourceHandler</resource-handler>
+    </application>

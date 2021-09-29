@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Prime Technology.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,70 +16,50 @@
 package org.primefaces.mobile.renderkit;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import javax.faces.component.UIComponent;
-import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import org.primefaces.renderkit.CoreRenderer;
+import org.primefaces.component.panelgrid.PanelGrid;
+import org.primefaces.mobile.util.MobileUtils;
 
-public class PanelGridRenderer extends CoreRenderer {
-
-    private Map<Integer, String> columnKeys;
-
-    private Map<Integer, String> blockKeys;
-
-    public PanelGridRenderer() {
-        columnKeys = new HashMap<Integer, String>();
-        columnKeys.put(2, "a");
-        columnKeys.put(3, "b");
-        columnKeys.put(4, "c");
-        columnKeys.put(5, "d");
-
-        blockKeys = new HashMap<Integer, String>();
-        blockKeys.put(0, "a");
-        blockKeys.put(1, "b");
-        blockKeys.put(2, "c");
-        blockKeys.put(3, "d");
-        blockKeys.put(4, "e");
-    }
+public class PanelGridRenderer extends org.primefaces.component.panelgrid.PanelGridRenderer {
 
     @Override
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
-        HtmlPanelGrid grid = (HtmlPanelGrid) component;
+        PanelGrid grid = (PanelGrid) component;
+        String clientId = grid.getClientId(context);
         int columns = grid.getColumns();
-        String gridClass = "ui-grid-" + columnKeys.get(columns);
+        if(columns == 0) {
+            columns = 1;
+        }
+        String gridClass = MobileUtils.GRID_MAP.get(columns);
+        String style = grid.getStyle();
         String styleClass = grid.getStyleClass();
-        styleClass = styleClass == null ? gridClass : gridClass + " " + styleClass;
-
+        styleClass = (styleClass == null) ? gridClass : gridClass + " " + styleClass;
+        
         writer.startElement("div", grid);
-        writer.writeAttribute("id", grid.getClientId(context), null);
-        writer.writeAttribute("class", styleClass, null);
-        if(grid.getStyle() != null) {
-            writer.writeAttribute("style", grid.getStyle(), null);
+        writer.writeAttribute("id", clientId, "id");
+        writer.writeAttribute("class", styleClass, "styleClass");
+        if(style != null) {
+            writer.writeAttribute("style", style, "style");
         }
-
-        for(int i=0; i < grid.getChildCount(); i++) {
-            String blockClass = "ui-block-" + blockKeys.get(i%columns);
-
-            writer.startElement("div", grid);
-            writer.writeAttribute("class", blockClass, null);
-            grid.getChildren().get(i).encodeAll(context);
-            writer.endElement("div");
+        
+        renderDynamicPassThruAttributes(context, grid);
+        
+        int i = 0;
+        for(UIComponent child : grid.getChildren()) {
+            if(child.isRendered()) {
+                int blockKey = (i % columns);
+                String blockClass = MobileUtils.BLOCK_MAP.get(blockKey);
+                writer.startElement("div", null);
+                writer.writeAttribute("class", blockClass, null);
+                child.encodeAll(context);
+                writer.endElement("div");                
+                i++;
+            }
         }
-
+        
         writer.endElement("div");
     }
-
-    @Override
-	public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
-		//Rendering happens on encodeEnd
-	}
-
-    @Override
-	public boolean getRendersChildren() {
-		return true;
-	}
 }

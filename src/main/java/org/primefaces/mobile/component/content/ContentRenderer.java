@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Prime Technology.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,19 +27,23 @@ public class ContentRenderer extends CoreRenderer {
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         Content content = (Content) component;
+        String style = content.getStyle();
+        String styleClass = content.getStyleClass();
+        styleClass = (styleClass == null) ? "ui-content" : "ui-content " + styleClass;
 
-        writer.startElement("div", content);
-        writer.writeAttribute("id", content.getClientId(context), "id");
-        writer.writeAttribute("data-role", "content", null);
+        writer.startElement("div", null);
+        writer.writeAttribute("role", "main", null);
+        writer.writeAttribute("class", styleClass, null);
         
-        if(content.getStyle() != null) writer.writeAttribute("style", content.getStyle(), null);
-        if(content.getStyleClass() != null) writer.writeAttribute("class", content.getStyleClass(), null);
+        if(style != null) {
+            writer.writeAttribute("style", style, null);
+        }
+        
+        renderDynamicPassThruAttributes(context, component);
     }
 
     @Override
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-
-        writer.endElement("div");
+        context.getResponseWriter().endElement("div");
     }
 }

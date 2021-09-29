@@ -28,15 +28,17 @@ public class FieldRenderer extends CoreRenderer {
         ResponseWriter writer = context.getResponseWriter();
         Field field = (Field) component;
 
-        writer.startElement("div", field);
-        writer.writeAttribute("id", field.getClientId(context), "id");
-        writer.writeAttribute("data-role", "fieldcontain", null);
+        writer.startElement("div", null);
+        if (shouldWriteId(field)) {
+            writer.writeAttribute("id", field.getClientId(context), "id");
+        }
+        writer.writeAttribute("class", "ui-field-contain", null);
+        
+        renderDynamicPassThruAttributes(context, component);
     }
 
     @Override
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-
-        writer.endElement("div");
+        context.getResponseWriter().endElement("div");
     }
 }

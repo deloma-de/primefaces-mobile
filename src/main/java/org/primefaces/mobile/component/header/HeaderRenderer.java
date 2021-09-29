@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Prime Technology.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ public class HeaderRenderer extends CoreRenderer {
         UIComponent left = header.getFacet("left");
         UIComponent right = header.getFacet("right");
         
-        writer.startElement("div", header);
+        writer.startElement("div", null);
         writer.writeAttribute("id", header.getClientId(context), "id");
         writer.writeAttribute("data-role", "header", null);
         writer.writeAttribute("data-backbtn", "false", null);
@@ -41,6 +41,8 @@ public class HeaderRenderer extends CoreRenderer {
         if(header.getStyleClass() != null) writer.writeAttribute("class", header.getStyleClass(), null);
         if(swatch != null) writer.writeAttribute("data-theme", swatch, null);
         if(header.isFixed())  writer.writeAttribute("data-position", "fixed", null);
+        
+        renderDynamicPassThruAttributes(context, component);
 
         if(left != null) {
             left.encodeAll(context);
@@ -55,26 +57,11 @@ public class HeaderRenderer extends CoreRenderer {
         if(right != null) {
             right.getAttributes().put("styleClass", "ui-btn-right");
             right.encodeAll(context);
-        }    
-                
-        renderChildren(context, header);
-        
+        }
     }
 
     @Override
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-
-        writer.endElement("div");
+        context.getResponseWriter().endElement("div");
     }
-    
-    @Override
-    public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
-        //Rendering happens on encodeEnd
-    }
-
-    @Override
-    public boolean getRendersChildren() {
-        return true;
-    }      
 }
