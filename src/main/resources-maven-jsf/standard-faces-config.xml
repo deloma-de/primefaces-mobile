@@ -1,8 +1,15 @@
     
     <name>primefaces-mobile</name>
     
+    <ordering>
+        <after>
+            <name>primefaces</name>
+        </after>
+    </ordering>
+    
     <application>
-        <system-event-listener>
+		<navigation-handler>org.primefaces.mobile.application.MobileNavigationHandler</navigation-handler>
+    	<system-event-listener>
             <system-event-listener-class>org.primefaces.mobile.event.system.CalendarResourceListener</system-event-listener-class>
             <system-event-class>javax.faces.event.PostAddToViewEvent</system-event-class>
             <source-class>org.primefaces.component.calendar.Calendar</source-class>

@@ -13,6 +13,7 @@
 	<rendererType>org.primefaces.mobile.component.UISwitchRenderer</rendererType>
 	<rendererClass>org.primefaces.mobile.component.uiswitch.UISwitchRenderer</rendererClass>
 	<parent>javax.faces.component.UIInput</parent>
+	<description>switch</description>
     <interfaces>
 		<interface>
 			<name>org.primefaces.component.api.Widget</name>

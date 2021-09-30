@@ -12,6 +12,7 @@
 	<rendererType>org.primefaces.mobile.component.FieldRenderer</rendererType>
 	<rendererClass>org.primefaces.mobile.component.field.FieldRenderer</rendererClass>
 	<parent>javax.faces.component.UIPanel</parent>
+	<description>field</description>
 	<attributes>
 		&standard_uicomponent_attributes;
 	</attributes>

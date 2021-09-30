@@ -13,6 +13,7 @@
 	<rendererType>org.primefaces.mobile.component.InputSliderRenderer</rendererType>
 	<rendererClass>org.primefaces.mobile.component.inputslider.InputSliderRenderer</rendererClass>
 	<parent>javax.faces.component.UIInput</parent>
+	<description>inputSlider</description>
     <interfaces>
 		<interface>
 			<name>org.primefaces.component.api.Widget</name>

@@ -22,7 +22,6 @@ import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.PrimeFaces;
-import org.primefaces.context.PrimeRequestContext;
 import org.primefaces.mobile.util.MobileUtils;
 
 public class MobileNavigationHandler extends ConfigurableNavigationHandler {

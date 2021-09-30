@@ -13,6 +13,7 @@
 	<rendererType>org.primefaces.mobile.component.RangeSliderRenderer</rendererType>
 	<rendererClass>org.primefaces.mobile.component.rangeslider.RangeSliderRenderer</rendererClass>
 	<parent>javax.faces.component.UIComponentBase</parent>
+	<description>rangeSlider</description>
     <interfaces>
 		<interface>
 			<name>org.primefaces.component.api.Widget</name>

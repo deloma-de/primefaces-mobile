@@ -12,6 +12,7 @@
 	<rendererType>org.primefaces.mobile.component.FooterRenderer</rendererType>
 	<rendererClass>org.primefaces.mobile.component.footer.FooterRenderer</rendererClass>
 	<parent>javax.faces.component.UIPanel</parent>
+	<description>footer</description>
 	<attributes>
 		&standard_uicomponent_attributes;
         <attribute>

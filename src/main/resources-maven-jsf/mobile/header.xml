@@ -12,6 +12,7 @@
 	<rendererType>org.primefaces.mobile.component.HeaderRenderer</rendererType>
 	<rendererClass>org.primefaces.mobile.component.header.HeaderRenderer</rendererClass>
 	<parent>javax.faces.component.UIPanel</parent>
+	<description>header</description>
 	<attributes>
 		&standard_uicomponent_attributes;
         <attribute>
