@@ -11,7 +11,7 @@ https://github.com/primefaces/primefaces/issues/3386
 1. +	refactor mobile depdendencies from namespaces other then mobile 
 2. +	remove non-mobile code / resources and add PrimeFaces 7.0 as dependency
 3. -	test with old mobile showcase
-4. -	Reintegrate DataListTemplate / DataTableTemplate ... SwipeEvent
+4. -	Reintegrate DataListTemplate / DataTableTemplate ... SwipeEvent xx
 
 ### License
 ***
