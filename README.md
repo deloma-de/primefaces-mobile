@@ -6,6 +6,14 @@ PrimeFaces mobile is a module with mobile optimized components inside PrimeFaces
 
 It contained some interesting mobile only UI components and renderer of existing versions and is a great framework to create hybrid applications with AJAX history back functionality. Valid use cases are B2B mobile applications used on MDA devices.
 
+## Documention & Showcase
+
+Mobile is covered in the original PrimeFaces PDF [Documentation](https://www.primefaces.org/documentation/) till Version 6.2.
+
+The legacy showcase source can be found at [Github](https://github.com/primefaces/primefaces-showcase-legacy/tree/6_1). 
+
+We recommend **6.1** version / tag since from 6.2 many mobile components already did not worked anymore.
+
 ## Components
 
 * content
@@ -23,7 +31,7 @@ There are many mobile optimized renders of existing PrimeFaces component such as
 
 ## Inofficial fork
 
-This project is an inoffical partial "fork" from legacy PrimeFaces 6.1 mobile components which were removed in PrimeFaces 7.0. 
+This project is an inoffical partial "fork" from legacy PrimeFaces **6.1** mobile components which were removed in PrimeFaces 7.0. 
 
 ### Motivation
 
