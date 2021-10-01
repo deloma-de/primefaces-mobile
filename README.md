@@ -47,8 +47,15 @@ This project basically extracts this commit [Remove mobile](https://github.com/p
 2. ~~remove non-mobile code / resources~~
 3. ~~add PrimeFaces 7.0 as dependency~~
 4. ~~adjust to PrimeFaces 7.0 changes~~
-5. test with old mobile showcase
-6. Reintegrate DataListTemplate / DataTableTemplate ... SwipeEvent
+
+#### jQuery
+
+PrimeFaces 7.0 uses jQuery 3+ whereas mobile is only compatible to 1.9+ with breaking changes. [Download mobile](https://releases.jquery.com/mobile/)
+
+5. adapt to jQuery 3+
+6. mouse jquery.event.props undefined https://github.com/stephband/jquery.event.move/issues/31
+7. test with old mobile showcase
+8. Reintegrate DataListTemplate / DataTableTemplate ... SwipeEvent
 
 ## License
 
