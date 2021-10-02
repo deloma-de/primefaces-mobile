@@ -2,21 +2,22 @@
 
 ## Description
 
-PrimeFaces mobile is a module with mobile optimized components inside PrimeFaces till Version 6.2 which then was removed in 7.0. Client side is based on [jQuery mobile](https://jquerymobile.com/).
+This project contains legacy mobile optimized components of [PrimeFaces](https://www.primefaces.org/) till Version 6.2 which then were removed in 7.0. Client side is based on [jQuery mobile](https://jquerymobile.com/).
 
 It contained some interesting mobile only UI components and renderer of existing versions and is a great framework to create hybrid applications with AJAX history back functionality. Valid use cases are B2B mobile applications used on MDA devices.
+
+## PrimeFaces Compatibility
+
+This project is compatible to following PrimeFaces versions
+
+* 6.x - mobile already included
+* 7.0 - compatible
 
 ## Documention
 
 Mobile is covered in the original PrimeFaces PDF [Documentation](https://www.primefaces.org/documentation/) till Version 6.2.
 
-## Showcase
-
-The legacy showcase source can be found at [Github](https://github.com/primefaces/primefaces-showcase-legacy/tree/6_1). 
-
-We recommend **6.1** version / tag since from 6.2 many mobile components already did not worked anymore.
-
-## Components
+### Components
 
 * content
 * field
@@ -27,9 +28,16 @@ We recommend **6.1** version / tag since from 6.2 many mobile components already
 * rangeslider
 * uiswitch
 
-## Renderekit
-
 There are many mobile optimized renders of existing PrimeFaces component such as  _SelectOneMenu_ ,  _DataTable_  and many more.
+
+## Download
+
+* 7.0 _coming soon_
+
+
+## Showcase
+
+The legacy showcase source can be found at [Github](https://github.com/primefaces/primefaces-showcase-legacy/tree/6_1). 
 
 ## Inofficial fork
 
@@ -41,9 +49,9 @@ At [deloma](https://www.deloma.de/Agentur/wp/Logistik-Software), we use this for
 
 This hybrid app works very stable in production and its not worth the time to refactor with new _responsive_ versions of the _new_ components with later PrimeFaces releases and finding solutions for browser ajax _history back_ support. 
 
-### Changes
+## Changes
 
-#### 6.1 -> 7.0
+### 6.1 -> 7.0
 
 - /java
     - adapted Java classes to PrimeFaces 7.0 changes
