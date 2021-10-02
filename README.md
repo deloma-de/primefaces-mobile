@@ -45,14 +45,14 @@ This hybrid app works very stable in production and its not worth the time to re
 
 #### 6.1 -> 7.0
 
-* /java
-** adapted Java classes to PrimeFaces 7.0 changes
-* /resources
-** _/core.mobile.js_ moved to _/mobile_
-** _/mobile/core.js_ added from PrimeFaces 6.1
-** _/mobile/jquery/_ added to provide _jQuery_ from 6.1
-*** _jquery.js_
-*** _jquery-plugins.js_ 
+- /java
+    - adapted Java classes to PrimeFaces 7.0 changes
+- /resources
+    - _/core.mobile.js_  moved to _/mobile_
+    - _/mobile/core.js_  added from PrimeFaces 6.1
+    - _/mobile/jquery/_  added to provide _jQuery_  from 6.1
+        - _jquery.js_
+        - _jquery-plugins.js_ 
 
 
 ### History
