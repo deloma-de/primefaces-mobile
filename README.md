@@ -2,13 +2,15 @@
 
 ## Description
 
-PrimeFaces mobile is a module with mobile optimized components inside PrimeFaces till Version 6.2 which then was removed in 7.0. It is based on [jQuery mobile](https://jquerymobile.com/).
+PrimeFaces mobile is a module with mobile optimized components inside PrimeFaces till Version 6.2 which then was removed in 7.0. Client side is based on [jQuery mobile](https://jquerymobile.com/).
 
 It contained some interesting mobile only UI components and renderer of existing versions and is a great framework to create hybrid applications with AJAX history back functionality. Valid use cases are B2B mobile applications used on MDA devices.
 
-## Documention & Showcase
+## Documention
 
 Mobile is covered in the original PrimeFaces PDF [Documentation](https://www.primefaces.org/documentation/) till Version 6.2.
+
+## Showcase
 
 The legacy showcase source can be found at [Github](https://github.com/primefaces/primefaces-showcase-legacy/tree/6_1). 
 
@@ -31,7 +33,7 @@ There are many mobile optimized renders of existing PrimeFaces component such as
 
 ## Inofficial fork
 
-This project is an inoffical partial "fork" from legacy PrimeFaces **6.1** mobile components which were removed in PrimeFaces 7.0. 
+This project is an inoffical partial "fork" from legacy PrimeFaces **6.1** extracting mobile components which were removed in PrimeFaces 7.0. 
 
 ### Motivation
 
@@ -39,27 +41,31 @@ At [deloma](https://www.deloma.de/Agentur/wp/Logistik-Software), we use this for
 
 This hybrid app works very stable in production and its not worth the time to refactor with new _responsive_ versions of the _new_ components with later PrimeFaces releases and finding solutions for browser ajax _history back_ support. 
 
-### Migration
+### Changes
+
+#### 6.1 -> 7.0
+
+* /java
+** adapted Java classes to PrimeFaces 7.0 changes
+* /resources
+** _/core.mobile.js_ moved to _/mobile_
+** _/mobile/core.js_ added from PrimeFaces 6.1
+** _/mobile/jquery/_ added to provide _jQuery_ from 6.1
+*** _jquery.js_
+*** _jquery-plugins.js_ 
+
+
+### History
 
 This project basically extracts this commit [Remove mobile](https://github.com/primefaces/primefaces/issues/3386).
 
-1. ~~refactor mobile depdendencies from namespaces other then mobile~~
-2. ~~remove non-mobile code / resources~~
-3. ~~add PrimeFaces 7.0 as dependency~~
-4. ~~adjust to PrimeFaces 7.0 changes~~
+### jQuery
 
-#### jQuery
+PrimeFaces 7.0 uses jQuery 3+ whereas mobile is only compatible up to 1.9 which leads to breaking changes. [Download mobile](https://releases.jquery.com/mobile/).
 
-PrimeFaces 7.0 uses jQuery 3+ whereas mobile is only compatible to 1.9+ with breaking changes. [Download mobile](https://releases.jquery.com/mobile/)
-
-5. adapt to jQuery 3+
-6. mouse jquery.event.props undefined https://github.com/stephband/jquery.event.move/issues/31
-7. test with old mobile showcase
-8. Reintegrate DataListTemplate / DataTableTemplate ... SwipeEvent
+To make migration easier we use _old_ jQuery resources for mobile in _HeadRenderer_.
 
 ## License
-
-Same as original PrimeFaces:
 
 ***
 Licensed under the Apache License, Version 2.0 (the "License") [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)

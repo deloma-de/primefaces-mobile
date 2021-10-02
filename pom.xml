@@ -55,6 +55,10 @@
             <id>sudheer.jonna</id>
             <name>Sudheer Jonna</name>
         </developer>
+        <developer>
+            <id>marco.janc</id>
+            <name>Marco Janc</name>
+        </developer>
     </developers>
 
     <properties>
@@ -232,9 +236,9 @@
                         <aggregation>
                             <insertNewLine>true</insertNewLine>
                             <removeIncluded>true</removeIncluded>
-                            <output>${project.build.directory}/classes/META-INF/resources/primefaces/components-mobile.js</output>
+                            <output>${project.build.directory}/classes/META-INF/resources/primefaces/mobile/components-mobile.js</output>
                             <includes>
-                                <include>${project.build.directory}/classes/META-INF/resources/primefaces/core/core.mobile.js</include>
+                                <include>${project.build.directory}/classes/META-INF/resources/primefaces/mobile/core.mobile.js</include>
                                 <include>${project.build.directory}/classes/META-INF/resources/primefaces/mobile/widgets/accordion.js</include>
                                 <include>${project.build.directory}/classes/META-INF/resources/primefaces/mobile/widgets/autocomplete.js</include>
                                 <include>${project.build.directory}/classes/META-INF/resources/primefaces/mobile/widgets/calendar.js</include>
