@@ -102,7 +102,8 @@ PrimeFaces.widget.AccordionPanel = PrimeFaces.widget.BaseWidget.extend({
 
         tab.removeClass('ui-collapsible-collapsed').attr('aria-expanded', true);
         header.removeClass('ui-collapsible-heading-collapsed')
-                .children('.ui-collapsible-heading-toggle').removeClass('ui-icon-plus').addClass('ui-icon-minus');
+                .children('.ui-collapsible-heading-toggle')
+				.children().first().removeClass('ui-icon-plus').addClass('ui-icon-minus');
         content.removeClass('ui-collapsible-content-collapsed').attr('aria-hidden', false).show();
         PrimeFaces.invokeDeferredRenders(this.id);
     },
@@ -110,7 +111,9 @@ PrimeFaces.widget.AccordionPanel = PrimeFaces.widget.BaseWidget.extend({
     close: function(tab) {
         tab.addClass('ui-collapsible-collapsed').attr('aria-expanded', false);
         tab.children('.ui-collapsible-heading').addClass('ui-collapsible-heading-collapsed')
-                .children('.ui-collapsible-heading-toggle').addClass('ui-collapsible-heading-collapsed').removeClass('ui-icon-minus').addClass('ui-icon-plus');
+                .children('.ui-collapsible-heading-toggle')
+				.addClass('ui-collapsible-heading-collapsed')
+				.children().first().removeClass('ui-icon-minus').addClass('ui-icon-plus');
         tab.children('.ui-collapsible-content').attr('aria-hidden', true)
                 .addClass('ui-collapsible-content-collapsed').attr('aria-hidden', true).hide();
     },

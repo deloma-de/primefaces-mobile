@@ -20,6 +20,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.panel.Panel;
+import org.primefaces.mobile.util.MobileRenderUtils;
+import org.primefaces.mobile.util.MobileUtils;
 import org.primefaces.util.HTML;
 import org.primefaces.util.WidgetBuilder;
 
@@ -28,9 +30,12 @@ public class PanelRenderer extends org.primefaces.component.panel.PanelRenderer 
     public static final String MOBILE_CLASS = "ui-panel-m ui-corner-all";
     public static final String MOBILE_TITLE_CLASS = "ui-panel-m-titlebar ui-bar ui-bar-inherit";
     public static final String MOBILE_CONTENT_CLASS = "ui-panel-m-content ui-body ui-body-inherit";
-    public static final String MOBILE_TOGGLEICON_EXPANDED_CLASS = "ui-panel-m-titlebar-icon ui-btn ui-shadow ui-corner-all ui-icon-minus ui-btn-icon-notext ui-btn-right";
-    public static final String MOBILE_TOGGLEICON_COLLAPSED_CLASS = "ui-panel-m-titlebar-icon ui-btn ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-notext ui-btn-right";
+
+    public static final String MOBILE_TOGGLEICON_CLASS = "ui-panel-m-titlebar-icon ui-button ui-shadow ui-corner-all ui-button-icon-only ui-toolbar-header-button-right";
 	
+    public static final String MOBILE_COLLAPSED_ICON = "ui-icon-plus";
+	public static final String MOBILE_EXPANDED_ICON = "ui-icon-minus";
+    
     @Override
     protected void encodeScript(FacesContext context, Panel panel) throws IOException {
         String clientId = panel.getClientId(context);
@@ -96,11 +101,15 @@ public class PanelRenderer extends org.primefaces.component.panel.PanelRenderer 
         writer.endElement("h3");
         
         if (toggleable) {
-            String toggleIconClass = collapsed ? MOBILE_TOGGLEICON_COLLAPSED_CLASS : MOBILE_TOGGLEICON_EXPANDED_CLASS;
+        	
             writer.startElement("a", null);
             writer.writeAttribute("href", "#", null);
-            writer.writeAttribute("class", toggleIconClass, null);
-            writer.endElement("a");
+            writer.writeAttribute("class", MOBILE_TOGGLEICON_CLASS, null);
+            
+            // toggle icon
+            MobileRenderUtils.renderButtonIconSpan(writer, PanelRenderer.getIconClass(collapsed), null);
+            
+            writer.endElement("a");          
         }
         
         writer.endElement("div");
@@ -118,5 +127,17 @@ public class PanelRenderer extends org.primefaces.component.panel.PanelRenderer 
         renderChildren(context, panel);
         writer.endElement("p");
         writer.endElement("div");
+    }
+    
+    /**
+     * Renders plus icon if collapsed is <code>true</code>, else minus icon.
+     * 
+     * @param collapsed
+     * 
+     * @return
+     */
+    public static String getIconClass(boolean collapsed)
+    {
+    	return collapsed ? MOBILE_COLLAPSED_ICON : MOBILE_EXPANDED_ICON;
     }
 }

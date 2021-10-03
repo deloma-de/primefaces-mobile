@@ -105,9 +105,9 @@
 }
 
 .ui-datalist.ui-datalist-topbar .ui-listview > li.ui-first-child, 
-.ui-datalist.ui-datalist-topbar .ui-listview > li.ui-first-child > a.ui-btn,
+.ui-datalist.ui-datalist-topbar .ui-listview > li.ui-first-child > a.ui-button,
 .ui-datalist.ui-datalist-bottombar .ui-listview > li.ui-last-child, 
-.ui-datalist.ui-datalist-bottombar .ui-listview > li.ui-last-child > a.ui-btn {
+.ui-datalist.ui-datalist-bottombar .ui-listview > li.ui-last-child > a.ui-button {
     border-radius: 0;
 }
 
@@ -207,4 +207,31 @@
 .ui-messages .ui-messages-close {
     float:right;
     cursor: pointer;
+}
+
+/* jQuery mobile 1.5 fixes */
+
+.ui-button-icon-notext
+{
+	padding:0;
+	width:1.75em;
+	height:1.75em;
+	text-indent:-9999px;
+	white-space:nowrap!important
+}
+
+.ui-button-icon-left
+{
+	position: absolute;
+	left: .5625em;
+	top: 50%;
+	margin-top: -11px;
+}
+
+.ui-button-icon-right
+{
+	position: absolute;
+	right: .5625em;
+	top: 50%;
+	margin-top: -11px;
 }

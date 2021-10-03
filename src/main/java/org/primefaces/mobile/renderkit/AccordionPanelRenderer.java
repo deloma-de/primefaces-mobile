@@ -21,6 +21,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.accordionpanel.AccordionPanel;
 import org.primefaces.component.tabview.Tab;
+import org.primefaces.mobile.util.MobileRenderUtils;
+import org.primefaces.mobile.util.MobileUtils;
 import org.primefaces.util.HTML;
 import org.primefaces.util.WidgetBuilder;
 
@@ -33,8 +35,8 @@ public class AccordionPanelRenderer extends org.primefaces.component.accordionpa
     public final static String MOBILE_INACTIVE_TAB_HEADER_CLASS = "ui-collapsible-heading ui-collapsible-heading-collapsed";
     public final static String MOBILE_ACTIVE_TAB_CONTENT_CLASS = "ui-collapsible-content ui-body-inherit";
     public final static String MOBILE_INACTIVE_TAB_CONTENT_CLASS = "ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed";
-    public final static String MOBILE_ACTIVE_ICON_CLASS = "ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-icon-minus";
-    public final static String MOBILE_INACTIVE_ICON_CLASS = "ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-icon-plus";
+    
+    public final static String MOBILE_TOGGLE_CLASS = "ui-collapsible-heading-toggle ui-button";
 	
     @Override
     protected void encodeMarkup(FacesContext context, AccordionPanel acco) throws IOException {
@@ -93,7 +95,7 @@ public class AccordionPanelRenderer extends org.primefaces.component.accordionpa
         String headerClass = active ? MOBILE_ACTIVE_TAB_HEADER_CLASS : MOBILE_INACTIVE_TAB_HEADER_CLASS;
         headerClass = tab.isDisabled() ? headerClass + " ui-state-disabled" : headerClass;
         headerClass = tab.getTitleStyleClass() == null ? headerClass : headerClass + " " + tab.getTitleStyleClass();
-        String iconClass = active ? MOBILE_ACTIVE_ICON_CLASS : MOBILE_INACTIVE_ICON_CLASS;
+
         String contentClass = active ? MOBILE_ACTIVE_TAB_CONTENT_CLASS : MOBILE_INACTIVE_TAB_CONTENT_CLASS;
         UIComponent titleFacet = tab.getFacet("title");
 
@@ -113,12 +115,14 @@ public class AccordionPanelRenderer extends org.primefaces.component.accordionpa
 
         writer.startElement("a", null);
         writer.writeAttribute("href", "#", null);
-        writer.writeAttribute("class", iconClass, null);
-        if(titleFacet == null) {
-            writer.write(tab.getTitle());
-        } else {
-            titleFacet.encodeAll(context);
-        }
+        writer.writeAttribute("class", MOBILE_TOGGLE_CLASS, null);
+        
+        // icon
+        MobileRenderUtils.renderButtonIconSpan(writer, PanelRenderer.getIconClass(!active), null);
+        
+        // text
+        MobileRenderUtils.renderTextSpan(writer, tab.getTitle(), false, context, titleFacet);
+
         writer.endElement("a");
         
         writer.endElement("div");

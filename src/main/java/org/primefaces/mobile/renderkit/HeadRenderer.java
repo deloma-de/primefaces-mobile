@@ -67,8 +67,7 @@ public class HeadRenderer extends Renderer {
             renderCSS(context, "fa/font-awesome.css", "primefaces");
         }
 
-        // 6.1 jquery version
-        renderJS(context, "mobile/jquery/jquery.js", "primefaces");
+        renderJS(context, "/jquery/jquery.js", "primefaces");
 
         writer.startElement("script", null);
         writer.writeAttribute("type", "text/javascript", null);
@@ -85,10 +84,8 @@ public class HeadRenderer extends Renderer {
         writer.write("});");
         writer.endElement("script");
 
-        // 6.1 jquery-mobile.js
         renderJS(context, "mobile/jquery-mobile.js", "primefaces");
-        // 6.1 core.js
-        renderJS(context, "mobile/core.js", "primefaces");
+        renderJS(context, "core.js", "primefaces");
         renderJS(context, "mobile/components-mobile.js", "primefaces");
 
         //Registered Resources

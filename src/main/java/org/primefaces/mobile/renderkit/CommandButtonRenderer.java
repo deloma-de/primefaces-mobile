@@ -16,88 +16,66 @@
 package org.primefaces.mobile.renderkit;
 
 import java.io.IOException;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import org.primefaces.component.button.Button;
 import org.primefaces.component.commandbutton.CommandButton;
+import org.primefaces.mobile.util.MobileRenderUtils;
 import org.primefaces.util.HTML;
 
-public class CommandButtonRenderer extends org.primefaces.component.commandbutton.CommandButtonRenderer {
-    
-    @Override
-	public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
+public class CommandButtonRenderer extends org.primefaces.component.commandbutton.CommandButtonRenderer
+{
+
+	@Override
+	public void encodeEnd(FacesContext context, UIComponent component) throws IOException
+	{
+		ResponseWriter writer = context.getResponseWriter();
 		CommandButton button = (CommandButton) component;
-        String clientId = button.getClientId(context);
-        Object value = button.getValue();
-        String type = button.getType();
-        String request = (type.equals("reset")||type.equals("button")) ? null: buildRequest(context, button, clientId);        
-        String onclick = buildDomEvent(context, button, "onclick", "click", "action", request);
-        
+		String clientId = button.getClientId(context);
+		Object value = button.getValue();
+		String type = button.getType();
+		String request = (type.equals("reset") || type.equals("button")) ? null : buildRequest(context, button, clientId);
+		String onclick = buildDomEvent(context, button, "onclick", "click", "action", request);
+
 		writer.startElement("button", button);
 		writer.writeAttribute("id", clientId, null);
 		writer.writeAttribute("name", clientId, null);
-        writer.writeAttribute("class", resolveStyleClass(button), null);
-        
-		if(onclick != null) {
-            if(button.requiresConfirmation()) {
-                writer.writeAttribute("data-pfconfirmcommand", onclick, null);
-                writer.writeAttribute("onclick", button.getConfirmationScript(), "onclick");
-            }
-            else
-                writer.writeAttribute("onclick", onclick, "onclick");
-		}
-		
-        renderPassThruAttributes(context, button, HTML.BUTTON_ATTRS, HTML.CLICK_EVENT);
-        
-        if (button.isDisabled()) writer.writeAttribute("disabled", "disabled", "disabled");
-        if (button.isReadonly()) writer.writeAttribute("readonly", "readonly", "readonly");
-        
-        if(value == null) {
-            writer.write("ui-button");
-        }
-        else {
-            if(button.isEscape())
-                writer.writeText(value, "value");
-            else
-                writer.write(value.toString());
-        }
-        
-        writer.endElement("button");
+		writer.writeAttribute("class", resolveStyleClass(button), null);
+
+		if (onclick != null)
+			if (button.requiresConfirmation())
+			{
+				writer.writeAttribute("data-pfconfirmcommand", onclick, null);
+				writer.writeAttribute("onclick", button.getConfirmationScript(), "onclick");
+			}
+			else
+				writer.writeAttribute("onclick", onclick, "onclick");
+
+		renderPassThruAttributes(context, button, HTML.BUTTON_ATTRS, HTML.CLICK_EVENT);
+
+		if (button.isDisabled())
+			writer.writeAttribute("disabled", "disabled", "disabled");
+		if (button.isReadonly())
+			writer.writeAttribute("readonly", "readonly", "readonly");
+
+		// icon + value
+		MobileRenderUtils.renderButtonIconValue(writer, value, button.isEscape(), button.getIcon(), button.getIconPos());
+
+		writer.endElement("button");
 	}
-    
-    /**
-     * Same as {@link ButtonRenderer#resolveStyleClass(Button)}.
-     * 
-     * TODO refactor with interface
-     * 
-     * @param button
-     * 
-     * @return
-     */
-    public static String resolveStyleClass(CommandButton button) {
-        String icon = button.getIcon();
-        String iconPos = button.getIconPos();
-        Object value = button.getValue();
-        String styleClass = "ui-btn ui-shadow ui-corner-all";
-            
-        if(value != null && icon != null) {
-            styleClass = styleClass + " " + icon + " ui-btn-icon-" + iconPos;
-        } else if(value == null && icon != null) {
-            styleClass = styleClass + " " + icon + " ui-btn-icon-notext";
-        }
-    
-        if(button.isDisabled()) {
-            styleClass = styleClass + " ui-state-disabled";
-        } 
-    
-        String userStyleClass = button.getStyleClass();
-        if(userStyleClass != null) {
-            styleClass = styleClass + " " + userStyleClass;
-        }
-    
-        return styleClass;
-    }
+
+	/**
+	 * Same as {@link ButtonRenderer#resolveStyleClass(Button)}.
+	 *
+	 * @param button
+	 *
+	 * @return
+	 */
+	public static String resolveStyleClass(CommandButton button)
+	{
+		return ButtonRenderer.resolveStyleClass(button.isDisabled(), button.getValue(), button.getStyleClass());
+	}
 }

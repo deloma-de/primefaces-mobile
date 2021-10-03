@@ -2,7 +2,7 @@
 
 ## Description
 
-This project contains legacy mobile optimized components of [PrimeFaces](https://www.primefaces.org/) till Version 6.2 which then were removed in 7.0. Client side is based on [jQuery mobile](https://jquerymobile.com/).
+This project contains legacy mobile optimized components of [PrimeFaces](https://www.primefaces.org/) till Version 6.2 which then were removed in 7.0. Client side is based on [jQuery mobile](https://jquerymobile.com/) [(demo)](https://demos.jquerymobile.com/1.5.0-rc1/).
 
 It contained some interesting mobile only UI components and renderer of existing versions and is a great framework to create hybrid applications with AJAX history back functionality. Valid use cases are B2B mobile applications used on MDA devices.
 
@@ -57,11 +57,10 @@ This hybrid app works very stable in production and its not worth the time to re
     - adapted Java classes to PrimeFaces 7.0 changes
 - /resources
     - _/core.mobile.js_  moved to _/mobile_
-    - _/mobile/core.js_  added from PrimeFaces 6.1
-    - _/mobile/jquery/_  added to provide _jQuery_  from 6.1
-        - _jquery.js_
-        - _jquery-plugins.js_ 
-
+    - _/6.1/core.js_ 
+    - _/6.1/jquery/jquery.js_   _(v1.12.4)_  
+    - _/7.0/core.js_ 
+    - _/7.0/jquery/jquery.js_   _(v3.3.1)_  
 
 ### History
 

@@ -16,93 +16,94 @@
 package org.primefaces.mobile.renderkit;
 
 import java.io.IOException;
+
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+
 import org.primefaces.component.button.Button;
+import org.primefaces.mobile.util.MobileRenderUtils;
 import org.primefaces.mobile.util.MobileUtils;
 import org.primefaces.util.HTML;
 
-public class ButtonRenderer extends org.primefaces.component.button.ButtonRenderer {
-    
-    @Override
-    public void encodeMarkup(FacesContext context, Button button) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
+public class ButtonRenderer extends org.primefaces.component.button.ButtonRenderer
+{
+
+	@Override
+	public void encodeMarkup(FacesContext context, Button button) throws IOException
+	{
+		ResponseWriter writer = context.getResponseWriter();
 		String clientId = button.getClientId(context);
-        Object value = (String) button.getValue();
-        String icon = button.resolveIcon();
+		Object value = button.getValue();
+		String icon = button.resolveIcon();
+		String iconPos = button.getIconPos();
 
 		writer.startElement("button", button);
 		writer.writeAttribute("id", clientId, "id");
 		writer.writeAttribute("name", clientId, "name");
-        writer.writeAttribute("type", "button", null);
+		writer.writeAttribute("type", "button", null);
 		writer.writeAttribute("class", resolveStyleClass(button), "styleClass");
 
 		renderPassThruAttributes(context, button, HTML.BUTTON_ATTRS, HTML.CLICK_EVENT);
 
-        if(button.isDisabled()) {
-            writer.writeAttribute("disabled", "disabled", "disabled");
-        }
-        else {
-            writer.writeAttribute("onclick", buildOnclick(context, button), null);
-        }
+		if (button.isDisabled())
+			writer.writeAttribute("disabled", "disabled", "disabled");
+		else
+			writer.writeAttribute("onclick", buildOnclick(context, button), null);
 
-        if(value == null) {
-            writer.write("ui-button");
-        }
-        else {
-            if(button.isEscape())
-                writer.writeText(value, "value");
-            else
-                writer.write(value.toString());
-        }
-			
+		MobileRenderUtils.renderButtonIconValue(writer, value, button.isEscape(), icon, iconPos);
+
 		writer.endElement("button");
-    }
+	}
 
-    @Override
-    public void encodeScript(FacesContext context, Button button) throws IOException {
-        //no widget
-    }
-    
-    @Override
-    protected String buildOnclick(FacesContext context, Button button) {
-        String command = null;
-        String outcome = button.getOutcome();
-        
-        if(outcome != null && outcome.startsWith("pm:")) {
-            command = MobileUtils.buildNavigation(outcome);
-        }
-        else {
-            String targetURL = getTargetURL(context, button);
-            if(targetURL != null) {
-                command = "window.open('" + targetURL + "','" + button.getTarget() + "')";
-            }
-        }
-        
-        return buildDomEvent(context, button, "onclick", "click", "action", command);
-    }
-    
-    public static String resolveStyleClass(Button button) {
-        String icon = button.getIcon();
-        String iconPos = button.getIconPos();
-        Object value = button.getValue();
-        String styleClass = "ui-btn ui-shadow ui-corner-all";
-            
-        if(value != null && icon != null) {
-            styleClass = styleClass + " " + icon + " ui-btn-icon-" + iconPos;
-        } else if(value == null && icon != null) {
-            styleClass = styleClass + " " + icon + " ui-btn-icon-notext";
-        }
-    
-        if(button.isDisabled()) {
-            styleClass = styleClass + " ui-state-disabled";
-        } 
-    
-        String userStyleClass = button.getStyleClass();
-        if(userStyleClass != null) {
-            styleClass = styleClass + " " + userStyleClass;
-        }
-    
-        return styleClass;
-    }
+	@Override
+	public void encodeScript(FacesContext context, Button button) throws IOException
+	{
+		// no widget
+	}
+
+	@Override
+	protected String buildOnclick(FacesContext context, Button button)
+	{
+		String command = null;
+		String outcome = button.getOutcome();
+
+		if (outcome != null && outcome.startsWith("pm:"))
+			command = MobileUtils.buildNavigation(outcome);
+		else
+		{
+			String targetURL = getTargetURL(context, button);
+			if (targetURL != null)
+				command = "window.open('" + targetURL + "','" + button.getTarget() + "')";
+		}
+
+		return buildDomEvent(context, button, "onclick", "click", "action", command);
+	}
+
+	/*
+	 * util
+	 */
+
+
+
+
+	public static String resolveStyleClass(boolean disabled, Object value, String userStyleClass)
+	{
+		String styleClass = "ui-button ui-shadow ui-corner-all";
+
+		if (value == null)
+			styleClass += " ui-button-icon-notext";
+
+		if (disabled)
+			styleClass += " ui-state-disabled";
+
+		if (userStyleClass != null)
+			styleClass += " " + userStyleClass;
+
+		return styleClass;
+	}
+
+	public static String resolveStyleClass(Button button)
+	{
+		return resolveStyleClass(button.isDisabled(), button.getValue(), button.getStyleClass());
+	}
 }
