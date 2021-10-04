@@ -13,18 +13,50 @@ import javax.faces.context.ResponseWriter;
  */
 public class MobileRenderUtils 
 {
-    public static void renderButtonIconSpan(ResponseWriter writer, String icon, String position) throws IOException
+	public static enum IconPosition
+	{
+		LEFT,
+		RIGHT;
+		
+		public static IconPosition convert(String value)
+		{
+			if (value == null)
+				return null;
+			else if("left".equals(value))
+				return LEFT;
+			else if ("right".equals(value))
+				return RIGHT;
+			else
+				return null;
+		}
+	}
+    public static void renderIconSpan(ResponseWriter writer, String icon, IconPosition position) throws IOException
     {
         String iconCssClass = "ui-button-icon ui-icon " + icon;
-		if (position != null)
-			if (position.equals("left"))
-				iconCssClass += " ui-widget-icon-floatbeginning";
-			else if (position.equals("right"))
-				iconCssClass += " ui-widget-icon-floatend";
+        
+		if (position == IconPosition.LEFT)
+			iconCssClass += " ui-widget-icon-floatbeginning";
+		else if (position == IconPosition.RIGHT)
+			iconCssClass += " ui-widget-icon-floatend";
+		
+		// spacer
+		if (position == IconPosition.RIGHT)
+			renderSpan(writer, "ui-button-icon-space", " ", false);
 
 		writer.startElement("span", null);
 		writer.writeAttribute("class", iconCssClass, null);
 		writer.endElement("span");
+		
+		// spacer
+		if (position == IconPosition.LEFT)
+			renderSpan(writer, "ui-button-icon-space", " ", false);
+    }
+    
+
+    
+    public static void renderSpan(ResponseWriter writer, String styleClass) throws IOException
+    {
+    	renderSpan(writer, styleClass, null, false);
     }
     
     /**
@@ -34,18 +66,23 @@ public class MobileRenderUtils
      * 
      * @throws IOException
      */
-    public static void renderButtonIconSpace(ResponseWriter writer) throws IOException
+    public static void renderSpan(ResponseWriter writer, String styleClass, String text, boolean escape) throws IOException
     {
     	writer.startElement("span", null);
-		writer.writeAttribute("class", "ui-button-icon-space", null);
+		writer.writeAttribute("class", styleClass, null);
+		if (text != null)
+			if (escape)
+				writer.writeText(text, null);
+			else
+				writer.write(text);
 		writer.endElement("span");
     }
     
-	public static void renderButtonIconValue(ResponseWriter writer, Object value, boolean escape, String icon, String iconPos) throws IOException
+	public static void renderIconValueSpans(ResponseWriter writer, Object value, boolean escape, String icon, IconPosition position) throws IOException
 	{
 		// icon
 		if (icon != null)
-			MobileRenderUtils.renderButtonIconSpan(writer, icon, iconPos);
+			MobileRenderUtils.renderIconSpan(writer, icon, position);
 
 		// text
 		if (value != null)

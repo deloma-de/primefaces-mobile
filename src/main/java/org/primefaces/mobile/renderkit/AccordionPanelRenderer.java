@@ -118,7 +118,7 @@ public class AccordionPanelRenderer extends org.primefaces.component.accordionpa
         writer.writeAttribute("class", MOBILE_TOGGLE_CLASS, null);
         
         // icon
-        MobileRenderUtils.renderButtonIconSpan(writer, PanelRenderer.getIconClass(!active), null);
+        MobileRenderUtils.renderIconSpan(writer, PanelRenderer.getIconClass(!active), null);
         
         // text
         MobileRenderUtils.renderTextSpan(writer, tab.getTitle(), false, context, titleFacet);

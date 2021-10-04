@@ -107,7 +107,7 @@ public class PanelRenderer extends org.primefaces.component.panel.PanelRenderer 
             writer.writeAttribute("class", MOBILE_TOGGLEICON_CLASS, null);
             
             // toggle icon
-            MobileRenderUtils.renderButtonIconSpan(writer, PanelRenderer.getIconClass(collapsed), null);
+            MobileRenderUtils.renderIconSpan(writer, PanelRenderer.getIconClass(collapsed), null);
             
             writer.endElement("a");          
         }

@@ -24,6 +24,7 @@ import javax.faces.context.ResponseWriter;
 import org.primefaces.component.button.Button;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.mobile.util.MobileRenderUtils;
+import org.primefaces.mobile.util.MobileRenderUtils.IconPosition;
 import org.primefaces.util.HTML;
 
 public class CommandButtonRenderer extends org.primefaces.component.commandbutton.CommandButtonRenderer
@@ -62,7 +63,8 @@ public class CommandButtonRenderer extends org.primefaces.component.commandbutto
 			writer.writeAttribute("readonly", "readonly", "readonly");
 
 		// icon + value
-		MobileRenderUtils.renderButtonIconValue(writer, value, button.isEscape(), button.getIcon(), button.getIconPos());
+		MobileRenderUtils.renderIconValueSpans(writer, value, button.isEscape(), button.getIcon(), 
+			IconPosition.convert(button.getIconPos()));
 
 		writer.endElement("button");
 	}

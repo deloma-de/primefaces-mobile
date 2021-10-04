@@ -28,6 +28,11 @@ public class UISwitchRenderer extends CoreRenderer {
     
     private final static Logger logger = Logger.getLogger(UISwitchRenderer.class.getName());
     
+    public static String CONTAINER_CLASS = "ui-flipswitch ui-shadow-inset ui-bar-inherit ui-corner-all";
+    public static String ON_CLASS = "ui-flipswitch-on ui-button ui-shadow ui-button-inherit";
+    public static String OFF_CLASS = "ui-flipswitch-off";
+    public static String INPUT_CLASS = "ui-flipswitch-input";
+    
     @Override
 	public void decode(FacesContext context, UIComponent component) {
 		UISwitch uiswitch = (UISwitch) component;
@@ -69,7 +74,7 @@ public class UISwitchRenderer extends CoreRenderer {
         String offLabel = uiswitch.getOffLabel();
         String style = uiswitch.getStyle();
         String styleClass = uiswitch.getStyleClass();
-        styleClass = (styleClass == null) ? UISwitch.CONTAINER_CLASS: UISwitch.CONTAINER_CLASS + " " + styleClass;
+        styleClass = (styleClass == null) ? CONTAINER_CLASS: CONTAINER_CLASS + " " + styleClass;
         
         writer.startElement("div", uiswitch);
         writer.writeAttribute("id", clientId, "id");
@@ -77,12 +82,12 @@ public class UISwitchRenderer extends CoreRenderer {
         if(styleClass != null) writer.writeAttribute("class", styleClass, "styleClass");
         
         writer.startElement("span", uiswitch);
-        writer.writeAttribute("class", UISwitch.ON_CLASS, null);
+        writer.writeAttribute("class", ON_CLASS, null);
         writer.writeText(onLabel, null);
         writer.endElement("span");
         
         writer.startElement("span", uiswitch);
-        writer.writeAttribute("class", UISwitch.OFF_CLASS, null);
+        writer.writeAttribute("class", OFF_CLASS, null);
         writer.writeText(offLabel, null);
         writer.endElement("span");
         
@@ -91,7 +96,7 @@ public class UISwitchRenderer extends CoreRenderer {
         writer.writeAttribute("name", inputId, null);
         writer.writeAttribute("data-role", "none", null);
         writer.writeAttribute("type", "checkbox", null);
-        writer.writeAttribute("class", UISwitch.INPUT_CLASS, null);
+        writer.writeAttribute("class", INPUT_CLASS, null);
         
         if (checked) writer.writeAttribute("checked", "checked", null);
         if (uiswitch.isDisabled()) writer.writeAttribute("disabled", "disabled", null);

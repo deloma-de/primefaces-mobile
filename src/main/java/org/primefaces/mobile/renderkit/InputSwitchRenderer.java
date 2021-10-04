@@ -21,6 +21,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.inputswitch.InputSwitch;
 import org.primefaces.mobile.component.uiswitch.UISwitch;
+import org.primefaces.mobile.component.uiswitch.UISwitchRenderer;
 import org.primefaces.util.ComponentUtils;
 import org.primefaces.util.WidgetBuilder;
 
@@ -44,7 +45,7 @@ public class InputSwitchRenderer extends org.primefaces.component.inputswitch.In
         String offLabel = inputSwitch.getOffLabel();
         String style = inputSwitch.getStyle();
         String styleClass = inputSwitch.getStyleClass();
-        styleClass = (styleClass == null) ? UISwitch.CONTAINER_CLASS: UISwitch.CONTAINER_CLASS + " " + styleClass;
+        styleClass = (styleClass == null) ? UISwitchRenderer.CONTAINER_CLASS: UISwitchRenderer.CONTAINER_CLASS + " " + styleClass;
         if(checked) {
             styleClass = styleClass + "  ui-flipswitch-active";
         }
@@ -57,12 +58,12 @@ public class InputSwitchRenderer extends org.primefaces.component.inputswitch.In
         renderDynamicPassThruAttributes(context, inputSwitch);
         
         writer.startElement("span", null);
-        writer.writeAttribute("class", UISwitch.ON_CLASS, null);
+        writer.writeAttribute("class", UISwitchRenderer.ON_CLASS, null);
         writer.writeText(onLabel, null);
         writer.endElement("span");
         
         writer.startElement("span", null);
-        writer.writeAttribute("class", UISwitch.OFF_CLASS, null);
+        writer.writeAttribute("class", UISwitchRenderer.OFF_CLASS, null);
         writer.writeText(offLabel, null);
         writer.endElement("span");
         
@@ -71,7 +72,7 @@ public class InputSwitchRenderer extends org.primefaces.component.inputswitch.In
         writer.writeAttribute("name", inputId, null);
         writer.writeAttribute("data-role", "none", null);
         writer.writeAttribute("type", "checkbox", null);
-        writer.writeAttribute("class", UISwitch.INPUT_CLASS, null);
+        writer.writeAttribute("class", UISwitchRenderer.INPUT_CLASS, null);
         
         if (checked) writer.writeAttribute("checked", "checked", null);
         if (inputSwitch.isDisabled()) writer.writeAttribute("disabled", "disabled", null);

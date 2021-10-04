@@ -22,13 +22,15 @@ import javax.faces.context.ResponseWriter;
 import org.primefaces.util.ComponentUtils;
 import org.primefaces.util.HTML;
 import org.primefaces.component.inputtext.InputText;
+import org.primefaces.mobile.util.MobileRenderUtils;
 
 public class InputTextRenderer extends org.primefaces.component.inputtext.InputTextRenderer {
 
-    public final static String MOBILE_STYLE_CLASS = "ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear";
-    public final static String MOBILE_SEARCH_STYLE_CLASS = "ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear";
-    public final static String MOBILE_CLEAR_ICON_CLASS = "ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden";
-	
+    public final static String MOBILE_STYLE_CLASS = "ui-textinput ui-corner-all ui-shadow-inset ui-textinput-text ui-body-inherit ui-textinput-has-clear-button";
+    public final static String MOBILE_SEARCH_STYLE_CLASS = "ui-textinput ui-corner-all ui-shadow-inset ui-textinput-search ui-body-inherit ui-textinput-has-clear-button";
+    public final static String MOBILE_CLEAR_BUTTON_CLASS = "ui-textinput-clear-button ui-corner-all ui-button ui-button-icon-only ui-button-right ui-textinput-clear-button-hidden";
+	public final static String MOBILE_CLEAR_ICON_CLASS = "ui-textinput-clear-button-icon ui-icon-delete ui-icon";
+
     @Override
 	public void decode(FacesContext context, UIComponent component) {
 		InputText inputText = (InputText) component;
@@ -66,6 +68,10 @@ public class InputTextRenderer extends org.primefaces.component.inputtext.InputT
         if(style != null) { 
             writer.writeAttribute("style", style, null);
         }
+        
+        // search
+        if (search)
+        	MobileRenderUtils.renderIconSpan(writer, "ui-textinput-search-icon ui-alt-icon ui-icon-search", null);
 
         encodeInput(context, inputText, inputId);
         encodeClearIcon(context, inputText);
@@ -82,7 +88,8 @@ public class InputTextRenderer extends org.primefaces.component.inputtext.InputT
         writer.writeAttribute("id", inputId, null);
 		writer.writeAttribute("name", inputId, null);
 		writer.writeAttribute("type", inputText.getType(), null);           
-      
+		writer.writeAttribute("data-clear-btn", "true", null);
+		
         if(inputText.isDisabled()) writer.writeAttribute("disabled", "disabled", null);
         if(inputText.isReadonly()) writer.writeAttribute("readonly", "readonly", null);
         if(valueToRender != null) writer.writeAttribute("value", valueToRender , null);
@@ -96,9 +103,14 @@ public class InputTextRenderer extends org.primefaces.component.inputtext.InputT
     protected void encodeClearIcon(FacesContext context, InputText inputText) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         
+        // button
         writer.startElement("a", null);
         writer.writeAttribute("href", "#", null);
-        writer.writeAttribute("class", MOBILE_CLEAR_ICON_CLASS, null);
+        writer.writeAttribute("class", MOBILE_CLEAR_BUTTON_CLASS, null);
+        
+        // icon
+        MobileRenderUtils.renderIconSpan(writer, MOBILE_CLEAR_ICON_CLASS, null);
+        
         writer.endElement("a");
     }
 }

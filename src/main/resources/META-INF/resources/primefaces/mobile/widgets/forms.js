@@ -238,11 +238,13 @@ PrimeFaces.widget.SelectBooleanCheckbox = PrimeFaces.widget.BaseWidget.extend({
     },
     
     check: function() {
-        this.label.removeClass('ui-checkbox-off').addClass('ui-checkbox-on');
+        this.label.addClass('ui-checkboxradio-checked ui-state-active');
+		this.label.children().first().removeClass('ui-icon-blank').addClass('ui-icon-check ui-state-checked');
     },
     
     uncheck: function() {
-        this.label.removeClass('ui-checkbox-on').addClass('ui-checkbox-off');
+		this.label.removeClass('ui-checkboxradio-checked ui-state-active');
+        this.label.children().first().removeClass('ui-icon-check ui-state-checked').addClass('ui-icon-blank');
     }
 });
 

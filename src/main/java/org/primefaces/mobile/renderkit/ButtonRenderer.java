@@ -23,6 +23,7 @@ import javax.faces.context.ResponseWriter;
 import org.primefaces.component.button.Button;
 import org.primefaces.mobile.util.MobileRenderUtils;
 import org.primefaces.mobile.util.MobileUtils;
+import org.primefaces.mobile.util.MobileRenderUtils.IconPosition;
 import org.primefaces.util.HTML;
 
 public class ButtonRenderer extends org.primefaces.component.button.ButtonRenderer
@@ -35,7 +36,6 @@ public class ButtonRenderer extends org.primefaces.component.button.ButtonRender
 		String clientId = button.getClientId(context);
 		Object value = button.getValue();
 		String icon = button.resolveIcon();
-		String iconPos = button.getIconPos();
 
 		writer.startElement("button", button);
 		writer.writeAttribute("id", clientId, "id");
@@ -50,7 +50,8 @@ public class ButtonRenderer extends org.primefaces.component.button.ButtonRender
 		else
 			writer.writeAttribute("onclick", buildOnclick(context, button), null);
 
-		MobileRenderUtils.renderButtonIconValue(writer, value, button.isEscape(), icon, iconPos);
+		MobileRenderUtils.renderIconValueSpans(writer, value, button.isEscape(), icon, 
+			IconPosition.convert(button.getIconPos()));
 
 		writer.endElement("button");
 	}

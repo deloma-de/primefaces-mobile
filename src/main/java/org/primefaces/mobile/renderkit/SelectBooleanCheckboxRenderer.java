@@ -19,13 +19,20 @@ import java.io.IOException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
+import org.primefaces.mobile.util.MobileRenderUtils;
 import org.primefaces.util.ComponentUtils;
 
 public class SelectBooleanCheckboxRenderer extends org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckboxRenderer {
     
     public final static String MOBILE_STYLE_CLASS = "ui-checkbox";
-    public final static String MOBILE_LABEL_OFF_CLASS = "ui-btn ui-btn-inherit ui-btn-icon-left ui-corner-all ui-checkbox-off";
-    public final static String MOBILE_LABEL_ON_CLASS = "ui-btn ui-btn-inherit ui-btn-icon-left ui-corner-all ui-checkbox-on";
+    
+    public final static String MOBILE_LABEL_CLASS = "ui-checkboxradio-label ui-corner-all ui-button ui-widget ui-button-inherit";
+    public final static String MOBILE_LABEL_ON_CLASS = "ui-checkboxradio-checked ui-state-active";
+    
+    public final static String MOBILE_ICON_CLASS = "ui-checkboxradio-icon ui-corner-all ui-icon ui-icon-background";
+    public final static String MOBILE_ICON_OFF_CLASS = "ui-icon-blank";
+    public final static String MOBILE_ICON_ON_CLASS = "ui-icon-check ui-state-checked"; 
+    
     
     @Override
     public void encodeMarkup(FacesContext context, SelectBooleanCheckbox checkbox) throws IOException {
@@ -52,18 +59,30 @@ public class SelectBooleanCheckboxRenderer extends org.primefaces.component.sele
         writer.endElement("div");
     }
     
-    protected void encodeLabel(FacesContext context, SelectBooleanCheckbox checkbox, String inputId, boolean checked) throws IOException {
-        String itemLabel = checkbox.getItemLabel();
+    protected void encodeLabel(FacesContext context, SelectBooleanCheckbox checkbox, String inputId, boolean checked) throws IOException 
+    {        
+    	String labelClass = MOBILE_LABEL_CLASS;
+    	if (checked)
+    		labelClass += " " + MOBILE_LABEL_ON_CLASS;
+    	
+        ResponseWriter writer = context.getResponseWriter();            
+        writer.startElement("label", null);
+        writer.writeAttribute("for", inputId, null);
+        writer.writeAttribute("class", labelClass, null);
+           
+        // icon
+        String iconClass = checked ? MOBILE_ICON_ON_CLASS: MOBILE_ICON_OFF_CLASS;
+        MobileRenderUtils.renderSpan(writer, MOBILE_ICON_CLASS + " " + iconClass);
         
-        if(itemLabel != null) {
-            String labelClass = checked ? MOBILE_LABEL_ON_CLASS: MOBILE_LABEL_OFF_CLASS;
-            ResponseWriter writer = context.getResponseWriter();            
-            writer.startElement("label", null);
-            writer.writeAttribute("for", inputId, null);
-            writer.writeAttribute("class", labelClass, null);
+        // spacer
+        MobileRenderUtils.renderSpan(writer, "ui-checkboxradio-icon-space", " ", false);
+        
+        // text
+    	String itemLabel = checkbox.getItemLabel();
+        if(itemLabel != null)
             writer.writeText(itemLabel, null);
-            writer.endElement("label");
-        }
+            
+        writer.endElement("label");
     }
     
     @Override
@@ -75,10 +94,11 @@ public class SelectBooleanCheckboxRenderer extends org.primefaces.component.sele
         writer.writeAttribute("name", inputId, null);
         writer.writeAttribute("type", "checkbox", null);
         writer.writeAttribute("data-role", "none", null);
-
+        writer.writeAttribute("class", "ui-checkboxradio ui-helper-hidden-accessible", null);
+        
         if (checked) writer.writeAttribute("checked", "checked", null);
         if (checkbox.isDisabled()) writer.writeAttribute("disabled", "disabled", null);
-        
+
         renderOnchange(context, checkbox);
         renderDynamicPassThruAttributes(context, checkbox);
         
