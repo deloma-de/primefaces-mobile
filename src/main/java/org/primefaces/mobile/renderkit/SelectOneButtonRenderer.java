@@ -24,12 +24,13 @@ import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 import org.primefaces.component.selectonebutton.SelectOneButton;
 
-public class SelectOneButtonRenderer extends org.primefaces.component.selectonebutton.SelectOneButtonRenderer {
+public class SelectOneButtonRenderer extends org.primefaces.component.selectonebutton.SelectOneButtonRenderer 
+{
+
+    public final static String MOBILE_STYLE_CLASS = "ui-controlgroup ui-controlgroup-horizontal ui-helper-clearfix ui-group-theme-inherit";
+    public final static String MOBILE_LABEL_CLASS = "ui-button ui-widget ui-checkboxradio-radio-label ui-button-inherit ui-controlgroup-item ui-checkboxradio-label";
+    public final static String MOBILE_LABEL_ACTIVE_CLASS = "ui-checkboxradio-checked ui-state-active";
     
-    public final static String MOBILE_STYLE_CLASS = "ui-selectonebutton ui-controlgroup ui-controlgroup-horizontal ui-corner-all";
-    public final static String MOBILE_ITEMS_CLASS = "ui-controlgroup-controls";
-    public final static String MOBILE_LABEL_CLASS = "ui-btn ui-corner-all ui-btn-inherit";
-	
     @Override
     public void encodeMarkup(FacesContext context, SelectOneButton button) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
@@ -47,9 +48,6 @@ public class SelectOneButtonRenderer extends org.primefaces.component.selectoneb
             writer.writeAttribute("style", style, "style");
         }
         
-        writer.startElement("div", null);
-        writer.writeAttribute("class", MOBILE_ITEMS_CLASS, null);
-        
         if (selectItems != null && !selectItems.isEmpty()) {
             int itemCount = selectItems.size();
             Object value = button.getSubmittedValue();
@@ -64,32 +62,22 @@ public class SelectOneButtonRenderer extends org.primefaces.component.selectoneb
                 String id = clientId + UINamingContainer.getSeparatorChar(context) + idx;
                 Object coercedItemValue = coerceToModelType(context, selectItem.getValue(), type);
                 boolean selected = (coercedItemValue != null) && coercedItemValue.equals(value);
-                String labelClass = (idx == 0) ? "ui-first-child" : (idx == (itemCount - 1)) ? "ui-last-child" : null;
+                
+                String labelClass = (idx == 0) ? "ui-corner-left" : (idx == (itemCount - 1)) ? "ui-corner-right" : null;
  
                 encodeOption(context, button, selectItem, id, clientId, converter, selected, disabled, labelClass); 
             }
         }
-        
-        writer.endElement("div");
+
         writer.endElement("div");
     }
     
     protected void encodeOption(FacesContext context, SelectOneButton button, SelectItem option, String id, String name, Converter converter, boolean selected, boolean disabled, String labelClass) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         String itemValueAsString = getOptionAsString(context, button, converter, option.getValue());
-        String labelStyleClass = (labelClass == null) ? MOBILE_LABEL_CLASS: MOBILE_LABEL_CLASS + " " + labelClass;
         
-        if(selected) {
-            labelStyleClass = labelStyleClass + " ui-btn-active";
-        }
-        
-        if(disabled) {
-            labelStyleClass = labelStyleClass + " ui-state-disabled";
-        }
+        String labelStyleClass = SelectOneButtonRenderer.getLabelStyleClass(labelClass, selected, disabled);
 
-        writer.startElement("div", null);
-        writer.writeAttribute("class", "ui-radio", null);
-        
         //label
         writer.startElement("label", null);
         writer.writeAttribute("class", labelStyleClass, null);
@@ -109,6 +97,7 @@ public class SelectOneButtonRenderer extends org.primefaces.component.selectoneb
         writer.writeAttribute("type", "radio", null);
         writer.writeAttribute("value", itemValueAsString, null);
         writer.writeAttribute("data-role", "none", null);
+        writer.writeAttribute("class", "ui-checkboxradio ui-helper-hidden-accessible", null);
 
         renderOnchange(context, button);
         renderDynamicPassThruAttributes(context, button);
@@ -117,7 +106,18 @@ public class SelectOneButtonRenderer extends org.primefaces.component.selectoneb
         if (disabled) writer.writeAttribute("disabled", "disabled", null);
         
         writer.endElement("input");
-
-        writer.endElement("div");
+    }
+    
+    public static String getLabelStyleClass(String labelClass, boolean selected, boolean disabled)
+    {
+        String labelStyleClass = (labelClass == null) ? SelectOneButtonRenderer.MOBILE_LABEL_CLASS: SelectOneButtonRenderer.MOBILE_LABEL_CLASS + " " + labelClass;
+        
+        if(selected)
+            labelStyleClass += " " + SelectOneButtonRenderer.MOBILE_LABEL_ACTIVE_CLASS;
+        
+        if(disabled)
+            labelStyleClass += " ui-state-disabled";
+        
+        return labelStyleClass;
     }
 }

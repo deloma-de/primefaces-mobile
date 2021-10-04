@@ -53,8 +53,8 @@ PrimeFaces.widget.SelectOneButton = PrimeFaces.widget.BaseWidget.extend({
     init: function(cfg) {
         this._super(cfg);
         
-        this.controlGroup = this.jq.children('.ui-controlgroup-controls');
-        this.buttons = this.controlGroup.find('> .ui-radio > label.ui-btn');
+        this.controlGroup = this.jq;
+        this.buttons = this.controlGroup.find('> label.ui-button');
         this.bindEvents();
     },
     
@@ -64,16 +64,17 @@ PrimeFaces.widget.SelectOneButton = PrimeFaces.widget.BaseWidget.extend({
         this.buttons.on('click.selectOneButton', function(e) {
             var button = $(this);
 
-            if(!button.hasClass('ui-btn-active')) {
+            if(!button.hasClass('ui-state-active')) {
                 $this.select(button);
             }
         });
     },
     
     select: function(button) {
-        this.buttons.filter('.ui-btn-active').removeClass('ui-btn-active').next().prop('checked', false);
+	
+        this.buttons.filter('.ui-state-active').removeClass('ui-checkboxradio-checked ui-state-active').next().prop('checked', false);
 
-        button.addClass('ui-btn-active').next().prop('checked', true).change();
+        button.addClass('ui-checkboxradio-checked ui-state-active').next().prop('checked', true).change();
     }
     
 });
@@ -86,8 +87,8 @@ PrimeFaces.widget.SelectManyButton = PrimeFaces.widget.BaseWidget.extend({
     init: function(cfg) {
         this._super(cfg);
         
-        this.controlGroup = this.jq.children('.ui-controlgroup-controls ');
-        this.buttons = this.controlGroup.find('> .ui-checkbox > label.ui-btn');
+        this.controlGroup = this.jq;
+        this.buttons = this.controlGroup.find('> label.ui-button');
         
         this.bindEvents();
     },
@@ -97,7 +98,7 @@ PrimeFaces.widget.SelectManyButton = PrimeFaces.widget.BaseWidget.extend({
         this.buttons.on('click.selectManyButton', function() {
             var button = $(this);
 
-            if(button.hasClass('ui-btn-active'))
+            if(button.hasClass('ui-state-active'))
                 $this.unselect(button);
             else
                 $this.select(button);
@@ -105,12 +106,12 @@ PrimeFaces.widget.SelectManyButton = PrimeFaces.widget.BaseWidget.extend({
     },
     
     select: function(button) {
-        button.addClass('ui-btn-active').next().prop('checked', true).change();
+        button.addClass('ui-checkboxradio-checked ui-state-active').next().prop('checked', true).change();
 
     },
     
     unselect: function(button) {
-        button.removeClass('ui-btn-active').next().prop('checked', false).change();
+        button.removeClass('ui-checkboxradio-checked ui-state-active').next().prop('checked', false).change();
     }
     
 });

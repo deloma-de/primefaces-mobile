@@ -17,7 +17,6 @@ package org.primefaces.mobile.renderkit;
 
 import java.io.IOException;
 import java.util.List;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
@@ -25,13 +24,10 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 import org.primefaces.component.selectmanybutton.SelectManyButton;
-import org.primefaces.component.selectonebutton.SelectOneButton;
 
-public class SelectManyButtonRenderer extends org.primefaces.component.selectmanybutton.SelectManyButtonRenderer {
+public class SelectManyButtonRenderer extends org.primefaces.component.selectmanybutton.SelectManyButtonRenderer 
+{
     
-    public final static String MOBILE_STYLE_CLASS = "ui-selectmanybutton ui-controlgroup ui-controlgroup-horizontal ui-corner-all";
-    public final static String MOBILE_ITEMS_CLASS = "ui-controlgroup-controls";
-    public final static String MOBILE_LABEL_CLASS = "ui-btn ui-corner-all ui-btn-inherit";
 	
     @Override
     public void encodeMarkup(FacesContext context, SelectManyButton button) throws IOException {
@@ -40,7 +36,7 @@ public class SelectManyButtonRenderer extends org.primefaces.component.selectman
         List<SelectItem> selectItems = getSelectItems(context, button);
         String style = button.getStyle();
         String styleClass = button.getStyleClass();
-        styleClass = (styleClass == null) ? MOBILE_STYLE_CLASS: MOBILE_STYLE_CLASS + " " + styleClass;
+        styleClass = (styleClass == null) ? SelectOneButtonRenderer.MOBILE_STYLE_CLASS : SelectOneButtonRenderer.MOBILE_STYLE_CLASS + " " + styleClass;
      
         writer.startElement("div", button);
         writer.writeAttribute("id", clientId, "id");
@@ -48,9 +44,6 @@ public class SelectManyButtonRenderer extends org.primefaces.component.selectman
         if (style != null) {
             writer.writeAttribute("style", style, "style");
         }
-        
-        writer.startElement("div", null);
-        writer.writeAttribute("class", MOBILE_ITEMS_CLASS, "id");
         
         if (selectItems != null && !selectItems.isEmpty()) {
             int itemCount = selectItems.size();
@@ -60,13 +53,12 @@ public class SelectManyButtonRenderer extends org.primefaces.component.selectman
 
             for (int idx = 0; idx < itemCount; idx++) {
                 SelectItem selectItem = selectItems.get(idx);
-                String labelClass = (idx == 0) ? "ui-first-child" : (idx == (itemCount - 1)) ? "ui-last-child" : null;
+                String labelClass = (idx == 0) ? "ui-corner-left" : (idx == (itemCount - 1)) ? "ui-corner-right" : null;
  
                 encodeOption(context, button, values, submittedValues, converter, selectItem, idx, labelClass);
             }        
         }
-        
-        writer.endElement("div");
+
         writer.endElement("div");
     }
     
@@ -93,19 +85,9 @@ public class SelectManyButtonRenderer extends org.primefaces.component.selectman
             return;
         }
         
-        String labelStyleClass = (labelClass == null) ? MOBILE_LABEL_CLASS: MOBILE_LABEL_CLASS + " " + labelClass;
-        
-        if(selected) {
-            labelStyleClass = labelStyleClass + " ui-btn-active";
-        }
-        
-        if(disabled) {
-            labelStyleClass = labelStyleClass + " ui-state-disabled";
-        }
-        
-        writer.startElement("div", null);
-        writer.writeAttribute("class", "ui-checkbox", null);
-        
+        String labelStyleClass = SelectOneButtonRenderer.getLabelStyleClass(labelClass, selected, disabled);
+
+
         //label
         writer.startElement("label", null);
         writer.writeAttribute("class", labelStyleClass, null);
@@ -125,7 +107,8 @@ public class SelectManyButtonRenderer extends org.primefaces.component.selectman
         writer.writeAttribute("type", "checkbox", null);
         writer.writeAttribute("value", itemValueAsString, null);
         writer.writeAttribute("data-role", "none", null);
-
+        writer.writeAttribute("class", "ui-checkboxradio ui-helper-hidden-accessible", null);
+        
         renderOnchange(context, button);
         renderDynamicPassThruAttributes(context, button);
         
@@ -133,7 +116,5 @@ public class SelectManyButtonRenderer extends org.primefaces.component.selectman
         if (disabled) writer.writeAttribute("disabled", "disabled", null);
         
         writer.endElement("input");
-        
-        writer.endElement("div");
     }
 }
