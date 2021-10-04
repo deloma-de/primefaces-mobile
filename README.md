@@ -10,7 +10,6 @@ It contained some interesting mobile only UI components and renderer of existing
 
 This project is compatible to following PrimeFaces versions
 
-* 6.x - mobile already included
 * 7.0 - compatible
 
 ## Documention
@@ -26,7 +25,7 @@ Mobile is covered in the original PrimeFaces PDF [Documentation](https://www.pri
 * inputslider
 * page
 * rangeslider
-* uiswitch
+* uiswitch _deprecated in favor of InputSwitch_
 
 There are many mobile optimized renders of existing PrimeFaces component such as  _SelectOneMenu_ ,  _DataTable_  and many more.
 
@@ -34,20 +33,9 @@ There are many mobile optimized renders of existing PrimeFaces component such as
 
 * 7.0 _coming soon_
 
-
 ## Showcase
 
-The legacy showcase source can be found at [Github](https://github.com/primefaces/primefaces-showcase-legacy/tree/6_1). 
-
-## Inofficial fork
-
-This project is an inoffical partial "fork" from legacy PrimeFaces **6.1** extracting mobile components which were removed in PrimeFaces 7.0. 
-
-### Motivation
-
-At [deloma](https://www.deloma.de/Agentur/wp/Logistik-Software), we use this for our ecommerce enterprise application for the driver of a daily delivery tour with google maps navigation, order editing, user receipt, mobile payment (cashcard, creditcard, paypal, apple pay, android pay, cash) and also for stock inventory managing of our merchant clients.
-
-This hybrid app works very stable in production and its not worth the time to refactor with new _responsive_ versions of the _new_ components with later PrimeFaces releases and finding solutions for browser ajax _history back_ support. 
+The legacy showcase source can be found at [Github](https://github.com/primefaces/primefaces-showcase-legacy/tree/6_1).  
 
 ## Changes
 
@@ -55,12 +43,10 @@ This hybrid app works very stable in production and its not worth the time to re
 
 - /java
     - adapted Java classes to PrimeFaces 7.0 changes
+    - migrated Renderer classes to new DOM / CSS of jquery 1.5
 - /resources
-    - _/core.mobile.js_  moved to _/mobile_
-    - _/6.1/core.js_ 
-    - _/6.1/jquery/jquery.js_   _(v1.12.4)_  
-    - _/7.0/core.js_ 
-    - _/7.0/jquery/jquery.js_   _(v3.3.1)_  
+    - replaced jquery mobile with version 1.5.0-rc1
+    - migrated widgets to new DOM / CSS
 
 ### History
 
@@ -70,7 +56,15 @@ This project basically extracts this commit [Remove mobile](https://github.com/p
 
 PrimeFaces 7.0 uses jQuery 3+ whereas mobile is only compatible up to 1.9 which leads to breaking changes. [Download mobile](https://releases.jquery.com/mobile/).
 
-To make migration easier we use _old_ jQuery resources for mobile in _HeadRenderer_.
+## Inofficial fork
+
+This project is an inoffical partial "fork" from legacy PrimeFaces **6.1** extracting mobile components which were removed in PrimeFaces 7.0. 
+
+### Motivation
+
+At [deloma](https://www.deloma.de/Agentur/wp/Logistik-Software), we use this for our ecommerce enterprise application for the driver of a daily delivery tour with google maps navigation, order editing, user receipt, mobile payment (cashcard, creditcard, paypal, apple pay, android pay, cash) and also for stock inventory managing of our merchant clients.
+
+This hybrid app works very stable in production and its not worth the time to refactor with new _responsive_ versions of the _new_ components with later PrimeFaces releases and finding solutions for browser ajax _history back_ support.
 
 ## License
 
