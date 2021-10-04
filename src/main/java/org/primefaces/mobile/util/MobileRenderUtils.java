@@ -13,6 +13,8 @@ import javax.faces.context.ResponseWriter;
  */
 public class MobileRenderUtils 
 {
+	public static final String BUTTON_ICON_SPACER_CLASS = "ui-button-icon-space";
+		
 	public static enum IconPosition
 	{
 		LEFT,
@@ -41,7 +43,7 @@ public class MobileRenderUtils
 		
 		// spacer
 		if (position == IconPosition.RIGHT)
-			renderSpan(writer, "ui-button-icon-space", " ", false);
+			renderSpan(writer, BUTTON_ICON_SPACER_CLASS, " ", false);
 
 		writer.startElement("span", null);
 		writer.writeAttribute("class", iconCssClass, null);
@@ -49,7 +51,7 @@ public class MobileRenderUtils
 		
 		// spacer
 		if (position == IconPosition.LEFT)
-			renderSpan(writer, "ui-button-icon-space", " ", false);
+			renderSpan(writer, BUTTON_ICON_SPACER_CLASS, " ", false);
     }
     
 

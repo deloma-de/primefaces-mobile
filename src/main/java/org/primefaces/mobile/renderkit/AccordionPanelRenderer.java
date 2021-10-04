@@ -120,6 +120,9 @@ public class AccordionPanelRenderer extends org.primefaces.component.accordionpa
         // icon
         MobileRenderUtils.renderIconSpan(writer, PanelRenderer.getIconClass(!active), null);
         
+        // spacer
+        MobileRenderUtils.renderSpan(writer, MobileRenderUtils.BUTTON_ICON_SPACER_CLASS, " ", false);
+        
         // text
         MobileRenderUtils.renderTextSpan(writer, tab.getTitle(), false, context, titleFacet);
 

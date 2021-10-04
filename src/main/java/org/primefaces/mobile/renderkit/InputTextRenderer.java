@@ -28,7 +28,8 @@ public class InputTextRenderer extends org.primefaces.component.inputtext.InputT
 
     public final static String MOBILE_STYLE_CLASS = "ui-textinput ui-corner-all ui-shadow-inset ui-textinput-text ui-body-inherit ui-textinput-has-clear-button";
     public final static String MOBILE_SEARCH_STYLE_CLASS = "ui-textinput ui-corner-all ui-shadow-inset ui-textinput-search ui-body-inherit ui-textinput-has-clear-button";
-    public final static String MOBILE_CLEAR_BUTTON_CLASS = "ui-textinput-clear-button ui-corner-all ui-button ui-button-icon-only ui-button-right ui-textinput-clear-button-hidden";
+    public final static String MOBILE_CLEAR_BUTTON_CLASS = "ui-textinput-clear-button ui-corner-all ui-button ui-button-icon-only ui-button-right";
+    public final static String MOBILE_CLEAR_BUTTON_HIDDEN_CLASS = "ui-textinput-clear-button-hidden";
 	public final static String MOBILE_CLEAR_ICON_CLASS = "ui-textinput-clear-button-icon ui-icon-delete ui-icon";
 
     @Override
@@ -74,7 +75,6 @@ public class InputTextRenderer extends org.primefaces.component.inputtext.InputT
         	MobileRenderUtils.renderIconSpan(writer, "ui-textinput-search-icon ui-alt-icon ui-icon-search", null);
 
         encodeInput(context, inputText, inputId);
-        encodeClearIcon(context, inputText);
         
         writer.endElement("div");
 	}
@@ -98,15 +98,22 @@ public class InputTextRenderer extends org.primefaces.component.inputtext.InputT
         renderDomEvents(context, inputText, HTML.INPUT_TEXT_EVENTS);
         
         writer.endElement("input");
+       
+        // clear icon
+        encodeClearIcon(writer, valueToRender);
     }
     
-    protected void encodeClearIcon(FacesContext context, InputText inputText) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        
+    public static void encodeClearIcon(ResponseWriter writer, String value) throws IOException 
+    {
+    	String buttonCssClass = MOBILE_CLEAR_BUTTON_CLASS;
+    	
+    	if (value == null)
+    		buttonCssClass += " " + MOBILE_CLEAR_BUTTON_HIDDEN_CLASS;
+    		
         // button
         writer.startElement("a", null);
         writer.writeAttribute("href", "#", null);
-        writer.writeAttribute("class", MOBILE_CLEAR_BUTTON_CLASS, null);
+        writer.writeAttribute("class", buttonCssClass, null);
         
         // icon
         MobileRenderUtils.renderIconSpan(writer, MOBILE_CLEAR_ICON_CLASS, null);

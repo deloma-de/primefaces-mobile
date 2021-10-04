@@ -7,10 +7,10 @@ PrimeFaces.widget.AutoComplete = PrimeFaces.widget.BaseWidget.extend({
         this._super(cfg);
         this.cfg.minLength = (this.cfg.minLength !== undefined) ? this.cfg.minLength : 1;
         this.cfg.delay = (this.cfg.delay !== undefined) ? this.cfg.delay : 300;
-        this.inputContainer = this.jq.children('.ui-input-search');
+        this.inputContainer = this.jq.children('.ui-textinput-search');
         this.input = $(this.jqId + '_input');
         this.hinput = $(this.jqId + '_hinput');
-        this.clearIcon = this.inputContainer.children('.ui-input-clear');
+        this.clearIcon = this.inputContainer.children('.ui-textinput-clear-button');
         this.cfg.pojo = (this.hinput.length === 1);
         this.panel = this.jq.children('.ui-controlgroup');
         this.itemContainer = this.panel.children('.ui-controlgroup-controls');
@@ -165,11 +165,11 @@ PrimeFaces.widget.AutoComplete = PrimeFaces.widget.BaseWidget.extend({
     },
     
     showClearIcon: function() {
-        this.clearIcon.removeClass('ui-input-clear-hidden');
+        this.clearIcon.removeClass('ui-textinput-clear-button-hidden');
     },
     
     hideClearIcon: function() {
-        this.clearIcon.addClass('ui-input-clear-hidden');
+        this.clearIcon.addClass('ui-textinput-clear-button-hidden');
     }
     
 });

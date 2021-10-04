@@ -22,18 +22,18 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import org.primefaces.component.autocomplete.AutoComplete;
+import org.primefaces.mobile.util.MobileRenderUtils;
 import org.primefaces.util.ComponentUtils;
 import org.primefaces.util.HTML;
 import org.primefaces.util.WidgetBuilder;
 
 public class AutoCompleteRenderer extends org.primefaces.component.autocomplete.AutoCompleteRenderer {
     
-    public final static String MOBILE_INPUT_CONTAINER_CLASS = "ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear";
+    public final static String MOBILE_INPUT_CONTAINER_CLASS = "ui-textinput-search ui-body-inherit ui-corner-all ui-shadow-inset ui-textinput-has-clear-button";
     public final static String MOBILE_PANEL_CLASS = "ui-controlgroup ui-controlgroup-vertical ui-corner-all ui-screen-hidden";
     public final static String MOBILE_ITEM_CONTAINER_CLASS = "ui-controlgroup-controls";
-    public final static String MOBILE_ITEM_CLASS = "ui-autocomplete-item ui-btn ui-corner-all ui-shadow";
-    public final static String MOBILE_CLEAR_ICON_CLASS = "ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden";
-	
+    public final static String MOBILE_ITEM_CLASS = "ui-autocomplete-item ui-button ui-corner-all ui-shadow";
+    
     @Override
     protected void encodeScript(FacesContext context, AutoComplete ac) throws IOException {
         String clientId = ac.getClientId(context);
@@ -80,6 +80,9 @@ public class AutoCompleteRenderer extends org.primefaces.component.autocomplete.
         writer.startElement("div", null);
         writer.writeAttribute("class", MOBILE_INPUT_CONTAINER_CLASS, null);
         
+        // search icon
+        MobileRenderUtils.renderIconSpan(writer, "ui-textinput-search-icon ui-alt-icon ui-icon-search", null);
+        
         writer.startElement("input", ac);
         writer.writeAttribute("id", inputId, null);
         writer.writeAttribute("name", inputId, null);
@@ -94,10 +97,8 @@ public class AutoCompleteRenderer extends org.primefaces.component.autocomplete.
         
         writer.endElement("input");
         
-        writer.startElement("a", null);
-        writer.writeAttribute("href", "#", null);
-        writer.writeAttribute("class", MOBILE_CLEAR_ICON_CLASS, null);
-        writer.endElement("a");
+        // clear icon
+        InputTextRenderer.encodeClearIcon(writer, valueToRender);
         
         if(ac.getVar() != null) {
             encodeHiddenInput(context, ac, clientId);
