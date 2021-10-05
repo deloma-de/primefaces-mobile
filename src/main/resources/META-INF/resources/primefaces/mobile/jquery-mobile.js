@@ -1,5 +1,5 @@
 /*!
-* jQuery Mobile <%= version %>
+* jQuery Mobile 1.5.0-rc1
 * Git HEAD hash: 1f0cec9bcb9d75998e733d580d6f1144c963326e <> Date: Mon Sep 10 2018 04:34:35 UTC
 * http://jquerymobile.com
 *
@@ -19179,7 +19179,7 @@ return $.widget( "mobile.filterable", {
 		filterCallback: defaultFilterCallback,
 		enhanced: false,
 		input: null,
-		children: "> li, > option, > optgroup option, > tbody tr, > .ui-controlgroup > .ui-btn, " +
+		children: "> li, > option, > optgroup option, > tbody tr, > .ui-controlgroup > .ui-button, " +
 			"> .ui-controlgroup > .ui-checkbox, > .ui-controlgroup > .ui-radio"
 	},
 

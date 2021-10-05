@@ -31,7 +31,7 @@ There are many mobile optimized renders of existing PrimeFaces component such as
 
 ## Download
 
-* 7.0 _coming soon_
+* 7.0  _coming soon_
 
 ## Showcase
 
@@ -47,6 +47,17 @@ The legacy showcase source can be found at [Github](https://github.com/primeface
 - /resources
     - replaced jquery mobile with version 1.5.0-rc1
     - migrated widgets to new DOM / CSS
+    
+    
+**Main DOM / CSS changes **
+
+- icon as child span
+- _ui-li-divider_  now _ui-listview-item-divider_
+- _ui-li-static_  now  _ui-listview-item-static_
+- _ui-tab_  now  _ui-tabs-tab_
+- _ui-btn_  now  _ui-button_
+- _ui-btn-icon-notext_  now  _ui-button-icon-only_
+
 
 ### History
 

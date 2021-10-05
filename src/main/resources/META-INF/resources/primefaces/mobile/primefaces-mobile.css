@@ -208,30 +208,3 @@
     float:right;
     cursor: pointer;
 }
-
-/* jQuery mobile 1.5 fixes */
-
-.ui-button-icon-notext
-{
-	padding:0;
-	width:1.75em;
-	height:1.75em;
-	text-indent:-9999px;
-	white-space:nowrap!important
-}
-
-.ui-button-icon-left
-{
-	position: absolute;
-	left: .5625em;
-	top: 50%;
-	margin-top: -11px;
-}
-
-.ui-button-icon-right
-{
-	position: absolute;
-	right: .5625em;
-	top: 50%;
-	margin-top: -11px;
-}

@@ -61,7 +61,7 @@ PrimeFaces.widget.Growl = PrimeFaces.widget.BaseWidget.extend({
     
     renderMessage: function(msg) {
         var markup = '<div class="ui-growl-item ui-grid-a">';
-        markup += '<div class="ui-growl-severity ui-block-a"><a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-notext ui-btn-b ui-btn-inline" href="#"></a></div>';
+        markup += '<div class="ui-growl-severity ui-block-a"><a class="ui-button ui-shadow ui-corner-all ui-button-icon-only ui-button-b ui-button-inline" href="#"><span class="ui-button-icon ui-icon"></span></a></div>';
         markup += '<div class="ui-growl-message ui-block-b">';
         markup += '<div class="ui-growl-summary"></div>';
         markup += '<div class="ui-growl-detail"></div>';
@@ -72,7 +72,7 @@ PrimeFaces.widget.Growl = PrimeFaces.widget.BaseWidget.extend({
         summaryEL = item.find('> .ui-growl-message > .ui-growl-summary'),
         detailEL = item.find('> .ui-growl-message > .ui-growl-detail');
 
-        severityEL.children('a').addClass(this.getSeverityIcon(msg.severity));
+        severityEL.children('a').children('span').addClass(this.getSeverityIcon(msg.severity));
         
         if(this.cfg.escape) {
             summaryEL.text(msg.summary);

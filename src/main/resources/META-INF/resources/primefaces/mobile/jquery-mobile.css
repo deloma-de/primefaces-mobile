@@ -1,5 +1,5 @@
 /*!
-* jQuery Mobile <%= version %>
+* jQuery Mobile 1.5.0-rc1
 * Git HEAD hash: 1f0cec9bcb9d75998e733d580d6f1144c963326e <> Date: Mon Sep 10 2018 04:34:35 UTC
 * http://jquerymobile.com
 *
@@ -2784,11 +2784,11 @@ li.ui-block-e {
 .ui-toolbar-header-button-right {
 	right: .4em;
 }
-.ui-btn-icon-notext.ui-toolbar-header-button-left {
+.ui-button-icon-only.ui-toolbar-header-button-left {
 	top: .3125em;
 	left: .3125em;
 }
-.ui-btn-icon-notext.ui-toolbar-header-button-right {
+.ui-button-icon-only.ui-toolbar-header-button-right {
 	top: .3125em;
 	right: .3125em;
 }
@@ -3532,7 +3532,7 @@ li.ui-block-e {
 	right: 3.2em;
 }
 /* Count indicator position must be different for mini version. */
-.ui-selectmenu.ui-mini .ui-btn-icon-right .ui-listview-item-count-bubble {
+.ui-selectmenu.ui-mini .ui-button-icon-right .ui-listview-item-count-bubble {
 	right: 2.5em;
 }
 /* We set the rules for the span as well to fix an issue on Chrome with text-overflow ellipsis for the button in combination with text-align center. */
@@ -4335,7 +4335,7 @@ html .ui-popup .ui-field-contain > label + .ui-flipswitch {
 	width: 1.875em;
 }
 /* This is super ugly but there does not seem to be a better way with current theme */
-.ui-flipswitch-active .ui-btn {
+.ui-flipswitch-active .ui-button {
 	color: inherit !important;
 	text-shadow: inherit !important;
 }

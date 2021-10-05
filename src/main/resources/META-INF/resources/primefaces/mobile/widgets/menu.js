@@ -20,7 +20,7 @@ PrimeFaces.widget.TabMenu = PrimeFaces.widget.BaseWidget.extend({
     init: function(cfg) {
         this._super(cfg);
         this.links = this.jq.find('a.ui-link');
-        this.links.eq(this.cfg.activeIndex).addClass('ui-btn-active');
+        this.links.eq(this.cfg.activeIndex).addClass('ui-button-active');
         
         this.jq.navbar();
     }
