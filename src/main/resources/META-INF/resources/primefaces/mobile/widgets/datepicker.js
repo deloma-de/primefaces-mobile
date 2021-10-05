@@ -744,7 +744,9 @@ $.extend(Datepicker.prototype, {
 		if (!inst.inline) {
 			showAnim = $.datepicker._get(inst, "showAnim");
 			duration = $.datepicker._get(inst, "duration");
-			inst.dpDiv.zIndex($(input).zIndex()+1);
+			// inst.dpDiv.zIndex($(input).zIndex()+1);
+			inst.dpDiv.css("zIndex", $(input).css( "zIndex")+1);
+			
 			$.datepicker._datepickerShowing = true;
 
 			if ( $.effects && $.effects.effect[ showAnim ] ) {
@@ -2173,8 +2175,8 @@ $.datepicker.version = "1.10.3";
           this.calendar.addClass("ui-shadow")
           .find( ".ui-datepicker-calendar" ).addClass( "mobile-enhanced" ).end()
           .find(".ui-datepicker-calendar a,.ui-datepicker-prev,.ui-datepicker-next").addClass("ui-button").end()
-          .find(".ui-datepicker-prev").addClass("ui-button-icon-only ui-button-inline ui-corner-all ui-icon-arrow-l ui-shadow").end()
-          .find(".ui-datepicker-next").addClass("ui-button-icon-only ui-button-inline ui-corner-all ui-icon-arrow-r ui-shadow").end()
+          .find(".ui-datepicker-prev").addClass("ui-button-icon-only ui-button-inline ui-corner-all ui-shadow").end() // ui-icon-arrow-l 
+          .find(".ui-datepicker-next").addClass("ui-button-icon-only ui-button-inline ui-corner-all ui-shadow").end() //  ui-icon-arrow-r 
           .find(".ui-datepicker-header").addClass("ui-body-a ui-corner-top").removeClass("ui-corner-all").end()
           .find(".ui-datepicker-calendar th" ).addClass("ui-bar-a").end()
           .find(".ui-datepicker-calendar td" ).addClass("ui-body-a").end()
