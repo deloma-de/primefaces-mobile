@@ -24,8 +24,9 @@ import org.primefaces.component.toolbar.Toolbar;
 public class ToolbarRenderer extends org.primefaces.component.toolbar.ToolbarRenderer {
     
     public static String MOBILE_CONTAINER_CLASS = "ui-toolbar ui-header ui-bar-inherit";
-    public static String MOBILE_LEFT_GROUP_CLASS = "ui-toolbar-header-button-left ui-controlgroup ui-controlgroup-horizontal ui-corner-all";
-    public static String MOBILE_RIGHT_GROUP_CLASS = "ui-toolbar-header-button-right ui-controlgroup ui-controlgroup-horizontal ui-corner-all";
+    // ui-toolbar-header-button-left 
+    public static String MOBILE_LEFT_GROUP_CLASS = "ui-button-inline ui-controlgroup ui-controlgroup-horizontal ui-corner-all";
+    public static String MOBILE_RIGHT_GROUP_CLASS = "ui-toolbar-header-button-right ui-button-inline ui-controlgroup ui-controlgroup-horizontal ui-corner-all";
     public static String MOBILE_GROUP_CONTAINER_CLASS = "ui-controlgroup-controls ";
 	
     @Override
