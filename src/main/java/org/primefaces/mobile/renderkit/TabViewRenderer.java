@@ -24,17 +24,19 @@ import org.primefaces.component.tabview.TabView;
 import org.primefaces.util.HTML;
 import org.primefaces.util.WidgetBuilder;
 
-public class TabViewRenderer extends org.primefaces.component.tabview.TabViewRenderer {
-    
-	
+public class TabViewRenderer extends org.primefaces.component.tabview.TabViewRenderer 
+{
     public static final String MOBILE_CONTAINER_CLASS = "ui-tabs ui-widget ui-widget-content ui-corner-all ui-hidden-container";
     public static final String MOBILE_NAVBAR_CLASS = "ui-navbar";
-    public static final String MOBILE_NAVIGATOR_CLASS = "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all";
-    public static final String MOBILE_INACTIVE_TAB_HEADER_CLASS = "ui-tabs-header";
-    public static final String MOBILE_ACTIVE_TAB_HEADER_CLASS = "ui-tabs-header ui-tabs-active";
-    public static final String MOBILE_INACTIVE_TAB_HEADER_TITLE_CLASS = "ui-link ui-btn ui-tabs-anchor";
-    public static final String MOBILE_ACTIVE_TAB_HEADER_TITLE_CLASS = "ui-link ui-btn ui-tabs-anchor ui-btn-active";
-    public static final String MOBILE_TAB_CONTENT_CLASS = "ui-content";
+    public static final String MOBILE_NAVIGATOR_CLASS = "ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header";
+    
+    public static final String MOBILE_TAB_HEADER_CLASS = "ui-tabs-header";
+    public static final String MOBILE_TAB_HEADER_ACTIVE_CLASS = "ui-tabs-active ui-state-active";
+    
+    public static final String MOBILE_TAB_HEADER_TITLE_CLASS = "ui-tabs-anchor ui-button ui-shadow ui-corner-all ui-widget ui-button-inherit";
+    public static final String MOBILE_TAB_HEADER_TITLE_ACTIVE_CLASS = "ui-button-active";
+   
+    public static final String MOBILE_TAB_CONTENT_CLASS = "ui-tabs-panel ui-corner-bottom ui-widget-content";
     
     @Override
     protected void encodeScript(FacesContext context, TabView tabView) throws IOException {
@@ -122,10 +124,18 @@ public class TabViewRenderer extends org.primefaces.component.tabview.TabViewRen
     }
     
     @Override
-    protected void encodeTabHeader(FacesContext context, TabView tabView, Tab tab, int index, boolean active) throws IOException {
+    protected void encodeTabHeader(FacesContext context, TabView tabView, Tab tab, int index, boolean active) throws IOException 
+    {
         ResponseWriter writer = context.getResponseWriter();
-        String headerClass = active ? MOBILE_ACTIVE_TAB_HEADER_CLASS : MOBILE_INACTIVE_TAB_HEADER_CLASS;
-        String titleClass = active ? MOBILE_ACTIVE_TAB_HEADER_TITLE_CLASS : MOBILE_INACTIVE_TAB_HEADER_TITLE_CLASS;
+        
+        String headerClass = MOBILE_TAB_HEADER_CLASS;
+        String titleClass = MOBILE_TAB_HEADER_TITLE_CLASS;
+        if (active)
+        {
+        	headerClass += " " + MOBILE_TAB_HEADER_ACTIVE_CLASS;
+        	titleClass+= " " + MOBILE_TAB_HEADER_TITLE_ACTIVE_CLASS;
+        }
+        
         String styleClass = tab.getTitleStyleClass();
         String style = tab.getTitleStyle();
         styleClass = (styleClass == null) ? headerClass : headerClass + " " + styleClass;

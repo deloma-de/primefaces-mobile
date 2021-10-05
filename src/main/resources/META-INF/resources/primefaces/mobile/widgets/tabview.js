@@ -116,10 +116,10 @@ PrimeFaces.widget.TabView = PrimeFaces.widget.BaseWidget.extend({
         newPanel.attr('aria-hidden', false);
         newHeader.attr('aria-expanded', true);
 
-        oldHeader.removeClass('ui-tabs-active').children('a').removeClass('ui-btn-active');
+        oldHeader.removeClass('ui-tabs-active').children('a').removeClass('ui-button-active');
         oldPanel.hide();
 
-        newHeader.addClass('ui-tabs-active').children('a').addClass('ui-btn-active');
+        newHeader.addClass('ui-tabs-active').children('a').addClass('ui-button-active');
         newPanel.show();
 
         this.postTabShow(newPanel);

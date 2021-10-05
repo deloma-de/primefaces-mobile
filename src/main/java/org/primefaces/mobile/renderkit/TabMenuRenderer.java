@@ -30,8 +30,8 @@ import org.primefaces.util.WidgetBuilder;
 public class TabMenuRenderer extends BaseMenuRenderer {
         
     public static final String MOBILE_CONTAINER_CLASS = "ui-tabmenu ui-navbar";
-    public static final String MOBILE_INACTIVE_TAB_HEADER_CLASS = "ui-link ui-btn";
-    public static final String MOBILE_ACTIVE_TAB_HEADER_CLASS = "ui-link ui-btn ui-btn-active";
+    public static final String MOBILE_INACTIVE_TAB_HEADER_CLASS = "ui-link ui-button";
+    public static final String MOBILE_ACTIVE_TAB_HEADER_CLASS = "ui-link ui-button ui-button-active";
 	
     @Override
     protected void encodeMarkup(FacesContext context, AbstractMenu component) throws IOException {
@@ -77,15 +77,13 @@ public class TabMenuRenderer extends BaseMenuRenderer {
     }
     
     @Override
-    protected String getLinkStyleClass(MenuItem menuitem) {
-        String icon = menuitem.getIcon();
-        String iconPos = menuitem.getIconPos();
-        iconPos = (iconPos == null) ? "ui-btn-icon-top": "ui-btn-icon-" + iconPos;
-        String styleClass = (icon == null) ? MobileConstants.MOBILE_MENUITEM_LINK_CLASS: MobileConstants.MOBILE_MENUITEM_LINK_CLASS + " " + icon + " " + iconPos;
+    protected String getLinkStyleClass(MenuItem menuitem) 
+    {
+        String styleClass = MobileConstants.MOBILE_MENUITEM_LINK_CLASS;
+        
         String userStyleClass = menuitem.getStyleClass();
-        if(userStyleClass != null) {
-            styleClass = styleClass + " " + userStyleClass;
-        }
+        if(userStyleClass != null)
+            styleClass += " " + userStyleClass;
         
         return styleClass;
     }

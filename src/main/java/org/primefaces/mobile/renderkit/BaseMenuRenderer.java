@@ -28,12 +28,14 @@ import javax.faces.context.ResponseWriter;
 import org.primefaces.component.api.AjaxSource;
 import org.primefaces.component.api.UIOutcomeTarget;
 import org.primefaces.component.menu.AbstractMenu;
+import org.primefaces.mobile.util.MobileRenderUtils;
+import org.primefaces.mobile.util.MobileRenderUtils.IconPos;
 import org.primefaces.mobile.util.MobileUtils;
 import org.primefaces.model.menu.MenuItem;
 import org.primefaces.util.ComponentTraversalUtils;
-import org.primefaces.util.ComponentUtils;
 
-public abstract class BaseMenuRenderer extends org.primefaces.component.menu.BaseMenuRenderer {
+public abstract class BaseMenuRenderer extends org.primefaces.component.menu.BaseMenuRenderer 
+{
      
     @Override
     protected void encodeMenuItem(FacesContext context, AbstractMenu menu, MenuItem menuitem) throws IOException {
@@ -122,9 +124,10 @@ public abstract class BaseMenuRenderer extends org.primefaces.component.menu.Bas
         }
 
         Object value = menuitem.getValue();
-        if(value != null) {
-            writer.writeText(value, null);
-        }
+        
+        // icon + value
+        MobileRenderUtils.renderIconValueSpans(writer, value, false, 
+        	menuitem.getIcon(), IconPos.convert(menuitem.getIconPos()));
 
         writer.endElement("a");  
     }

@@ -23,7 +23,7 @@ import javax.faces.context.ResponseWriter;
 import org.primefaces.component.button.Button;
 import org.primefaces.mobile.util.MobileRenderUtils;
 import org.primefaces.mobile.util.MobileUtils;
-import org.primefaces.mobile.util.MobileRenderUtils.IconPosition;
+import org.primefaces.mobile.util.MobileRenderUtils.IconPos;
 import org.primefaces.util.HTML;
 
 public class ButtonRenderer extends org.primefaces.component.button.ButtonRenderer
@@ -51,7 +51,7 @@ public class ButtonRenderer extends org.primefaces.component.button.ButtonRender
 			writer.writeAttribute("onclick", buildOnclick(context, button), null);
 
 		MobileRenderUtils.renderIconValueSpans(writer, value, button.isEscape(), icon, 
-			IconPosition.convert(button.getIconPos()));
+			IconPos.convert(button.getIconPos()));
 
 		writer.endElement("button");
 	}
@@ -92,7 +92,7 @@ public class ButtonRenderer extends org.primefaces.component.button.ButtonRender
 		String styleClass = "ui-button ui-shadow ui-corner-all";
 
 		if (value == null)
-			styleClass += " ui-button-icon-notext";
+			styleClass += " ui-button-icon-only";
 
 		if (disabled)
 			styleClass += " ui-state-disabled";
