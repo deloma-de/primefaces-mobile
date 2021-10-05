@@ -75,16 +75,5 @@ public class TabMenuRenderer extends BaseMenuRenderer {
         wb.init("TabMenu", menu.resolveWidgetVar(), clientId).attr("activeIndex", menu.getActiveIndex());
         wb.finish();
     }
-    
-    @Override
-    protected String getLinkStyleClass(MenuItem menuitem) 
-    {
-        String styleClass = MobileConstants.MOBILE_MENUITEM_LINK_CLASS;
-        
-        String userStyleClass = menuitem.getStyleClass();
-        if(userStyleClass != null)
-            styleClass += " " + userStyleClass;
-        
-        return styleClass;
-    }
+
 }

@@ -32,7 +32,7 @@ import org.primefaces.util.WidgetBuilder;
 public class MenuRenderer extends BaseMenuRenderer {
     
 	public static final String MOBILE_CONTAINER_CLASS = "ui-menu ui-listview";
-    public static final String MOBILE_DIVIDER_CLASS = "ui-li-divider ui-bar-inherit";
+    public static final String MOBILE_DIVIDER_CLASS = "ui-listview-item-divider ui-bar-inherit";
 	
     @Override
     protected void encodeMarkup(FacesContext context, AbstractMenu abstractMenu) throws IOException {
@@ -129,21 +129,5 @@ public class MenuRenderer extends BaseMenuRenderer {
         wb.initWithDomReady("PlainMenu", menu.resolveWidgetVar(), clientId);
         wb.finish();
 	}
-    
-    @Override
-    protected String getLinkStyleClass(MenuItem menuitem) {
-        String icon = menuitem.getIcon();
-        if(icon == null) {
-            icon = "ui-icon-carat-r";
-        }
-        String iconPos = menuitem.getIconPos();
-        iconPos = (iconPos == null) ? "ui-btn-icon-right": "ui-btn-icon-" + iconPos;
-        String styleClass = MobileConstants.MOBILE_MENUITEM_LINK_CLASS + " " + icon + " " + iconPos;
-        String userStyleClass = menuitem.getStyleClass();
-        if(userStyleClass != null) {
-            styleClass = styleClass + " " + userStyleClass;
-        }
-        
-        return styleClass;
-    }
+
 }

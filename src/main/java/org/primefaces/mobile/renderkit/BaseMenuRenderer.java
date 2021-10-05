@@ -28,6 +28,7 @@ import javax.faces.context.ResponseWriter;
 import org.primefaces.component.api.AjaxSource;
 import org.primefaces.component.api.UIOutcomeTarget;
 import org.primefaces.component.menu.AbstractMenu;
+import org.primefaces.mobile.util.MobileConstants;
 import org.primefaces.mobile.util.MobileRenderUtils;
 import org.primefaces.mobile.util.MobileRenderUtils.IconPos;
 import org.primefaces.mobile.util.MobileUtils;
@@ -36,7 +37,8 @@ import org.primefaces.util.ComponentTraversalUtils;
 
 public abstract class BaseMenuRenderer extends org.primefaces.component.menu.BaseMenuRenderer 
 {
-     
+    public static final String MOBILE_MENUITEM_LINK_CLASS = "ui-link ui-button";
+    
     @Override
     protected void encodeMenuItem(FacesContext context, AbstractMenu menu, MenuItem menuitem) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
@@ -130,5 +132,18 @@ public abstract class BaseMenuRenderer extends org.primefaces.component.menu.Bas
         	menuitem.getIcon(), IconPos.convert(menuitem.getIconPos()));
 
         writer.endElement("a");  
+    }
+    
+    
+    @Override
+    protected String getLinkStyleClass(MenuItem menuitem) 
+    {
+        String styleClass = MOBILE_MENUITEM_LINK_CLASS;
+        
+        String userStyleClass = menuitem.getStyleClass();
+        if(userStyleClass != null)
+            styleClass += " " + userStyleClass;
+        
+        return styleClass;
     }
 }
