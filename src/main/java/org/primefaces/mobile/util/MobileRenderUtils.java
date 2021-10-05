@@ -112,4 +112,20 @@ public class MobileRenderUtils
 		
 		writer.endElement("span");
     }
+    
+    /**
+     * Concatenates the given values with space as separator
+     * 
+     * @param values
+     * 
+     * @return empty string if no values present
+     */
+    public static String concatSpace(String ... values)
+    {
+    	String result = "";
+    	for(String value : values)
+    		if (value != null)
+    			result += " " + value;
+    	return result.trim();
+    }
 }

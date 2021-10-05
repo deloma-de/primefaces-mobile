@@ -19,10 +19,15 @@ import java.io.IOException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+
+import org.primefaces.mobile.util.MobileRenderUtils;
 import org.primefaces.renderkit.CoreRenderer;
 
-public class FooterRenderer extends CoreRenderer {
-
+public class FooterRenderer extends CoreRenderer 
+{
+	public static final String MOBILE_FOOTER_CLASS = "ui-toolbar-footer ui-bar-inherit";
+	public static final String MOBILE_TITLE_CLASS = "ui-toolbar-title";
+	
     @Override
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
@@ -33,8 +38,10 @@ public class FooterRenderer extends CoreRenderer {
         writer.startElement("div", null);
         writer.writeAttribute("data-role", "footer", null);
         
+        String footerStyleClass = MobileRenderUtils.concatSpace(MOBILE_FOOTER_CLASS, footer.getStyleClass());
+        writer.writeAttribute("class", footerStyleClass, null);
+        
         if(footer.getStyle() != null) writer.writeAttribute("style", footer.getStyle(), null);
-        if(footer.getStyleClass() != null) writer.writeAttribute("class", footer.getStyleClass(), null);
         if(swatch != null) writer.writeAttribute("data-theme", swatch, null);        
         if(footer.isFixed()) {
             writer.writeAttribute("data-position", "fixed", null);
@@ -47,6 +54,7 @@ public class FooterRenderer extends CoreRenderer {
         
         if(title != null) {
              writer.startElement("h4", null);
+             writer.writeAttribute("class", MOBILE_TITLE_CLASS, null);
              writer.writeText(title, null);
              writer.endElement("h4");
         }
