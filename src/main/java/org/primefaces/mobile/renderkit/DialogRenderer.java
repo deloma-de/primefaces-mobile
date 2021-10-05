@@ -21,17 +21,19 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.dialog.Dialog;
 import org.primefaces.expression.SearchExpressionFacade;
+import org.primefaces.mobile.util.MobileRenderUtils;
 import org.primefaces.util.WidgetBuilder;
 
-public class DialogRenderer extends org.primefaces.component.dialog.DialogRenderer {
+public class DialogRenderer extends org.primefaces.component.dialog.DialogRenderer 
+{
     
     public static final String MOBILE_CONTAINER_CLASS = "ui-popup-container ui-popup-hidden ui-popup-truncate";
     public static final String MOBILE_POPUP_CLASS = "ui-popup ui-body-inherit ui-overlay-shadow ui-corner-all";
     public static final String MOBILE_MASK_CLASS = "ui-popup-screen ui-overlay-b ui-screen-hidden";
-    public static final String MOBILE_TITLE_BAR_CLASS = "ui-header ui-bar-inherit";
-    public static final String MOBILE_TITLE_CLASS = "ui-title";
+    public static final String MOBILE_TITLE_BAR_CLASS = "ui-toolbar-header ui-bar-inherit";
+    public static final String MOBILE_TITLE_CLASS = "ui-toolbar-title";
     public static final String MOBILE_CONTENT_CLASS = "ui-content";
-    public static final String MOBILE_CLOSE_ICON_CLASS = "ui-btn ui-corner-all ui-icon-delete ui-btn-icon-notext ui-btn-left";
+    public static final String MOBILE_CLOSE_ICON_CLASS = "ui-button ui-corner-all ui-button-icon-only ui-toolbar-header-button-left";
 	
     @Override
     protected void encodeScript(FacesContext context, Dialog dialog) throws IOException {
@@ -95,35 +97,9 @@ public class DialogRenderer extends org.primefaces.component.dialog.DialogRender
     }
     
     @Override
-    protected void encodeHeader(FacesContext context, Dialog dialog) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        String header = dialog.getHeader();
-        UIComponent headerFacet = dialog.getFacet("header");
-        
-        writer.startElement("div", null);
-        writer.writeAttribute("class", MOBILE_TITLE_BAR_CLASS, null);
-        
-        //close
-        if(dialog.isClosable()) {
-            writer.startElement("a", null);
-            writer.writeAttribute("href", "#", null);
-            writer.writeAttribute("class", MOBILE_CLOSE_ICON_CLASS, null);
-            writer.endElement("a");
-        }
-        
-        //title
-        writer.startElement("h1", null);
-        writer.writeAttribute("class", MOBILE_TITLE_CLASS, null);
-        writer.writeAttribute("role", "heading", null);
-        
-        if(headerFacet != null)
-            headerFacet.encodeAll(context);
-        else if(header != null)
-            writer.write(header);
-        
-        writer.endElement("h1");
-        
-        writer.endElement("div");
+    protected void encodeHeader(FacesContext context, Dialog dialog) throws IOException 
+    {
+       DialogRenderer.encodeHeader(context, dialog, dialog.getHeader(), dialog.isClosable());
     }
     
     @Override
@@ -139,5 +115,44 @@ public class DialogRenderer extends org.primefaces.component.dialog.DialogRender
         }
         
         writer.endElement("div");
+    }
+    
+    public static void encodeHeader(FacesContext context, UIComponent dialog,
+    	String header, boolean closable) throws IOException
+    {
+    	ResponseWriter writer = context.getResponseWriter();
+    	
+        UIComponent headerFacet = dialog.getFacet("header");
+        
+        writer.startElement("div", null);
+        writer.writeAttribute("class", DialogRenderer.MOBILE_TITLE_BAR_CLASS, null);
+        
+        //close
+        if(closable)
+        {
+    	    writer.startElement("a", null);
+    	    writer.writeAttribute("href", "#", null);
+    	    writer.writeAttribute("class", MOBILE_CLOSE_ICON_CLASS, null);
+    	    
+    	    // icon
+    	    MobileRenderUtils.renderIconSpan(writer, "ui-icon-delete", null);
+    	    
+    	    writer.endElement("a");
+        }
+        
+        //title
+        writer.startElement("h1", null);
+        writer.writeAttribute("class", DialogRenderer.MOBILE_TITLE_CLASS, null);
+        writer.writeAttribute("role", "heading", null);
+        
+        if(headerFacet != null)
+            headerFacet.encodeAll(context);
+        else if(header != null)
+            writer.write(header);
+        
+        writer.endElement("h1");
+        
+        writer.endElement("div");
+    
     }
 }

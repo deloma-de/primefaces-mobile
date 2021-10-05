@@ -8,8 +8,8 @@ PrimeFaces.widget.Dialog = PrimeFaces.widget.BaseWidget.extend({
         this.popupElement = this.jq.children('.ui-popup');
         this.mask = this.jq.prev('.ui-popup-screen');
         this.content = this.popupElement.children('.ui-content');
-        this.header = this.popupElement.children('.ui-header');
-        this.closeIcon = this.header.children('.ui-icon-delete');
+        this.header = this.popupElement.children('.ui-toolbar-header');
+        this.closeIcon = this.header.children('.ui-button').children('.ui-icon-delete');
         
         //cleanup duplicate masks due to ajax update
         var orphanMask = this.mask.prev('.ui-popup-screen');

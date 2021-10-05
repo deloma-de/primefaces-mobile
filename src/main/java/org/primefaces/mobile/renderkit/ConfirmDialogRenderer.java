@@ -20,9 +20,9 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.confirmdialog.ConfirmDialog;
-import org.primefaces.component.dialog.Dialog;
 
-public class ConfirmDialogRenderer extends org.primefaces.component.confirmdialog.ConfirmDialogRenderer {
+public class ConfirmDialogRenderer extends org.primefaces.component.confirmdialog.ConfirmDialogRenderer 
+{
     
     @Override
     protected void encodeMarkup(FacesContext context, ConfirmDialog dialog) throws IOException {
@@ -58,35 +58,9 @@ public class ConfirmDialogRenderer extends org.primefaces.component.confirmdialo
     }
     
     @Override
-    protected void encodeHeader(FacesContext context, ConfirmDialog dialog) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        String header = dialog.getHeader();
-        UIComponent headerFacet = dialog.getFacet("header");
-        
-        writer.startElement("div", null);
-        writer.writeAttribute("class", DialogRenderer.MOBILE_TITLE_BAR_CLASS, null);
-        
-        //close
-        if(dialog.isClosable()) {
-            writer.startElement("a", null);
-            writer.writeAttribute("href", "#", null);
-            writer.writeAttribute("class", DialogRenderer.MOBILE_CLOSE_ICON_CLASS, null);
-            writer.endElement("a");
-        }
-        
-        //title
-        writer.startElement("h1", null);
-        writer.writeAttribute("class", DialogRenderer.MOBILE_TITLE_CLASS, null);
-        writer.writeAttribute("role", "heading", null);
-        
-        if(headerFacet != null)
-            headerFacet.encodeAll(context);
-        else if(header != null)
-            writer.write(header);
-        
-        writer.endElement("h1");
-        
-        writer.endElement("div");
+    protected void encodeHeader(FacesContext context, ConfirmDialog dialog) throws IOException 
+    {
+    	DialogRenderer.encodeHeader(context, dialog, dialog.getHeader(), dialog.isClosable());
     }
     
     @Override
