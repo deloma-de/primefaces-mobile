@@ -20,18 +20,15 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import org.primefaces.PrimeFaces;
 import org.primefaces.component.password.Password;
 import org.primefaces.context.PrimeApplicationContext;
 import org.primefaces.util.ComponentUtils;
 import org.primefaces.util.HTML;
 import org.primefaces.util.WidgetBuilder;
 
-public class PasswordRenderer extends org.primefaces.component.password.PasswordRenderer {
+public class PasswordRenderer extends org.primefaces.component.password.PasswordRenderer 
+{
 
-    public final static String MOBILE_STYLE_CLASS = "ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear";
-    public final static String MOBILE_CLEAR_ICON_CLASS = "ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden";
-	
     @Override
 	public void decode(FacesContext context, UIComponent component) {
 		Password password = (Password) component;
@@ -56,7 +53,7 @@ public class PasswordRenderer extends org.primefaces.component.password.Password
 		String clientId = password.getClientId(context);
         boolean disabled = password.isDisabled();
         
-        String inputClass = MOBILE_STYLE_CLASS;
+        String inputClass = InputTextRenderer.MOBILE_STYLE_CLASS;
         inputClass = password.isValid() ? inputClass : inputClass + " ui-state-error";
         inputClass = !disabled ? inputClass : inputClass + " ui-state-disabled";
 		String styleClass = password.getStyleClass() == null ? inputClass : inputClass + " " + password.getStyleClass();
@@ -69,7 +66,6 @@ public class PasswordRenderer extends org.primefaces.component.password.Password
         }
 		
 		encodeInput(context, password, clientId);
-        encodeClearIcon(context, password);
 
 		writer.endElement("div");
 	}   
@@ -106,14 +102,9 @@ public class PasswordRenderer extends org.primefaces.component.password.Password
         }
         
         writer.endElement("input");
-    }
-    
-    protected void encodeClearIcon(FacesContext context, Password password) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
         
-        writer.startElement("a", null);
-        writer.writeAttribute("href", "#", null);
-        writer.writeAttribute("class", MOBILE_CLEAR_ICON_CLASS, null);
-        writer.endElement("a");
+		// clear icon
+        InputTextRenderer.encodeClearIcon(writer, valueToRender);
     }
+
 }
