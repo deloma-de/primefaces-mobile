@@ -40,9 +40,9 @@ public class DataTableRenderer extends org.primefaces.component.datatable.DataTa
     public static final String MOBILE_TABLE_CLASS = "ui-responsive ui-table table-stripe";
     public static final String MOBILE_COLUMN_HEADER_CLASS = "ui-column-header";
     public static final String MOBILE_ROW_CLASS = "ui-table-row";
-    public static final String MOBILE_SORT_ICON_CLASS = "ui-sortable-column-icon ui-icon-bars ui-btn-icon-notext ui-btn-right";
-    public static final String MOBILE_SORT_ICON_ASC_CLASS = "ui-sortable-column-icon ui-icon-arrow-u ui-btn-icon-notext ui-btn-right";
-    public static final String MOBILE_SORT_ICON_DESC_CLASS = "ui-sortable-column-icon ui-icon-arrow-d ui-btn-icon-notext ui-btn-right";
+    public static final String MOBILE_SORT_ICON_CLASS = "ui-sortable-column-icon ui-icon ui-icon-bars ui-button-icon-only ui-widget-icon-floatend";
+    public static final String MOBILE_SORT_ICON_ASC_CLASS = "ui-sortable-column-icon ui-icon-arrow-u ui-button-icon-only ui-widget-icon-floatend";
+    public static final String MOBILE_SORT_ICON_DESC_CLASS = "ui-sortable-column-icon ui-icon-arrow-d ui-button-icon-only ui-widget-icon-floatend";
     public static final String MOBILE_SORTED_COLUMN_CLASS = "ui-column-sorted";
     public static final String MOBILE_CELL_LABEL = "ui-table-cell-label";
 	

@@ -21,8 +21,10 @@ import javax.faces.context.ResponseWriter;
 import org.primefaces.component.api.Pageable;
 import org.primefaces.component.paginator.PaginatorElementRenderer;
 
-public class PageLinksRenderer implements PaginatorElementRenderer {
-
+public class PageLinksRenderer implements PaginatorElementRenderer 
+{
+	public static final String MOBILE_PAGE_CLASS = "ui-paginator-page ui-button ui-button-inline";
+	
     public void render(FacesContext context, Pageable pageable) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         int currentPage = pageable.getPage();
@@ -38,8 +40,11 @@ public class PageLinksRenderer implements PaginatorElementRenderer {
         int delta = pageLinks - (end - start + 1);
         start = Math.max(0, start - delta);
         
-        for(int i = start; i <= end; i++){
-            String styleClass = currentPage == i ? "ui-paginator-page ui-btn ui-btn-active" : "ui-paginator-page ui-btn";
+        for(int i = start; i <= end; i++)
+        {
+            String styleClass = MOBILE_PAGE_CLASS;
+            if (currentPage == i)
+            	styleClass +=  " ui-button-active";
             
             writer.startElement("button", null);
             writer.writeAttribute("class", styleClass, null);

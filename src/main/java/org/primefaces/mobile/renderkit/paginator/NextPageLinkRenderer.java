@@ -28,7 +28,7 @@ public class NextPageLinkRenderer extends PageLinkRenderer implements PaginatorE
         
         boolean disabled = (currentPage == (pageCount - 1)) || (currentPage == 0 && pageCount == 0);
        
-        super.render(context, pageable, "ui-paginator-next ui-btn ui-btn-icon-notext ui-icon-forward", disabled);
+        super.render(context, pageable, "ui-icon-forward", "ui-paginator-next ui-button ui-button-inline", disabled);
     }
     
 }

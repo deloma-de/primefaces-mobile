@@ -19,17 +19,24 @@ import java.io.IOException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.api.Pageable;
+import org.primefaces.mobile.util.MobileRenderUtils;
 
-public class PageLinkRenderer {
+public class PageLinkRenderer 
+{
 
-    public void render(FacesContext context, Pageable pageable, String styleClass, boolean disabled) throws IOException {
+    public void render(FacesContext context, Pageable pageable, 
+    	String icon, String styleClass, boolean disabled) throws IOException 
+    {
         ResponseWriter writer = context.getResponseWriter();
         String buttonClass = disabled ? styleClass + " ui-state-disabled" : styleClass;
 
         writer.startElement("button", null);
         writer.writeAttribute("class", buttonClass, null);
         writer.writeAttribute("type", "button", null);
-        writer.write("button");
+        
+        MobileRenderUtils.renderIconSpan(writer, icon, null);
+        
+        // writer.write("button");
         writer.endElement("button");
     }
 }

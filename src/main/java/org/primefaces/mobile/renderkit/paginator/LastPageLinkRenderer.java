@@ -28,7 +28,7 @@ public class LastPageLinkRenderer extends PageLinkRenderer implements PaginatorE
         
         boolean disabled = (currentPage == (pageCount - 1)) || (currentPage == 0 && pageCount == 0);
         
-        super.render(context, pageable, "ui-paginator-last ui-btn ui-btn-icon-notext ui-icon-carat-r", disabled);
+        super.render(context, pageable, "ui-icon-caret-r", "ui-paginator-last ui-button ui-button-inline", disabled);
     }
     
 }

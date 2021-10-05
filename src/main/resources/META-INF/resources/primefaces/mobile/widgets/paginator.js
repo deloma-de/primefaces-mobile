@@ -80,7 +80,7 @@ PrimeFaces.widget.Paginator = PrimeFaces.widget.BaseWidget.extend({
         this.pageLinks.on('click.paginator', function(e) {
             var link = $(this);
 
-            if(!link.hasClass('ui-state-disabled') &&! link.hasClass('ui-btn-active')) {
+            if(!link.hasClass('ui-state-disabled') &&! link.hasClass('ui-button-active')) {
                 $this.setPage(parseInt(link.text()) - 1);
             }
         });
@@ -126,10 +126,10 @@ PrimeFaces.widget.Paginator = PrimeFaces.widget.BaseWidget.extend({
 
         //update dom
         for(var i = start; i <= end; i++) {
-            var styleClass = 'ui-paginator-page ui-btn';
+            var styleClass = 'ui-paginator-page ui-button ui-button-inline';
             
             if(this.cfg.page === i) {
-                styleClass += " ui-btn-active";
+                styleClass += " ui-button-active";
             }
             
             this.pageLinks.eq(j).attr('class', styleClass).text(i + 1);
