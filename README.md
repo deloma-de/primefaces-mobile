@@ -6,15 +6,13 @@ This project contains legacy mobile optimized components of [PrimeFaces](https:/
 
 It contained some interesting mobile only UI components and renderer of existing versions and is a great framework to create hybrid applications with AJAX history back functionality. Valid use cases are B2B mobile applications used on MDA devices.
 
-## PrimeFaces Compatibility
+## Download
 
-This project is compatible to following PrimeFaces versions
-
-* 7.0 - compatible
+* 7.0  _coming soon_ - compatible to PrimeFaces-7.0
 
 ## Showcase
 
-__coming soon_
+_link coming soon_
 
 Repository can be found at [Showcase Repo](https://github.com/djmj/primefaces-mobile-showcase)
 
@@ -35,9 +33,6 @@ Mobile is covered in the original PrimeFaces PDF [Documentation](https://www.pri
 
 There are many mobile optimized renders of existing PrimeFaces component such as  _SelectOneMenu_ ,  _DataTable_  and many more.
 
-## Download
-
-* 7.0  _coming soon_
 
 ## Showcase
 
@@ -55,7 +50,7 @@ The legacy showcase source can be found at [Github](https://github.com/primeface
     - migrated widgets to new DOM / CSS
     
     
-**Main DOM / CSS changes **
+**DOM / CSS changes**
 
 - icon as child span
 - _ui-li-divider_  now _ui-listview-item-divider_
@@ -71,7 +66,7 @@ This project basically extracts this commit [Remove mobile](https://github.com/p
 
 ### jQuery
 
-PrimeFaces 7.0 uses jQuery 3+ whereas mobile is only compatible up to 1.9 which leads to breaking changes. [Download mobile](https://releases.jquery.com/mobile/).
+PrimeFaces 7.0 uses jQuery 3+ whereas mobile version below 7.0 were only compatible up to 1.9 which leads to breaking changes. [Download mobile](https://releases.jquery.com/mobile/).
 
 ## Inofficial fork
 
