@@ -12,7 +12,7 @@ It contained some interesting mobile only UI components and renderer of existing
 
 ## Showcase
 
-_link coming soon_
+* [Showcase](https://admin.deloma.de/primefaces-mobile-showcase/)
 
 Repository can be found at [Showcase Repo](https://github.com/djmj/primefaces-mobile-showcase)
 
