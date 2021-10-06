@@ -12,6 +12,12 @@ This project is compatible to following PrimeFaces versions
 
 * 7.0 - compatible
 
+## Showcase
+
+__coming soon_
+
+Repository can be found at [Showcase Repo](https://github.com/djmj/primefaces-mobile-showcase)
+
 ## Documention
 
 Mobile is covered in the original PrimeFaces PDF [Documentation](https://www.primefaces.org/documentation/) till Version 6.2.
