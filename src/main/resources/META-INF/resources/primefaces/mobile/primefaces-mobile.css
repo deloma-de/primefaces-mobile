@@ -209,6 +209,13 @@
     cursor: pointer;
 }
 
+/* PrimeFaces 7.0 / jQuery mobile 1.5 changes */
+
+.ui-toolbar-header > .ui-button
+{
+	padding: .35em 0.75em;
+}
+
 /* icons for dialog renderer */
 
 /* .ui-icon-arrow-l */

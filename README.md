@@ -51,11 +51,15 @@ There are many mobile optimized renders of existing PrimeFaces component such as
 **DOM / CSS changes**
 
 - icon as child span
-- _ui-li-divider_  now _ui-listview-item-divider_
-- _ui-li-static_  now  _ui-listview-item-static_
-- _ui-tab_  now  _ui-tabs-tab_
-- _ui-btn_  now  _ui-button_
-- _ui-btn-icon-notext_  now  _ui-button-icon-only_
+- CSS classes
+    - _ui-li-divider_  →  _ui-listview-item-divider_
+    - _ui-li-static_  →  _ui-listview-item-static_
+    - _ui-tab_  →  _ui-tabs-tab_
+    - _ui-btn_  →  _ui-button_
+    - _ui-btn-icon-notext_  →  _ui-button-icon-only_
+    - _ui-btn-left_  →  _ui-toolbar-header-button-left_  
+    - _ui-btn-right_  →  _ui-toolbar-header-button-right_ 
+    - _ui-input_ → _ui-textinput_  /  _ui-searchinput_  (at text / search / password input)
 
 
 ### History
