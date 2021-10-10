@@ -43,7 +43,10 @@ There are many mobile optimized renders of existing PrimeFaces component such as
 - /resources
     - replaced jquery mobile with version 1.5.0-rc1
     - migrated widgets to new DOM / CSS
-    
+
+**Components**
+
+- Button: added new icon position options:  _float-left_  and  _float-right_  that replace old options  _left, right_  
     
 **DOM / CSS changes**
 
