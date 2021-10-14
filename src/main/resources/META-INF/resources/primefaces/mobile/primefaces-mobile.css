@@ -209,15 +209,28 @@
     cursor: pointer;
 }
 
-/* PrimeFaces 7.0 / jQuery mobile 1.5 changes */
+/* jQuery mobile 1.5 fixes */
 
-.ui-toolbar-header .ui-button
-{
+/* font awesome icon support */
+
+.ui-icon.fa::before {
+    color: #fff;
+    text-shadow: none;
+    position: relative;
+    top: 3px;
+}
+
+.ui-icon.fa {
+	text-align: center;
+}
+
+/* PrimeFaces 7.0+ / jQuery mobile 1.5 changes */
+
+.ui-toolbar-header .ui-button {
 	padding: .35em 0.75em;
 }
 
-.ui-toolbar-header .ui-button-icon-only
-{
+.ui-toolbar-header .ui-button-icon-only {
     padding: 0;
     margin: 0.15em;
 }
