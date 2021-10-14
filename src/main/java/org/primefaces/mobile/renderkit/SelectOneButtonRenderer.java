@@ -54,7 +54,8 @@ public class SelectOneButtonRenderer extends org.primefaces.component.selectoneb
             if(value == null) {
                 value = button.getValue();
             }
-            Class type = value == null ? String.class : value.getClass();
+            
+            Class<?> type = value == null ? String.class : value.getClass();
         
             for (int idx = 0; idx < selectItems.size(); idx++) {
                 SelectItem selectItem = selectItems.get(idx);

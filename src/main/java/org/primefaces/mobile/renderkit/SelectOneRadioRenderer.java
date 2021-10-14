@@ -53,7 +53,7 @@ public class SelectOneRadioRenderer extends org.primefaces.component.selectonera
             if(value == null) {
                 value = radio.getValue();
             }
-            Class type = value == null ? String.class : value.getClass();
+            Class<?> type = value == null ? String.class : value.getClass();
         
             int idx = 0;
             for (SelectItem selectItem : selectItems) {

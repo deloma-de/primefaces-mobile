@@ -35,7 +35,7 @@ public class ButtonRenderer extends org.primefaces.component.button.ButtonRender
 		ResponseWriter writer = context.getResponseWriter();
 		String clientId = button.getClientId(context);
 		Object value = button.getValue();
-		String icon = button.resolveIcon();
+		String icon = button.getIcon();
 
 		writer.startElement("button", button);
 		writer.writeAttribute("id", clientId, "id");

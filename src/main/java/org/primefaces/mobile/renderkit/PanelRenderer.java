@@ -19,6 +19,8 @@ import java.io.IOException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+
+import org.primefaces.component.menu.Menu;
 import org.primefaces.component.panel.Panel;
 import org.primefaces.mobile.util.MobileRenderUtils;
 import org.primefaces.mobile.util.MobileUtils;
@@ -37,10 +39,10 @@ public class PanelRenderer extends org.primefaces.component.panel.PanelRenderer 
 	public static final String MOBILE_EXPANDED_ICON = "ui-icon-minus";
     
     @Override
-    protected void encodeScript(FacesContext context, Panel panel) throws IOException {
+    protected void encodeScript(FacesContext context, Panel panel, Menu menu) throws IOException {
         String clientId = panel.getClientId(context);
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.initWithDomReady("Panel", panel.resolveWidgetVar(), clientId);
+        wb.init("Panel", panel.resolveWidgetVar(), clientId);
         
         wb.attr("toggleable", panel.isToggleable(), false);
         
@@ -50,7 +52,7 @@ public class PanelRenderer extends org.primefaces.component.panel.PanelRenderer 
     }
     
     @Override
-    protected void encodeMarkup(FacesContext context, Panel panel) throws IOException {
+    protected void encodeMarkup(FacesContext context, Panel panel, Menu menu) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         String clientId = panel.getClientId(context);
         boolean toggleable = panel.isToggleable();

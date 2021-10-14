@@ -28,7 +28,6 @@ import javax.faces.context.ResponseWriter;
 import org.primefaces.component.api.AjaxSource;
 import org.primefaces.component.api.UIOutcomeTarget;
 import org.primefaces.component.menu.AbstractMenu;
-import org.primefaces.mobile.util.MobileConstants;
 import org.primefaces.mobile.util.MobileRenderUtils;
 import org.primefaces.mobile.util.MobileRenderUtils.IconPos;
 import org.primefaces.mobile.util.MobileUtils;
@@ -99,12 +98,14 @@ public abstract class BaseMenuRenderer extends org.primefaces.component.menu.Bas
                 }
 
                 String command;
-                if(menuitem.isDynamic()) {
-                    String menuClientId = menu.getClientId(context);
-                    Map<String,List<String>> params = menuitem.getParams();
-                    if(params == null) {
-                        params = new LinkedHashMap<String, List<String>>();
-                    }
+                String menuClientId = menu.getClientId(context);
+                
+                Map<String,List<String>> params = menuitem.getParams();
+                if(params == null) 
+                    params = new LinkedHashMap<String, List<String>>();
+
+                if(menuitem.isDynamic()) 
+                {
                     List<String> idParams = new ArrayList<String>();
                     idParams.add(menuitem.getId());
                     params.put(menuClientId + "_menuid", idParams);
@@ -114,7 +115,9 @@ public abstract class BaseMenuRenderer extends org.primefaces.component.menu.Bas
         				: buildNonAjaxRequest(context, menu, form, menuClientId, params, true);
                 } 
                 else {
-                    command = menuitem.isAjax() ? buildAjaxRequest(context, (AjaxSource) menuitem, form) : buildNonAjaxRequest(context, ((UIComponent) menuitem), form, ((UIComponent) menuitem).getClientId(context), true);
+                    command = menuitem.isAjax() 
+                    	? buildAjaxRequest(context, (UIComponent & AjaxSource) menuitem, form) 
+                		: buildNonAjaxRequest(context, ((UIComponent) menuitem), form, menuClientId, true);
                 }
 
                 onclick = (onclick == null) ? command : onclick + ";" + command;
@@ -133,7 +136,6 @@ public abstract class BaseMenuRenderer extends org.primefaces.component.menu.Bas
 
         writer.endElement("a");  
     }
-    
     
     @Override
     protected String getLinkStyleClass(MenuItem menuitem) 

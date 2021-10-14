@@ -59,6 +59,6 @@ public class InputTextareaRenderer extends org.primefaces.component.inputtextare
 		String clientId = inputTextarea.getClientId(context);
         
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.initWithDomReady("InputTextarea", inputTextarea.resolveWidgetVar(), clientId).finish();
+        wb.init("InputTextarea", inputTextarea.resolveWidgetVar(), clientId).finish();
 	}
 }

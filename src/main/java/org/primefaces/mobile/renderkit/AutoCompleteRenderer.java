@@ -126,8 +126,9 @@ public class AutoCompleteRenderer extends org.primefaces.component.autocomplete.
         writer.endElement("div");
     }
     
-    @Override
-    protected void encodeSuggestions(FacesContext context, AutoComplete ac, List items) throws IOException {
+    @SuppressWarnings("rawtypes")
+	@Override
+    protected void encodeSuggestions(FacesContext context, AutoComplete ac, Object items) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         String var = ac.getVar();
         boolean pojo = (var != null);
@@ -135,31 +136,32 @@ public class AutoCompleteRenderer extends org.primefaces.component.autocomplete.
         Converter converter = ComponentUtils.getConverter(context, ac);
         boolean hasContent = (ac.getChildCount() > 0);
         
-        for(Object item : items) {
-            writer.startElement("a", null);
-            writer.writeAttribute("href", "#", null);
-            writer.writeAttribute("class", MOBILE_ITEM_CLASS, null);
-            
-            if(pojo) {
-                requestMap.put(var, item);
-                String value = (converter == null) ? (String) ac.getItemValue() : converter.getAsString(context, ac, ac.getItemValue());
-                writer.writeAttribute("data-item-value", value, null);
-                writer.writeAttribute("data-item-label", ac.getItemLabel(), null);
-                
-                if(hasContent)
-                    renderChildren(context, ac);
-                else
-                    writer.writeText(ac.getItemLabel(), null);
-            }
-            else {
-                writer.writeAttribute("data-item-label", item, null);
-                writer.writeAttribute("data-item-value", item, null);
-                
-                writer.writeText(item, null);
-            }
-
-            writer.endElement("a");
-        }
+        if (items != null && items instanceof List)
+	        for(Object item : (List)items) {
+	            writer.startElement("a", null);
+	            writer.writeAttribute("href", "#", null);
+	            writer.writeAttribute("class", MOBILE_ITEM_CLASS, null);
+	            
+	            if(pojo) {
+	                requestMap.put(var, item);
+	                String value = (converter == null) ? (String) ac.getItemValue() : converter.getAsString(context, ac, ac.getItemValue());
+	                writer.writeAttribute("data-item-value", value, null);
+	                writer.writeAttribute("data-item-label", ac.getItemLabel(), null);
+	                
+	                if(hasContent)
+	                    renderChildren(context, ac);
+	                else
+	                    writer.writeText(ac.getItemLabel(), null);
+	            }
+	            else {
+	                writer.writeAttribute("data-item-label", item, null);
+	                writer.writeAttribute("data-item-value", item, null);
+	                
+	                writer.writeText(item, null);
+	            }
+	
+	            writer.endElement("a");
+	        }
         
         if(pojo) {
             requestMap.remove(var);

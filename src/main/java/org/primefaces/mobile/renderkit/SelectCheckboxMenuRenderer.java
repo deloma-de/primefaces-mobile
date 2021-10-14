@@ -32,7 +32,7 @@ public class SelectCheckboxMenuRenderer extends org.primefaces.component.selectc
         String clientId = menu.getClientId(context);
         
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.initWithDomReady("SelectCheckboxMenu", menu.resolveWidgetVar(), clientId).finish();        
+        wb.init("SelectCheckboxMenu", menu.resolveWidgetVar(), clientId).finish();        
     }
     
     @Override

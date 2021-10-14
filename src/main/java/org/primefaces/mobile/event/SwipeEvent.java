@@ -21,6 +21,8 @@ import org.primefaces.event.AbstractAjaxBehaviorEvent;
 
 public class SwipeEvent extends AbstractAjaxBehaviorEvent {
 
+	private static final long serialVersionUID = -244177623519008697L;
+	
 	private Object data;
 	
 	public SwipeEvent(UIComponent component, Behavior behavior, Object data) {

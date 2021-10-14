@@ -480,8 +480,7 @@ public class DataTableRenderer extends org.primefaces.component.datatable.DataTa
         PaginatorRenderer renderer = ComponentUtils.getUnwrappedRenderer(
                 context,
                 "org.primefaces.component",
-                "org.primefaces.component.PaginatorRenderer",
-                PaginatorRenderer.class);
+                "org.primefaces.component.PaginatorRenderer");
         return renderer;
     }
     

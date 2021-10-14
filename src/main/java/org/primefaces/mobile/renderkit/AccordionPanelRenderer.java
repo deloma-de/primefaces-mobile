@@ -22,7 +22,6 @@ import javax.faces.context.ResponseWriter;
 import org.primefaces.component.accordionpanel.AccordionPanel;
 import org.primefaces.component.tabview.Tab;
 import org.primefaces.mobile.util.MobileRenderUtils;
-import org.primefaces.mobile.util.MobileUtils;
 import org.primefaces.util.HTML;
 import org.primefaces.util.WidgetBuilder;
 

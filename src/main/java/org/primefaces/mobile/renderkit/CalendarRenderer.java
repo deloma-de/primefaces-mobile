@@ -87,7 +87,7 @@ public class CalendarRenderer extends org.primefaces.component.calendar.Calendar
         Locale locale = uicalendar.calculateLocale(context);
         String pattern = uicalendar.calculatePattern();
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.initWithDomReady("Calendar", calendar.resolveWidgetVar(), clientId);
+        wb.init("Calendar", calendar.resolveWidgetVar(), clientId);
         
         wb.attr("popup", calendar.isPopup())
             .attr("locale", locale.toString())

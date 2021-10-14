@@ -126,7 +126,7 @@ public class MenuRenderer extends BaseMenuRenderer {
 		String clientId = menu.getClientId(context);
         
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.initWithDomReady("PlainMenu", menu.resolveWidgetVar(), clientId);
+        wb.init("PlainMenu", menu.resolveWidgetVar(), clientId);
         wb.finish();
 	}
 

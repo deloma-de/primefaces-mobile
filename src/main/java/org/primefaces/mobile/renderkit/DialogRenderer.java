@@ -39,7 +39,7 @@ public class DialogRenderer extends org.primefaces.component.dialog.DialogRender
     protected void encodeScript(FacesContext context, Dialog dialog) throws IOException {
         String clientId = dialog.getClientId(context);
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.initWithDomReady("Dialog", dialog.resolveWidgetVar(), clientId);
+        wb.init("Dialog", dialog.resolveWidgetVar(), clientId);
 
         wb.attr("visible", dialog.isVisible(), false)
             .attr("modal", dialog.isModal(), false)

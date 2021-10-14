@@ -9,6 +9,7 @@ It contained some interesting mobile only UI components and renderer of existing
 ## Download JAR
 
 * [7.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-7.0.jar) - compatible to PrimeFaces-7.0
+* [8.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-8.0.jar) - compatible to PrimeFaces-8.0
 
 ## Showcase
 
@@ -35,14 +36,20 @@ There are many mobile optimized renders of existing PrimeFaces component such as
 
 ## Changes
 
-### 6.1 -> 7.0
+### 7.0
 
-- /java
-    - adapted Java classes to PrimeFaces 7.0 changes
-    - migrated Renderer classes to new DOM / CSS of jquery 1.5
-- /resources
-    - replaced jquery mobile with version 1.5.0-rc1
-    - migrated widgets to new DOM / CSS
+- set java compilation level to 1.5 
+- adapted Java classes to PrimeFaces 7.0 changes
+- migrated Renderer classes to new DOM / CSS of jquery 1.5
+- replaced jquery mobile with version 1.5.0-rc1
+- migrated widgets to new DOM / CSS
+- added font-awesome icon support via CSS
+    
+### 8.0    
+
+- adapted Java classes to PrimeFaces 8.0 changes
+- set java compilation level to 1.8
+
 
 **Components**
 
@@ -68,7 +75,7 @@ This project basically extracts this commit [Remove mobile](https://github.com/p
 
 ### jQuery
 
-PrimeFaces 7.0 uses jQuery 3+ whereas mobile version below 7.0 were only compatible up to 1.9 which leads to breaking changes. [Download mobile](https://releases.jquery.com/mobile/).
+PrimeFaces 7.0 or higher uses jQuery 3+ whereas mobile version below 7.0 were only compatible up to 1.9 which leads to breaking changes. [Download mobile](https://releases.jquery.com/mobile/).
 
 ### Build from source
 

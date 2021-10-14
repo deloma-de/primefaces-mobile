@@ -74,7 +74,7 @@ public class PasswordRenderer extends org.primefaces.component.password.Password
     protected void encodeScript(FacesContext context, Password password) throws IOException {
 		String clientId = password.getClientId(context);
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.initWithDomReady("Password", password.resolveWidgetVar(), clientId);
+        wb.init("Password", password.resolveWidgetVar(), clientId);
 
         wb.finish();
 	}

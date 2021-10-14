@@ -53,7 +53,7 @@ public class OverlayPanelRenderer extends org.primefaces.component.overlaypanel.
         String clientId = panel.getClientId(context);
 
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.initWithDomReady("OverlayPanel", panel.resolveWidgetVar(), clientId)
+        wb.init("OverlayPanel", panel.resolveWidgetVar(), clientId)
             .attr("targetId", targetClientId, null)
             .attr("showEvent", panel.getShowEvent(), null)
             .attr("hideEvent", panel.getHideEvent(), null)

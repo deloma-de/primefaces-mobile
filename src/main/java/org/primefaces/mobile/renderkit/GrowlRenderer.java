@@ -46,7 +46,7 @@ public class GrowlRenderer extends org.primefaces.component.growl.GrowlRenderer 
     
     protected void encodeScript(FacesContext context, Growl growl) throws IOException {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.initWithDomReady("Growl", growl.resolveWidgetVar(), growl.getClientId(context));
+        wb.init("Growl", growl.resolveWidgetVar(), growl.getClientId(context));
         wb.attr("sticky", growl.isSticky(), false)
             .attr("life", growl.getLife(), 6000)
             .attr("escape", growl.isEscape(), true)

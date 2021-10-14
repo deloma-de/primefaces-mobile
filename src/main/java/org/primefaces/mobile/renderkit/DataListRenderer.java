@@ -17,11 +17,14 @@ package org.primefaces.mobile.renderkit;
 
 import java.io.IOException;
 import java.util.Map;
+
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.api.UIData;
 import org.primefaces.component.datalist.DataList;
+import org.primefaces.component.datalist.DataListState;
 import org.primefaces.mobile.renderkit.paginator.PaginatorRenderer;
 import org.primefaces.util.ComponentUtils;
 import org.primefaces.util.WidgetBuilder;
@@ -47,8 +50,18 @@ public class DataListRenderer extends org.primefaces.component.datalist.DataList
             }
             
             encodeList(context, list);
+            
+            if (list.isMultiViewState()) {
+                DataListState ls = list.getMultiViewState(true);
+                ls.setFirst(list.getFirst());
+                ls.setRows(list.getRows());
+            }
         } 
         else {
+        	
+        	if (list.isMultiViewState())
+                list.restoreMultiViewState();
+        	
             encodeMarkup(context, list);
             encodeScript(context, list);
         }
@@ -130,28 +143,20 @@ public class DataListRenderer extends org.primefaces.component.datalist.DataList
         
         renderDynamicPassThruAttributes(context, list);
 
-        for (int i = first; i < pageSize; i++) {
-            if(varStatus != null) {
-                requestMap.put(varStatus, new org.primefaces.component.datalist.DataListRenderer.VarStatus(first, (pageSize - 1), (i == 0), (i == (rowCount - 1)), i, (i % 2 == 0), (i % 2 == 1), 1));
-            }
-            
-            list.setRowIndex(i);
+        list.forEachRow((status) -> {
+        	try
+			{
+				writer.startElement("li", null);
+	            renderChildren(context, list);
+	            writer.endElement("li");
+			}
+			catch (IOException e)
+			{
+				throw new FacesException(e);
+			}
 
-            if (list.isRowAvailable()) {
-                writer.startElement("li", null);
-                renderChildren(context, list);
-                writer.endElement("li");
-            }
-        }
-        
-        list.setRowIndex(-1);
-        
-        if(varStatus != null) {
-            requestMap.remove(varStatus);
-        }
-        
-        
-        
+        });
+
         writer.endElement(listTag);
     }
     
@@ -172,8 +177,7 @@ public class DataListRenderer extends org.primefaces.component.datalist.DataList
         PaginatorRenderer renderer = ComponentUtils.getUnwrappedRenderer(
                 context,
                 "org.primefaces.component",
-                "org.primefaces.component.PaginatorRenderer",
-                PaginatorRenderer.class);
+                "org.primefaces.component.PaginatorRenderer");
         return renderer;
     }
 }
