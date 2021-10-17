@@ -2,9 +2,9 @@
 
 ## Description
 
-This project contains legacy mobile optimized components of [PrimeFaces](https://www.primefaces.org/) till Version 6.2 which then were removed in 7.0. Client side is based on [jQuery mobile](https://jquerymobile.com/) [(demo)](https://demos.jquerymobile.com/1.5.0-rc1/).
+This project contains legacy mobile optimized components of [PrimeFaces](https://www.primefaces.org/) which were only supported till Version 6.2. Client side is based on [jQuery mobile](https://jquerymobile.com/) [(demo)](https://demos.jquerymobile.com/1.5.0-rc1/).
 
-It contained some interesting mobile only UI components and renderer of existing versions and is a great framework to create hybrid applications with AJAX history back functionality. Valid use cases are B2B mobile applications used on MDA devices.
+It contained some interesting mobile only UI components and renderer of existing versions and is a great framework to create hybrid applications with AJAX history back functionality like B2B mobile applications used on MDA devices.
 
 ## Download JAR
 
@@ -38,6 +38,16 @@ There are many mobile optimized renders of existing PrimeFaces component such as
 
 ## Changes
 
+### 10.0    
+
+- adapted Java classes to PrimeFaces 10.0 changes
+- hardcoded OverlayPanel javascript position as 'overlay' since showEffect was removed
+
+### 8.0    
+
+- adapted Java classes to PrimeFaces 8.0 changes
+- set java compilation level to 1.8
+
 ### 7.0
 
 - set java compilation level to 1.5 
@@ -46,15 +56,7 @@ There are many mobile optimized renders of existing PrimeFaces component such as
 - replaced jquery mobile with version 1.5.0-rc1
 - migrated widgets to new DOM / CSS
 - added font-awesome icon support via CSS
-    
-### 8.0    
 
-- adapted Java classes to PrimeFaces 8.0 changes
-- set java compilation level to 1.8
-
-### 10.0    
-
-- adapted Java classes to PrimeFaces 10.0 changes
 
 **Components**
 
@@ -73,20 +75,18 @@ There are many mobile optimized renders of existing PrimeFaces component such as
     - _ui-btn-right_  →  _ui-toolbar-header-button-right_ 
     - _ui-input_ → _ui-textinput_  /  _ui-searchinput_  (at text / search / password input)
 
-
-### History
-
-This project basically extracts this commit [Remove mobile](https://github.com/primefaces/primefaces/issues/3386).
-
 ### jQuery
 
-PrimeFaces 7.0 or higher uses jQuery 3+ whereas mobile version below 7.0 were only compatible up to 1.9 which leads to breaking changes. [Download mobile](https://releases.jquery.com/mobile/).
+PrimeFaces 7.0 or higher uses jQuery 3+ whereas mobile version till 6.2 were only compatible up to 1.9 so an upgrade to jquery 3 was necessary.
+
+jQuery mobile 1.5 is based on jquery 3. [Download mobile](https://releases.jquery.com/mobile/).
 
 ### Build from source
 
 Following plugin is required to build it from source using Maven.
 
-[maven-jsf-plugin-1.3.3-SNAPSHOT.jar](https://cdn.deloma.de/others/libraries/primefaces/maven-jsf-plugin-1.3.3-SNAPSHOT.jar)
+- 10+ [maven-jsf-plugin-1.3.4-SNAPSHOT.jar](https://cdn.deloma.de/others/libraries/primefaces/maven-jsf-plugin-1.3.3-SNAPSHOT.jar)
+- 7.0 and 8.0 [maven-jsf-plugin-1.3.3-SNAPSHOT.jar](https://cdn.deloma.de/others/libraries/primefaces/maven-jsf-plugin-1.3.3-SNAPSHOT.jar)
 
 ## Inofficial fork
 
