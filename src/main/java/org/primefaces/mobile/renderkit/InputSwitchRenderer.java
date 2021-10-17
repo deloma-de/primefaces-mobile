@@ -85,9 +85,9 @@ public class InputSwitchRenderer extends org.primefaces.component.inputswitch.In
     }
     
     @Override
-    public void encodeScript(FacesContext context, InputSwitch inputSwitch) throws IOException {
-        String clientId = inputSwitch.getClientId(context);
+    public void encodeScript(FacesContext context, InputSwitch inputSwitch) throws IOException 
+    {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("UISwitch", inputSwitch.resolveWidgetVar(), clientId).finish();
+        wb.init("UISwitch", inputSwitch).finish();
     }
 }

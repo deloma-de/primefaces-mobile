@@ -36,10 +36,10 @@ public class DialogRenderer extends org.primefaces.component.dialog.DialogRender
     public static final String MOBILE_CLOSE_ICON_CLASS = "ui-button ui-corner-all ui-button-icon-only ui-toolbar-header-button-left";
 	
     @Override
-    protected void encodeScript(FacesContext context, Dialog dialog) throws IOException {
-        String clientId = dialog.getClientId(context);
+    protected void encodeScript(FacesContext context, Dialog dialog) throws IOException 
+    {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("Dialog", dialog.resolveWidgetVar(), clientId);
+        wb.init("Dialog", dialog);
 
         wb.attr("visible", dialog.isVisible(), false)
             .attr("modal", dialog.isModal(), false)

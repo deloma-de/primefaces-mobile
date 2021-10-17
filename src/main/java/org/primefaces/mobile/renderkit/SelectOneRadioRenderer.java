@@ -28,9 +28,10 @@ import org.primefaces.util.WidgetBuilder;
 public class SelectOneRadioRenderer extends org.primefaces.component.selectoneradio.SelectOneRadioRenderer {
     
     @Override
-    protected void encodeScript(FacesContext context, SelectOneRadio radio) throws IOException {
+    protected void encodeScript(FacesContext context, SelectOneRadio radio) throws IOException 
+    {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("SelectOneRadio", radio.resolveWidgetVar(), radio.getClientId(context)).finish();
+        wb.init("SelectOneRadio", radio).finish();
     }
     
     @Override

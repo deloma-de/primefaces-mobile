@@ -81,11 +81,13 @@ public class PaginatorRenderer extends CoreRenderer {
         writer.endElement("div");
     }
 
-    public void encodeScript(FacesContext context, UIData uidata, WidgetBuilder wb) throws IOException {
-        String clientId = uidata.getClientId(context);
-        String paginatorPosition = uidata.getPaginatorPosition();
+    public void encodeScript(FacesContext context, Pageable pageable, WidgetBuilder wb) 
+    	throws IOException 
+    {
+        String clientId = pageable.getClientId(context);
+        String paginatorPosition = pageable.getPaginatorPosition();
         String paginatorContainers = null;
-        String currentPageTemplate = uidata.getCurrentPageReportTemplate();
+        String currentPageTemplate = pageable.getCurrentPageReportTemplate();
         
         if(paginatorPosition.equalsIgnoreCase("both"))
             paginatorContainers = "'" + clientId + "_paginator_top','" + clientId + "_paginator_bottom'";
@@ -94,17 +96,17 @@ public class PaginatorRenderer extends CoreRenderer {
 
         wb.append(",paginator:{")
             .append("id:[").append(paginatorContainers).append("]")
-            .append(",rows:").append(uidata.getRows())
-            .append(",rowCount:").append(uidata.getRowCount())
-            .append(",page:").append(uidata.getPage());
+            .append(",rows:").append(pageable.getRows())
+            .append(",rowCount:").append(pageable.getRowCount())
+            .append(",page:").append(pageable.getPage());
         
         if(currentPageTemplate != null)
             wb.append(",currentPageTemplate:'").append(currentPageTemplate).append("'");
 
-        if(uidata.getPageLinks() != 10) 
-            wb.append(",pageLinks:").append(uidata.getPageLinks());
+        if(pageable.getPageLinks() != 10) 
+            wb.append(",pageLinks:").append(pageable.getPageLinks());
         
-        if(!uidata.isPaginatorAlwaysVisible()) 
+        if(!pageable.isPaginatorAlwaysVisible()) 
             wb.append(",alwaysVisible:false");
 
         wb.append("}");

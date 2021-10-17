@@ -71,12 +71,10 @@ public class PasswordRenderer extends org.primefaces.component.password.Password
 	}   
     
     @Override
-    protected void encodeScript(FacesContext context, Password password) throws IOException {
-		String clientId = password.getClientId(context);
+    protected void encodeScript(FacesContext context, Password password) throws IOException 
+    {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("Password", password.resolveWidgetVar(), clientId);
-
-        wb.finish();
+        wb.init("Password", password).finish();
 	}
     
     protected void encodeInput(FacesContext context, Password password, String clientId) throws IOException {

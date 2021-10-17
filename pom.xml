@@ -11,7 +11,7 @@
     <groupId>org.primefaces</groupId>
     <artifactId>primefaces-mobile</artifactId>
     <packaging>jar</packaging>
-    <version>8.0</version>
+    <version>10.0</version>
     <name>primefaces-mobile</name>
     <url>http://www.primefaces.org</url>
 
@@ -103,7 +103,7 @@
         <dependency>
         	<groupId>org.primefaces</groupId>
         	<artifactId>primefaces</artifactId>
-        	<version>8.0</version>
+        	<version>10.0.0</version>
         	<scope>provided</scope>
         </dependency>
     </dependencies>
@@ -173,7 +173,7 @@
             <plugin>
                 <groupId>org.primefaces</groupId>
                 <artifactId>maven-jsf-plugin</artifactId>
-                <version>1.3.3-SNAPSHOT</version>
+                <version>1.3.4-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <id>generate-ui-mobile</id>

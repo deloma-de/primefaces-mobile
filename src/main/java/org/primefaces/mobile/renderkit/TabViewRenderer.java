@@ -39,12 +39,12 @@ public class TabViewRenderer extends org.primefaces.component.tabview.TabViewRen
     public static final String MOBILE_TAB_CONTENT_CLASS = "ui-tabs-panel ui-corner-bottom ui-widget-content";
     
     @Override
-    protected void encodeScript(FacesContext context, TabView tabView) throws IOException {
-        String clientId = tabView.getClientId(context);
+    protected void encodeScript(FacesContext context, TabView tabView) throws IOException 
+    {
         boolean dynamic = tabView.isDynamic();
         
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("TabView", tabView.resolveWidgetVar(), clientId);
+        wb.init("TabView", tabView);
         
         if(dynamic) {
             wb.attr("dynamic", true).attr("cache", tabView.isCache());

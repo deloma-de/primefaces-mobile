@@ -29,10 +29,10 @@ import org.primefaces.util.WidgetBuilder;
 public class SelectManyCheckboxRenderer extends org.primefaces.component.selectmanycheckbox.SelectManyCheckboxRenderer {
     
     @Override    
-    protected void encodeScript(FacesContext context, SelectManyCheckbox checkbox) throws IOException {
-        String clientId = checkbox.getClientId(context);
+    protected void encodeScript(FacesContext context, SelectManyCheckbox checkbox) throws IOException 
+    {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("SelectManyCheckbox", checkbox.resolveWidgetVar(), clientId).finish();
+        wb.init("SelectManyCheckbox", checkbox).finish();
     }
     
     @Override

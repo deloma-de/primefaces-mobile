@@ -43,7 +43,7 @@ public class DataListRenderer extends org.primefaces.component.datalist.DataList
         DataList list = (DataList) component;
 
         if(list.isPaginationRequest(context)) {
-            list.updatePaginationData(context, list);
+            list.updatePaginationData(context);
             
             if(list.isLazy()) {
                 list.loadLazyData();
@@ -68,10 +68,10 @@ public class DataListRenderer extends org.primefaces.component.datalist.DataList
     }
     
     @Override
-    protected void encodeScript(FacesContext context, DataList list) throws IOException {
-        String clientId = list.getClientId(context);
+    protected void encodeScript(FacesContext context, DataList list) throws IOException 
+    {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("DataList", list.resolveWidgetVar(), clientId);
+        wb.init("DataList", list);
         
         if(list.isPaginator()) {
             PaginatorRenderer paginatorRenderer = getPaginatorRenderer(context);

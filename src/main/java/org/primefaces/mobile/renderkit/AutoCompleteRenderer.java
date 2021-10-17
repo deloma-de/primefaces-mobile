@@ -35,10 +35,10 @@ public class AutoCompleteRenderer extends org.primefaces.component.autocomplete.
     public final static String MOBILE_ITEM_CLASS = "ui-autocomplete-item ui-button ui-corner-all ui-shadow";
     
     @Override
-    protected void encodeScript(FacesContext context, AutoComplete ac) throws IOException {
-        String clientId = ac.getClientId(context);
+    protected void encodeScript(FacesContext context, AutoComplete ac) throws IOException 
+    {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("AutoComplete", ac.resolveWidgetVar(), clientId);
+        wb.init("AutoComplete", ac);
         
         wb.attr("minLength", ac.getMinQueryLength(), 1)
             .attr("delay", ac.getQueryDelay(), 300);

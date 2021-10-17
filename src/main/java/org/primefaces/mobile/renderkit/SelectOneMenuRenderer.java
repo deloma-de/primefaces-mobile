@@ -66,10 +66,9 @@ public class SelectOneMenuRenderer extends org.primefaces.component.selectonemen
     }
     
     @Override
-    protected void encodeScript(FacesContext context, SelectOneMenu menu) throws IOException {
-        String clientId = menu.getClientId(context);
+    protected void encodeScript(FacesContext context, SelectOneMenu menu) throws IOException
+    {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("SelectOneMenu", menu.resolveWidgetVar(), clientId);               
-        wb.finish();
+        wb.init("SelectOneMenu", menu).finish();
     }
 }

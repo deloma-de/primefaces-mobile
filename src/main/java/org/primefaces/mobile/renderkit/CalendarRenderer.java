@@ -79,15 +79,14 @@ public class CalendarRenderer extends org.primefaces.component.calendar.Calendar
     }
     
     @Override
-    protected void encodeScript(FacesContext context, UICalendar uicalendar, String value) throws IOException {
-        
+    protected void encodeScript(FacesContext context, UICalendar uicalendar, String value) throws IOException 
+    {
     	Calendar calendar = (Calendar) uicalendar;
-    	
-    	String clientId = uicalendar.getClientId(context);
+
         Locale locale = uicalendar.calculateLocale(context);
         String pattern = uicalendar.calculatePattern();
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("Calendar", calendar.resolveWidgetVar(), clientId);
+        wb.init("Calendar", calendar);
         
         wb.attr("popup", calendar.isPopup())
             .attr("locale", locale.toString())

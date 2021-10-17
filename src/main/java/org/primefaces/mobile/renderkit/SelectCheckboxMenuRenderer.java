@@ -28,11 +28,10 @@ import org.primefaces.util.WidgetBuilder;
 public class SelectCheckboxMenuRenderer extends org.primefaces.component.selectcheckboxmenu.SelectCheckboxMenuRenderer {
         
     @Override
-    protected void encodeScript(FacesContext context, SelectCheckboxMenu menu) throws IOException {
-        String clientId = menu.getClientId(context);
-        
+    protected void encodeScript(FacesContext context, SelectCheckboxMenu menu) throws IOException 
+    {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("SelectCheckboxMenu", menu.resolveWidgetVar(), clientId).finish();        
+        wb.init("SelectCheckboxMenu", menu).finish();        
     }
     
     @Override

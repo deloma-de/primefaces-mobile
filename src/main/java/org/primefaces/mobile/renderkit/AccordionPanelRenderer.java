@@ -66,12 +66,12 @@ public class AccordionPanelRenderer extends org.primefaces.component.accordionpa
 	}
 
     @Override
-	protected void encodeScript(FacesContext context, AccordionPanel acco) throws IOException {
-		String clientId = acco.getClientId(context);
+	protected void encodeScript(FacesContext context, AccordionPanel acco) throws IOException 
+    {
         boolean multiple = acco.isMultiple();
         
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("AccordionPanel", acco.resolveWidgetVar(), clientId);
+        wb.init("AccordionPanel", acco);
          		
         if(acco.isDynamic()) {
             wb.attr("dynamic", true).attr("cache", acco.isCache());

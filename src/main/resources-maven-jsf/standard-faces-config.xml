@@ -14,6 +14,13 @@
             <system-event-class>javax.faces.event.PostAddToViewEvent</system-event-class>
             <source-class>org.primefaces.component.calendar.Calendar</source-class>
         </system-event-listener>
+        
+        <!-- log version -->
+     	<system-event-listener>
+            <system-event-listener-class>org.primefaces.mobile.webapp.PostConstructApplicationEventListener</system-event-listener-class>
+            <system-event-class>javax.faces.event.PostConstructApplicationEvent</system-event-class>
+            <source-class>javax.faces.application.Application</source-class>
+        </system-event-listener>
     </application>
         
     <!-- Mobile -->

@@ -11,7 +11,7 @@ PrimeFaces.widget.OverlayPanel = PrimeFaces.widget.BaseWidget.extend({
         
         this.jq.panel({
             position: this.cfg.at,
-            display: this.cfg.showEffect,
+            display: 'overlay',
             dismissable: this.cfg.dismissable
         });
         

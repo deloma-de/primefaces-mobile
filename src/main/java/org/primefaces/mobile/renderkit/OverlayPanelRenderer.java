@@ -47,17 +47,16 @@ public class OverlayPanelRenderer extends org.primefaces.component.overlaypanel.
     }
     
     @Override
-    protected void encodeScript(FacesContext context, OverlayPanel panel) throws IOException {
+    protected void encodeScript(FacesContext context, OverlayPanel panel) throws IOException 
+    {
         UIComponent target = SearchExpressionFacade.resolveComponent(context, panel, panel.getFor());
         String targetClientId = (target == null) ? null: target.getClientId(context);
-        String clientId = panel.getClientId(context);
 
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("OverlayPanel", panel.resolveWidgetVar(), clientId)
+        wb.init("OverlayPanel", panel)
             .attr("targetId", targetClientId, null)
             .attr("showEvent", panel.getShowEvent(), null)
             .attr("hideEvent", panel.getHideEvent(), null)
-            .attr("showEffect", panel.getShowEffect(), null)
             .callback("onShow", "function()", panel.getOnShow())
             .callback("onHide", "function()", panel.getOnHide())
             .attr("at", panel.getAt(), null)

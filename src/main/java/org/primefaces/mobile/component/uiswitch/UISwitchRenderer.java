@@ -108,9 +108,9 @@ public class UISwitchRenderer extends CoreRenderer {
         writer.endElement("div");
     }
     
-    public void encodeScript(FacesContext context, UISwitch uiswitch) throws IOException {
-        String clientId = uiswitch.getClientId(context);
+    public void encodeScript(FacesContext context, UISwitch uiswitch) throws IOException 
+    {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("UISwitch", uiswitch.resolveWidgetVar(), clientId).finish();
+        wb.init("UISwitch", uiswitch).finish();
     }
 }

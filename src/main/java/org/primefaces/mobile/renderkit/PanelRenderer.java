@@ -39,10 +39,10 @@ public class PanelRenderer extends org.primefaces.component.panel.PanelRenderer 
 	public static final String MOBILE_EXPANDED_ICON = "ui-icon-minus";
     
     @Override
-    protected void encodeScript(FacesContext context, Panel panel, Menu menu) throws IOException {
-        String clientId = panel.getClientId(context);
+    protected void encodeScript(FacesContext context, Panel panel, Menu menu) throws IOException 
+    {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("Panel", panel.resolveWidgetVar(), clientId);
+        wb.init("Panel", panel);
         
         wb.attr("toggleable", panel.isToggleable(), false);
         

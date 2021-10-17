@@ -26,7 +26,8 @@ public class FileUploadRenderer extends org.primefaces.component.fileupload.File
    public final static String MOBILE_CONTAINER_CLASS = "ui-fileupload ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset";
 	
     @Override
-	public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
+	public void encodeEnd(FacesContext context, UIComponent component) throws IOException 
+    {
         ResponseWriter writer = context.getResponseWriter();
         FileUpload fileUpload = (FileUpload) component;
         String clientId = fileUpload.getClientId(context);
@@ -68,9 +69,5 @@ public class FileUploadRenderer extends org.primefaces.component.fileupload.File
         
 		writer.endElement("input");
     }
-    
-    @Override
-    public String getSimpleInputDecodeId(FileUpload fileUpload, FacesContext context) {
-        return fileUpload.getClientId(context) + "_input";
-    }
+
 }

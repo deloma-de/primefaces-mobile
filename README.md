@@ -8,8 +8,10 @@ It contained some interesting mobile only UI components and renderer of existing
 
 ## Download JAR
 
-* [7.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-7.0.jar) - compatible to PrimeFaces-7.0
+* [10.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-10.0.jar) - compatible to PrimeFaces-8.0
 * [8.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-8.0.jar) - compatible to PrimeFaces-8.0
+* [7.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-7.0.jar) - compatible to PrimeFaces-7.0
+
 
 ## Showcase
 
@@ -50,6 +52,9 @@ There are many mobile optimized renders of existing PrimeFaces component such as
 - adapted Java classes to PrimeFaces 8.0 changes
 - set java compilation level to 1.8
 
+### 10.0    
+
+- adapted Java classes to PrimeFaces 10.0 changes
 
 **Components**
 

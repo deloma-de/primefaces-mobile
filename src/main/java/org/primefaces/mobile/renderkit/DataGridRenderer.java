@@ -34,10 +34,10 @@ public class DataGridRenderer extends org.primefaces.component.datagrid.DataGrid
     public static final String MOBILE_EMPTY_CONTENT_CLASS = "ui-datagrid-content ui-datagrid-content-empty";
 	
     @Override
-    protected void encodeScript(FacesContext context, DataGrid grid) throws IOException{
-		String clientId = grid.getClientId(context);        
+    protected void encodeScript(FacesContext context, DataGrid grid) throws IOException 
+    {     
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("DataGrid", grid.resolveWidgetVar(), clientId);
+        wb.init("DataGrid", grid);
                         
         if(grid.isPaginator()) {
             PaginatorRenderer paginatorRenderer = getPaginatorRenderer(context);

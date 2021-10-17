@@ -28,6 +28,8 @@ import org.primefaces.component.columngroup.ColumnGroup;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.row.Row;
 import org.primefaces.mobile.renderkit.paginator.PaginatorRenderer;
+import org.primefaces.model.SortMeta;
+import org.primefaces.model.SortOrder;
 import org.primefaces.util.ComponentUtils;
 import org.primefaces.util.Constants;
 import org.primefaces.util.LangUtils;
@@ -47,10 +49,10 @@ public class DataTableRenderer extends org.primefaces.component.datatable.DataTa
     public static final String MOBILE_CELL_LABEL = "ui-table-cell-label";
 	
     @Override
-    protected void encodeScript(FacesContext context, DataTable table) throws IOException{
-		String clientId = table.getClientId(context);        
+    protected void encodeScript(FacesContext context, DataTable table) throws IOException
+    {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("DataTable", table.resolveWidgetVar(), clientId);
+        wb.init("DataTable", table);
                 
         wb.attr("selectionMode", table.getSelectionMode(), null)
             .attr("reflow", table.isReflow(), false);
@@ -206,33 +208,23 @@ public class DataTableRenderer extends org.primefaces.component.datatable.DataTa
         
         ResponseWriter writer = context.getResponseWriter();
         String clientId = column.getContainerClientId(context);
-        ValueExpression columnSortByVE = column.getValueExpression(Column.PropertyKeys.sortBy.toString());
-        int priority = column.getPriority();
-        boolean sortable = (columnSortByVE != null);
-        String sortIcon = null;
+        int priority = column.getResponsivePriority();
+        boolean sortable = table.isColumnSortable(context, column);
+        
+        SortMeta sortMeta = null;
         String defaultStyleClass = sortable ? MOBILE_COLUMN_HEADER_CLASS + " " + DataTable.SORTABLE_COLUMN_CLASS : MOBILE_COLUMN_HEADER_CLASS; 
         String style = column.getStyle();
         String styleClass = column.getStyleClass();
         styleClass = (styleClass == null) ? defaultStyleClass: defaultStyleClass + " " + styleClass;
               
-        if(priority > 0) {
+        if(priority > 0)
             styleClass = styleClass + " ui-table-priority-" + priority;
-        }
         
-        if(sortable) {
-            ValueExpression tableSortByVE = table.getValueExpression(DataTable.PropertyKeys.sortBy.toString());
-            boolean defaultSorted = (tableSortByVE != null);
-                    
-            if(defaultSorted) {
-                 sortIcon = resolveDefaultSortIcon(table, column, table.getSortOrder());
-            }
-            
-            if(sortIcon == null) {
-                sortIcon = MOBILE_SORT_ICON_CLASS;
-            }
-            else {
-                styleClass = styleClass + " " + MOBILE_SORTED_COLUMN_CLASS;;
-            }
+        if (sortable) 
+        {
+            sortMeta = table.getSortByAsMap().get(column.getColumnKey());
+            if (sortMeta.isActive())
+            	styleClass += MOBILE_SORTED_COLUMN_CLASS;
         }
         
         String width = column.getWidth();
@@ -253,7 +245,7 @@ public class DataTableRenderer extends org.primefaces.component.datatable.DataTa
         if(column.getRowspan() != 1) writer.writeAttribute("rowspan", column.getRowspan(), null);
         if(column.getColspan() != 1) writer.writeAttribute("colspan", column.getColspan(), null);
                 
-        encodeColumnHeaderContent(context, table, column, sortIcon);
+        encodeColumnHeaderContent(context, table, column, sortMeta);
         
         writer.endElement("th");
     }
@@ -296,9 +288,8 @@ public class DataTableRenderer extends org.primefaces.component.datatable.DataTa
         UIComponent emptyFacet = table.getFacet("emptyMessage");
         String tbodyClientId = (tbodyId == null) ? clientId + "_data" : tbodyId;
                        
-        if(table.isSelectionEnabled()) {
-            table.findSelectedRowKeys();
-        }
+        if(table.isSelectionEnabled()) 
+            table.getSelectedRowKeys();
         
         int rows = table.getRows();
 		int first = table.getFirst();
@@ -358,8 +349,10 @@ public class DataTableRenderer extends org.primefaces.component.datatable.DataTa
     }
     
     @Override
-    public boolean encodeRow(FacesContext context, DataTable table, String clientId, int rowIndex, int columnStart, int columnEnd) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
+    public boolean encodeRow(FacesContext context, DataTable table, String clientId, 
+    	int rowIndex, int columnStart, int columnEnd) throws IOException
+    {
+    	ResponseWriter writer = context.getResponseWriter();
         boolean selectionEnabled = table.isSelectionEnabled();
         Object rowKey = null;
         List<UIColumn> columns = table.getColumns();
@@ -370,12 +363,13 @@ public class DataTableRenderer extends org.primefaces.component.datatable.DataTa
             
             //ask selectable datamodel
             if(rowKey == null)
-                rowKey = table.getRowKeyFromModel(table.getRowData());
+                rowKey = table.getRowKey(table.getRowData());
         }
         
         //Preselection
         
         boolean selected = table.getSelectedRowKeys().contains(rowKey);
+        boolean disabled = table.isDisabledSelection();
         
         String userRowStyleClass = table.getRowStyleClass();
         String rowStyleClass = MOBILE_ROW_CLASS;
@@ -402,13 +396,13 @@ public class DataTableRenderer extends org.primefaces.component.datatable.DataTa
             UIColumn column = columns.get(i);
             
             if(column instanceof Column) {
-                encodeCell(context, table, column, clientId, false);
+                encodeCell(context, table, column, false, disabled, rowIndex);
             }
             else if(column instanceof DynamicColumn) {
                 DynamicColumn dynamicColumn = (DynamicColumn) column;
                 dynamicColumn.applyModel();
 
-                encodeCell(context, table, dynamicColumn, null, false);
+                encodeCell(context, table, dynamicColumn, false, disabled, rowIndex);
             }
         }
 
@@ -418,17 +412,18 @@ public class DataTableRenderer extends org.primefaces.component.datatable.DataTa
     }
     
     @Override
-    protected void encodeCell(FacesContext context, DataTable table, UIColumn column, String clientId, boolean selected) throws IOException {
-        if(!column.isRendered()) {
+    protected void encodeCell(FacesContext context, DataTable table, UIColumn column, 
+    	boolean selected, boolean disabled, int rowIndex) throws IOException
+    {
+    	if(!column.isRendered())
             return;
-        }
         
         ResponseWriter writer = context.getResponseWriter();
         String style = column.getStyle();
         String styleClass = column.getStyleClass();
         int colspan = column.getColspan();
         int rowspan = column.getRowspan();
-        int priority = column.getPriority();
+        int priority = column.getResponsivePriority();
         
         if(priority > 0) {
             styleClass = (styleClass == null) ? "ui-table-priority-" + priority : styleClass + " ui-table-priority-" + priority;
@@ -457,23 +452,20 @@ public class DataTableRenderer extends org.primefaces.component.datatable.DataTa
     }
     
     @Override
-    protected String resolveDefaultSortIcon(DataTable table, UIColumn column, String sortOrder) {
-        ValueExpression tableSortByVE = table.getValueExpression(DataTable.PropertyKeys.sortBy.toString());
-        ValueExpression columnSortByVE = column.getValueExpression(Column.PropertyKeys.sortBy.toString());
-        String columnSortByExpression = columnSortByVE.getExpressionString();
-        String tableSortByExpression = tableSortByVE.getExpressionString();
-        String field = column.getField();
-        String sortField = table.getSortField();
-        String sortIcon = null;
-
-        if((sortField != null && field != null && sortField.equals(field)) || (tableSortByExpression != null && tableSortByExpression.equals(columnSortByExpression))) {
-            if(sortOrder.equalsIgnoreCase("ASCENDING"))
-                sortIcon = MOBILE_SORT_ICON_ASC_CLASS;
-            else if(sortOrder.equalsIgnoreCase("DESCENDING"))
-                sortIcon = MOBILE_SORT_ICON_DESC_CLASS;
-        }
+    protected String resolveDefaultSortIcon(SortMeta sortMeta)
+    {
+    	SortOrder sortOrder = sortMeta.getOrder();
         
-        return sortIcon;
+        switch(sortOrder)
+        {
+        	case ASCENDING:
+        		return MOBILE_SORT_ICON_ASC_CLASS;
+        	case DESCENDING:
+        		return MOBILE_SORT_ICON_DESC_CLASS;
+        	case UNSORTED:
+        	default:
+        		return MOBILE_SORT_ICON_CLASS;
+        }
     }
     
     private PaginatorRenderer getPaginatorRenderer(FacesContext context) {
@@ -500,11 +492,11 @@ public class DataTableRenderer extends org.primefaces.component.datatable.DataTa
             writer.writeAttribute("name", reflowId, null);
             writer.writeAttribute("data-role", "none", null);
             
-            encodeOptionOnReflow(context, "", MessageFactory.getMessage(DataTable.SORT_LABEL, null));
+            encodeOptionOnReflow(context, "", MessageFactory.getMessage(DataTable.SORT_LABEL));
             
             for(int headerIndex = 0; headerIndex < options.size(); headerIndex++) {
                 for(int order = 0; order < 2; order++) {
-                    String orderVal = (order==0) ? MessageFactory.getMessage(DataTable.SORT_ASC, null) : MessageFactory.getMessage(DataTable.SORT_DESC, null);
+                    String orderVal = (order==0) ? MessageFactory.getMessage(DataTable.SORT_ASC) : MessageFactory.getMessage(DataTable.SORT_DESC);
                     String value = headerIndex + "_" + order;
                     String label = options.get(headerIndex) + " " + orderVal;
                     

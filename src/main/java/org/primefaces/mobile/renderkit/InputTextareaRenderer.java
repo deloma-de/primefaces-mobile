@@ -55,10 +55,9 @@ public class InputTextareaRenderer extends org.primefaces.component.inputtextare
 	}
     
     @Override
-	public void encodeScript(FacesContext context, InputTextarea inputTextarea) throws IOException {
-		String clientId = inputTextarea.getClientId(context);
-        
+	public void encodeScript(FacesContext context, InputTextarea inputTextarea) throws IOException 
+    {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("InputTextarea", inputTextarea.resolveWidgetVar(), clientId).finish();
+        wb.init("InputTextarea", inputTextarea).finish();
 	}
 }

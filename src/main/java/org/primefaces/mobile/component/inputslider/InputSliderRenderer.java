@@ -79,9 +79,9 @@ public class InputSliderRenderer extends InputRenderer {
         writer.endElement("input");
     }
 
-    protected void encodeScript(FacesContext context, InputSlider inputSlider) throws IOException {
-        String clientId = inputSlider.getClientId(context);
+    protected void encodeScript(FacesContext context, InputSlider inputSlider) throws IOException 
+    {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("InputSlider", inputSlider.resolveWidgetVar(), clientId).finish();
+        wb.init("InputSlider", inputSlider).finish();
     }
 }

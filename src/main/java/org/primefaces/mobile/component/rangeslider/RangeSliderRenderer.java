@@ -52,10 +52,10 @@ public class RangeSliderRenderer extends CoreRenderer {
         writer.endElement("div");
     }
     
-    public void encodeScript(FacesContext context, RangeSlider rangeSlider) throws IOException {
-        String clientId = rangeSlider.getClientId(context);
+    public void encodeScript(FacesContext context, RangeSlider rangeSlider) throws IOException 
+    {
         WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("RangeSlider", rangeSlider.resolveWidgetVar(), clientId).finish();
+        wb.init("RangeSlider", rangeSlider).finish();
     }
     
     @Override
