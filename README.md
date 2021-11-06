@@ -8,6 +8,7 @@ It contained some interesting mobile only UI components and renderer of existing
 
 ## Download JAR
 
+* [11.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-11.0.jar) - compatible to PrimeFaces-10.0
 * [10.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-10.0.jar) - compatible to PrimeFaces-10.0
 * [8.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-8.0.jar) - compatible to PrimeFaces-8.0
 * [7.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-7.0.jar) - compatible to PrimeFaces-7.0
@@ -37,6 +38,11 @@ Mobile is covered in the original PrimeFaces PDF [Documentation](https://www.pri
 There are many mobile optimized renders of existing PrimeFaces component such as  _SelectOneMenu_ ,  _DataTable_  and many more.
 
 ## Changes
+
+### 11.0    
+
+- adapted Java classes to PrimeFaces 11.0 changes 
+- removing build in Font-Awesome resource rendering in HeadRenderer
 
 ### 10.0    
 
