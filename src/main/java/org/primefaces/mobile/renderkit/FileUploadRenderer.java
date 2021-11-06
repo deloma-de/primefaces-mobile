@@ -46,13 +46,13 @@ public class FileUploadRenderer extends org.primefaces.component.fileupload.File
                 
         writer.writeAttribute("class", styleClass, null);
         
-        encodeInputField(context, fileUpload, clientId + "_input");
+        encodeInputField(context, fileUpload, clientId + "_input", null);
         
         writer.endElement("div");
 	}
 
     @Override
-    protected void encodeInputField(FacesContext context, FileUpload fileUpload, String clientId) throws IOException {
+    protected void encodeInputField(FacesContext context, FileUpload fileUpload, String clientId, String tabIndex) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         
         writer.startElement("input", fileUpload);
