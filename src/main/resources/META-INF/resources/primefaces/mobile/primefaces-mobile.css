@@ -235,6 +235,26 @@
     margin: 0.15em;
 }
 
+/* alternate table styling */
+
+/* border after each row */
+.ui-table tbody tr
+{
+	border-bottom: 1px solid #ddd;
+}
+
+/* alternate row background color */
+.ui-table tbody tr:nth-child(2n+1) td
+{
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* highlight mouse hover if not selected - desktop only? */
+.ui-table tbody tr:hover:not(.ui-bar-b)
+{
+  background-color: #ededed;
+}
+
 /* icons for dialog renderer */
 
 /* .ui-icon-arrow-l */

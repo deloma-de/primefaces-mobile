@@ -8,7 +8,7 @@ It contained some interesting mobile only UI components and renderer of existing
 
 ## Download JAR
 
-* [11.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-11.0.jar) - compatible to PrimeFaces-10.0
+* [11.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-11.0.jar) - compatible to PrimeFaces-11.0
 * [10.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-10.0.jar) - compatible to PrimeFaces-10.0
 * [8.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-8.0.jar) - compatible to PrimeFaces-8.0
 * [7.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-7.0.jar) - compatible to PrimeFaces-7.0
