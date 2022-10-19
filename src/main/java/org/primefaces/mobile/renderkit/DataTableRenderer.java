@@ -17,6 +17,8 @@ package org.primefaces.mobile.renderkit;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -479,9 +481,10 @@ public class DataTableRenderer extends org.primefaces.component.datatable.DataTa
     @Override
     protected void encodeSortableHeaderOnReflow(FacesContext context, DataTable table) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
-        List<String> options = getSortableHeadersText(context, table);
         
-        if(!options.isEmpty()) {
+        Map<SortMeta, String> headers = getSortableColumnHeaders(context, table);
+        
+        if(!headers.isEmpty()) {
             String reflowId = table.getContainerClientId(context) + "_reflowDD";
             
             writer.startElement("div", null);
@@ -492,15 +495,19 @@ public class DataTableRenderer extends org.primefaces.component.datatable.DataTa
             writer.writeAttribute("name", reflowId, null);
             writer.writeAttribute("data-role", "none", null);
             
-            encodeOptionOnReflow(context, "", MessageFactory.getMessage(DataTable.SORT_LABEL));
+            encodeOptionOnReflow(context, "", MessageFactory.getMessage(DataTable.SORT_LABEL), null, null);
             
-            for(int headerIndex = 0; headerIndex < options.size(); headerIndex++) {
-                for(int order = 0; order < 2; order++) {
-                    String orderVal = (order==0) ? MessageFactory.getMessage(DataTable.SORT_ASC) : MessageFactory.getMessage(DataTable.SORT_DESC);
-                    String value = headerIndex + "_" + order;
-                    String label = options.get(headerIndex) + " " + orderVal;
-                    
-                    encodeOptionOnReflow(context, value, label);
+            for (Map.Entry<SortMeta, String> header : headers.entrySet()) {
+                for(int sortOrder = 0; sortOrder < 2; sortOrder++) 
+                {
+                	String sortOrderLabel = (sortOrder == 0)
+                        ? MessageFactory.getMessage(DataTable.SORT_ASC)
+                        : MessageFactory.getMessage(DataTable.SORT_DESC);
+
+                	String value = header.getKey().getColumnKey() + "_" + sortOrder;
+            		String label = header.getValue() + " " + sortOrderLabel;
+
+            		encodeOptionOnReflow(context, value,label, header.getKey().getColumnKey(), sortOrder);
                 }
             }
             
@@ -510,12 +517,20 @@ public class DataTableRenderer extends org.primefaces.component.datatable.DataTa
         }
     }
     
-    protected void encodeOptionOnReflow(FacesContext context, String value, String label) throws IOException {
+    protected void encodeOptionOnReflow(FacesContext context, String value, String label,
+    	String columnKey, Integer sortOrder) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         
         writer.startElement("option", null);
         writer.writeAttribute("value", value, null);
-        writer.write(label);
+        
+        if (columnKey != null)
+        	writer.writeAttribute("data-columnkey", columnKey, null);
+	    if (sortOrder != null)  
+	    	 writer.writeAttribute("data-sortorder", sortOrder, null);
+	    
+        writer.writeText(label, null);
+        
         writer.endElement("option");
     }
 }

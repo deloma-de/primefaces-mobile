@@ -87,8 +87,10 @@ public class AccordionPanelRenderer extends org.primefaces.component.accordionpa
 	}
     
     @Override
-    protected void encodeTab(FacesContext context, AccordionPanel accordionPanel, Tab tab, boolean active, boolean dynamic, boolean rtl) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
+    protected void encodeTab(FacesContext context, AccordionPanel accordionPanel, Tab tab, int index, boolean active, boolean dynamic,
+        boolean repeating, boolean rtl) throws IOException 
+    {     
+    	ResponseWriter writer = context.getResponseWriter();
         
         String containerClass = active ? MOBILE_ACTIVE_TAB_CONTAINER_CLASS : MOBILE_INACTIVE_TAB_CONTAINER_CLASS;
         String headerClass = active ? MOBILE_ACTIVE_TAB_HEADER_CLASS : MOBILE_INACTIVE_TAB_HEADER_CLASS;
@@ -135,15 +137,23 @@ public class AccordionPanelRenderer extends org.primefaces.component.accordionpa
         writer.writeAttribute("aria-hidden", String.valueOf(!active), null);
 
         writer.startElement("p", null);
-        if(dynamic) {
-            if(active) {
+        
+        if (dynamic) {
+            if (active) {
                 tab.encodeAll(context);
-                tab.setLoaded(true);
+                if (repeating) {
+                    tab.setLoaded(index, true);
+                }
+                else {
+                    tab.setLoaded(true);
+                }
             }
         }
         else {
             tab.encodeAll(context);
         }
+        
+
         writer.endElement("p");
 
         writer.endElement("div");

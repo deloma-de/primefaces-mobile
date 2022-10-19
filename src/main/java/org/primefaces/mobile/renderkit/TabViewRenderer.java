@@ -16,6 +16,8 @@
 package org.primefaces.mobile.renderkit;
 
 import java.io.IOException;
+
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -172,37 +174,25 @@ public class TabViewRenderer extends org.primefaces.component.tabview.TabViewRen
         ResponseWriter writer = context.getResponseWriter();
         int activeIndex = tabView.getActiveIndex();
         boolean dynamic = tabView.isDynamic();
+        boolean repeating = tabView.isRepeating();
         
         writer.startElement("div", null);
         writer.writeAttribute("class", TabView.PANELS_CLASS, null);
         
-        if(!tabView.isRepeating()) {
-            int i = 0;
-            for(UIComponent kid : tabView.getChildren()) {
-                if(kid.isRendered() && kid instanceof Tab) {
-                    encodeTabContent(context, (Tab) kid, i, (i == activeIndex), dynamic);
-                    i++;
-                }
+        tabView.forEachTab((tab, i, active) -> {
+            try {
+                encodeTabContent(context, tab, i, active, dynamic, repeating);
             }
-        }
-        else {
-            int dataCount = tabView.getRowCount();
-            activeIndex = activeIndex >= dataCount ? 0 : activeIndex;
-            Tab tab = (Tab) tabView.getChildren().get(0);
-            
-            for(int i = 0; i < dataCount; i++) {
-                tabView.setIndex(i);
-                encodeTabContent(context, tab, i, (i == activeIndex), dynamic);
+            catch (IOException ex) {
+                throw new FacesException(ex);
             }
-            
-            tabView.setIndex(-1);
-        }
+        });
         
         writer.endElement("div");
     }
         
     @Override
-    protected void encodeTabContent(FacesContext context, Tab tab, int index, boolean active, boolean dynamic) throws IOException {
+    protected void encodeTabContent(FacesContext context, Tab tab, int index, boolean active, boolean dynamic, boolean repeating) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         String visibility = active ? "display:block" : "display:none";
         
@@ -212,12 +202,18 @@ public class TabViewRenderer extends org.primefaces.component.tabview.TabViewRen
         writer.writeAttribute("role", "tabpanel", null);
         writer.writeAttribute("aria-hidden", String.valueOf(!active), null);
 
-        if(dynamic) {
-            if(active) {
+        if (dynamic) {
+            if (active) {
                 tab.encodeAll(context);
-                tab.setLoaded(true);
+
+                if (repeating) {
+                    tab.setLoaded(index, true);
+                }
+                else {
+                    tab.setLoaded(true);
+                }
             }
-        } 
+        }
         else {
             tab.encodeAll(context);
         }
