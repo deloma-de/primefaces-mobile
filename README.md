@@ -9,8 +9,8 @@ It contained some interesting mobile only UI components and renderer of existing
 ## Download JAR
 
 |Mobile Version|PrimeFaces Core|
-|[12.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-12.0.jar)|12.0|
 |:---:|:---:|
+|[12.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-12.0.jar)|12.0|
 |[11.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-11.0.jar)|11.0|
 |[10.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-10.0.jar)|10.0|
 |[8.0](https://cdn.deloma.de/others/libraries/primefaces/primefaces-mobile-8.0.jar)|8.0|
