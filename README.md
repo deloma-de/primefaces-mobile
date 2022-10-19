@@ -41,6 +41,10 @@ There are many mobile optimized renders of existing PrimeFaces component such as
 
 ## Changes
 
+### 12.0   
+
+- adapted Java classes to PrimeFaces 12.0 changes 
+
 ### 11.0    
 
 - adapted Java classes to PrimeFaces 11.0 changes 
